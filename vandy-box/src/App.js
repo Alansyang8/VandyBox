@@ -1,15 +1,12 @@
-import logo from './logo.svg';
 import './App.css';
+import Body from './components/Body';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p className="text-3xl">
-          Welcome to Vandy Box!
-        </p>
-      </header>
+      <Body>
+        
+      </Body>
     </div>
   );
 }
