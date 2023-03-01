@@ -1,12 +1,18 @@
-import "./App.css";
 
-import Body from "./components/Body";
+import { Routes, Route } from 'react-router-dom';
+import Home from './pages/Home'
+import Search from './pages/Search';
+
 
 function App() {
   return (
-    <div className="App">
-      <Body></Body>
-    </div>
+    <>
+       <Routes>
+    <Route path="/" element={<Home />} />
+    <Route path="/search" element={<Search />} />
+    </Routes>
+    </>
+
   );
 }
 

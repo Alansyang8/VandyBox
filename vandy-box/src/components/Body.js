@@ -123,7 +123,7 @@ function Body() {
     apiCall4();
   }, []);
   return (
-    <div className="space-y-4 pt-28 pb-20">
+    <div className="space-y-4 pb-20">
       <Header HandleSearch={HandleSearch} />
       <Container containerTitle="Trending this week">
         {trendingMovieAPI && (
@@ -139,13 +139,13 @@ function Body() {
         {ratingMovieAPI && <MovieSlider movies={ratingMovieAPI}></MovieSlider>}
       </Container>
 
-      <Container containerTitle={"Search"}>
+      {/* <Container containerTitle={"Search"}>
         {searchMovieAPI && searchMovieAPI.length > 0 ? (
           <MovieSlider movies={searchMovieAPI}></MovieSlider>
         ) : (
           "No Results"
         )}
-      </Container>
+      </Container> */}
     </div>
   );
 }
