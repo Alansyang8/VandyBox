@@ -1,5 +1,5 @@
 import React from "react";
-import lisaProfilePic from "../assets/lisaProfilePic.jpg";
+import SuzyBaePic from "../assets/SuzyBaePic.png";
 
 function Header() {
   return (
@@ -27,7 +27,7 @@ function Header() {
       />
       <a className="ml-auto" href="">
         <img
-          src={lisaProfilePic}
+          src={SuzyBaePic}
           className="object-cover rounded-full w-16 h-16 "
         />
       </a>
