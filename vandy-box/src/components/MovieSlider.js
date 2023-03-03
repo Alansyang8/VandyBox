@@ -2,15 +2,15 @@ import React from 'react'
 
 const MovieSlider = ({movies}) => {
   return (
-    <div className="flex text-center justify-between gap-5">
+    <div className="flex space-x-5">
         {movies.map((movie) => (
-            <div className=''>
-                <img src={movie.image} alt={movie.title} />
-                <span className=''>{movie.title}</span>
+            <div>
+                <img src={movie.image} alt={movie.title} width="144" height="192" />
+                <span>{movie.title}</span>
             </div>
         ))}
     </div>
   )
 }
 
-export default MovieSlider
+export default MovieSlider;

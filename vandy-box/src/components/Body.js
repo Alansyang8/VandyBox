@@ -75,17 +75,6 @@ const trendingMoviesVanderbilt = [
     }
   ];
 
-  // const favoriteMovies = [
-  //   {
-  //     title: "Movie 1",
-  //     image: sampleMovieImage
-  //   },
-  //   {
-  //     title: "Movie 2",
-  //     image: sampleMovieImage
-  //   }
-  // ];
-
 function Body() {
   const [trendingMovieAPI, setTrendingMovieAPI] = useState()
   const [revenueMovieAPI, setRevenueMovieAPI] = useState()
