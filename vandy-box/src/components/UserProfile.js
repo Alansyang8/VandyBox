@@ -20,7 +20,7 @@ function UserProfile() {
         {/* Follow & Message Buttons */}
         <div class="flex flex-row justify-center font-semibold mx-auto my-4 w-40">
           <div class="my-auto text-white bg-lime-500 hover:bg-lime-600 hover:cursor-pointer rounded-3xl py-2 px-4 mx-2">Follow</div>
-          <div class="my-auto text-gray-800 py-1 px-4 border-2 border-lime-500 hover:bg-lime-500 hover:cursor-pointer hover:text-white rounded-3xl mx-2">Message</div>
+          {/* <div class="my-auto text-gray-800 py-1 px-4 border-2 border-lime-500 hover:bg-lime-500 hover:cursor-pointer hover:text-white rounded-3xl mx-2">Add to Box</div> */}
         </div>
         </div>
       </div> 

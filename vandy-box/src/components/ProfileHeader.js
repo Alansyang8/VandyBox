@@ -1,5 +1,4 @@
 import React from "react";
-import SuzyBaePic from "../assets/SuzyBaePic.png";
 import { Link } from 'react-router-dom';
 
 function ProfileHeader() {
