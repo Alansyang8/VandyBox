@@ -11,11 +11,13 @@ function Header(props) {
           <a href="">Favorites</a>
         </li>
         <li className="">
-          <a href="">Categories</a>
+          <a href="">Recommendations</a>
         </li>
+        
         <li className="">
-          <a href="">Rankings</a>
+          <a href="">Watch Groups</a>
         </li>
+       
 
         <li className="">
           <Link to="/search">Search</Link>
