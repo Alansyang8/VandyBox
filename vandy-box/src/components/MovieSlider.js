@@ -12,5 +12,4 @@ const MovieSlider = ({movies}) => {
     </div>
   )
 }
-
 export default MovieSlider
