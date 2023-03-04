@@ -39,17 +39,17 @@ function UserProfile() {
     {/* Bottom Tabs Section */}
     {/* Fav Movies, To Watch, Friends, Watch Groups */}
     <div class="text-sm flex flex-row w-full justify-center font-medium text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700 mt-20">
-              <div class="flex -mb-px w-full">
-                  <div class="mr-2 w-1/4">
+              <div class="flex -mb-px w-full justify-center">
+                  <div class="mr-2 w-1/4 flex justify-center">
                       <a href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Fav Movies</a>
                   </div>
-                  <div class="mr-2 w-1/4">
+                  <div class="mr-2 w-1/4 flex justify-center">
                       <a href="#" class="inline-block p-4 text-lime-600 border-b-2 border-lime-600 rounded-t-lg active dark:text-lime-500 dark:border-lime-500" aria-current="page">To Watch</a>
                   </div>
-                  <div class="mr-2 w-1/4">
+                  <div class="mr-2 w-1/4 flex justify-center">
                       <a href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Friends</a>
                   </div>
-                  <div class="mr-2 w-1/4">
+                  <div class="mr-2 w-1/4 flex justify-center">
                       <a href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Watch Groups</a>
                   </div>
               </div>

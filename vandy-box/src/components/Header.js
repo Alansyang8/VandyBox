@@ -4,12 +4,9 @@ import { Link } from 'react-router-dom';
 
 function Header(props) {
   return (
-    <nav className="navbar flex w-screen   p-2 pl-10 pr-10 shadow-md gap-10 bg-amber-200 justify-start items-center">
+    <nav className="navbar flex w-screen   p-2 pl-10 pr-10 shadow-md gap-10 bg-lime-100 justify-start items-center">
       <ul className="flex gap-5   font-bold items-center">
-        <li className="pr-10 text-3xl font-black">VandyBox</li>
-        <li className="">
-          <Link to="/">Home</Link>
-        </li>
+        <li className="pr-10 text-3xl font-black"><Link to="/">VandyBox</Link></li>
         <li className="">
           <a href="">Favorites</a>
         </li>
@@ -36,12 +33,12 @@ function Header(props) {
         })}
         onChange={(event) => props.HandleSearch(event.target.value)}
       /> */}
-      <a className="ml-auto" href="">
+      <Link className="ml-auto" to="/profile">
         <img
           src={SuzyBaePic}
           className="object-cover rounded-full w-16 h-16 "
         />
-      </a>
+      </Link>
     </nav>
   );
 }
