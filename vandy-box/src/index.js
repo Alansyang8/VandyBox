@@ -8,6 +8,7 @@ import ErrorPage from './pages/ErrorPage';
 import ProfilePage from './pages/ProfilePage';
 import LoginPage from './pages/LoginPage';
 import { userDataLoader } from './api/userDataLoader';
+import Search from './pages/Search';
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
   {
     path: "login",
     element: <LoginPage />
+  },
+  {
+    path: "search",
+    element: <Search />
   },
   {
     path: "profile/:userId",
