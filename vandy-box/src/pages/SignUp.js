@@ -40,30 +40,35 @@ class SignUpPage extends React.Component {
    }
 
    handleSubmit(event) {
-       event.preventDefault();
-      //  if(this.state.vemail.length<= 15 && this.state.vanderbiltEmail.slice(this.state.vemail.length-15) != "@vanderbilt.edu"){
-       sendSignInLinkToEmail(auth, this.state.vanderbiltEmail, actionCodeSettings)
-           .then(() => {
-               window.localStorage.setItem('emailForSignIn', this.state.vanderbiltEmail);
-           }
-       )
-       .catch((error) => {
-           const errorCode = error.code;
-           const errorMessage = error.message;
-       });
+        event.preventDefault();
+        if(this.state.vanderbiltEmail.length>= 15){
+            if(this.state.vanderbiltEmail.slice(this.state.vanderbiltEmail.length-15) !== "@vanderbilt.edu"){
+                this.setState({ vanderbiltEmail: ""})
+            }
+            else{
+                sendSignInLinkToEmail(auth, this.state.vanderbiltEmail, actionCodeSettings)
+                    .then(() => {
+                    window.localStorage.setItem('emailForSignIn', this.state.vanderbiltEmail);
+                    }
+                )
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                });
 
-
-       if (isSignInWithEmailLink(auth, window.location.href)) {
-           let email = window.localStorage.getItem('emailForSignIn');
-       if(!email){
-           email = window.prompt('Please provide your email for confirmation');
-       }
-       signInWithEmailLink(auth, this.state.vanderbiltEmail, window.location.href)
-           .then((result) => {
-               window.localStorage.removeItem('emailForSignIn');
-       })
-}
-   }
+                if (isSignInWithEmailLink(auth, window.location.href)) {
+                    let email = window.localStorage.getItem('emailForSignIn');
+                if(!email){
+                    email = window.prompt('Please provide your email for confirmation');
+                }
+                signInWithEmailLink(auth, this.state.vanderbiltEmail, window.location.href)
+                    .then((result) => {
+                    window.localStorage.removeItem('emailForSignIn');
+                })
+                }
+            }
+        }
+    }
 
 render(){
   return (
@@ -83,17 +88,19 @@ render(){
         placeholder = "username"
         />
         </div>
-        <div class="mb-4">
+        <div class="mb-6">
         <label class="block text-gray-700 text-sm font-bold mb-2">
           Vanderbilt Email
         </label>
         <input name = "vanderbiltEmail"
         type = "text"
-        class = "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        class = "peer shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         value = {this.state.vanderbiltEmail}
         onChange = {this.handleInputChange}
         placeholder = "Vanderbilt Email"
+        required
         />
+        <p class="invisible peer-invalid:visible text-red-500 text-xs italic"> Must be a Vanderbilt Email</p>
         </div>
         <div class="flex items-center justify-between">
           <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
