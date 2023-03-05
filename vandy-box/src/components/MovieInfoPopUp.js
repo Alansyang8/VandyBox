@@ -2,7 +2,7 @@ function MovieInfoPopUp(props) {
   return (
     <>
       <div className="darken absolute inset-0 m-auto bg-neutral-900/80 pointer-events-none"></div>
-      <div className="MovieInfoPopUp absolute inset-0 m-auto w-fit h-fit max-w-screen-xl bg-neutral-600 pointer-events-none rounded-3xl p-6 flex flex justify-evenly">
+      <div className="MovieInfoPopUp absolute inset-0 m-auto w-fit h-fit max-w-screen-xl bg-neutral-800 pointer-events-none rounded-3xl p-6 flex flex justify-evenly">
         <div className="MovieInfo flex flex-col">
          <div className="text-white  pb-8">
          <span className="font-bold text-4xl">{props.title}</span>

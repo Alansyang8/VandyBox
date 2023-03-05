@@ -13,7 +13,7 @@ import Search from './pages/Search';
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: <App/>,
     errorElement: <ErrorPage />,
   },
   {
