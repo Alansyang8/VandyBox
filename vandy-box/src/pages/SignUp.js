@@ -4,9 +4,6 @@ import { sendSignInLinkToEmail, isSignInWithEmailLink,signInWithEmailLink } from
 import { auth } from '../firebase.js';
 
 
-class App extends React.Component {
-  handleSubmit
-}
 const actionCodeSettings = {
   url:'https://vandy-box.firebaseapp.com',
   handleCodeInApp: true,
@@ -98,18 +95,6 @@ render(){
         placeholder = "Vanderbilt Email"
         />
         </div>
-        {/* <div class="mb-4">
-        <label class="block text-gray-700 text-sm font-bold mb-2">
-          Password
-        </label>
-        <input name = "password"
-        type = "password"
-        class  = "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-        value = {this.state.password}
-        onChange = {this.handleInputChange}
-        placeholder = "password"
-        />
-        </div> */}
         <div class="flex items-center justify-between">
           <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
           Sign Up

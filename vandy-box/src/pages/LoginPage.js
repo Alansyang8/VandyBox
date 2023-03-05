@@ -4,9 +4,6 @@ import { sendSignInLinkToEmail, isSignInWithEmailLink,signInWithEmailLink } from
 import { auth } from '../firebase.js';
 
 
-class App extends React.Component {
-  handleSubmit
-}
 const actionCodeSettings = {
   url:'https://vandy-box.firebaseapp.com',
   handleCodeInApp: true,
@@ -25,7 +22,6 @@ class LoginPage extends React.Component {
    constructor(props) {
        super(props);
        this.state = {
-           username: "",
            vanderbiltEmail: ""
        };
    
