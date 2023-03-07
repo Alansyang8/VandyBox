@@ -136,25 +136,26 @@ const UserProfile = ({ userData }) => {
               {/* <div className="absolute"></div> */}
             </div>
             <div className="flex flex-col space-y-1 justify-center items-left -mt-12 w-80">
-              <span className="font-bold text-xl text-center text-gray-800 hover:text-lime-500 hover:cursor-pointer ">
+              <span data-testid={"name"} className="font-bold text-xl text-center text-gray-800 hover:text-lime-500 hover:cursor-pointer ">
                 {userData.name}
               </span>
-              <p className="text-gray-600 text-sm text-center">
+              <p data-testid={"handle"} className="text-gray-600 text-sm text-center">
                 @{userData.handle}
               </p>
-              <p className="text-black-600 text-sm text-center">
+              <p data-testid={"statusMsg"} className="text-black-600 text-sm text-center">
                 {userData.statusMsg}
               </p>
-              <p className="text-black-600 text-sm text-center">
+              <p data-testid={"additionalInfo"} className="text-black-600 text-sm text-center">
                 {userData.additionalInfo}
               </p>
 
               {/* Follow & Message Buttons */}
               <div className="flex flex-row justify-center font-semibold mx-auto my-4 w-40">
-                <div className="my-auto text-white bg-lime-500 hover:bg-lime-600 hover:cursor-pointer rounded-3xl py-2 px-4 mx-2">
+                <div data-testid="follow" className="my-auto text-white bg-lime-500 hover:bg-lime-600 hover:cursor-pointer rounded-3xl py-2 px-4 mx-2">
                   Follow
                 </div>
                 <div
+                  data-testid="edit"
                   className="my-auto text-white bg-gray-400 hover:bg-gray-500 hover:cursor-pointer rounded-3xl py-2 px-4 mx-2"
                   onClick={handleEdit}
                 >
@@ -184,6 +185,7 @@ const UserProfile = ({ userData }) => {
             }}
           >
             <span
+              data-testid="favMovies"
               className={
                 selectedUserInfo == "Fav Movies"
                   ? "inline-block p-4 text-lime-600 border-b-2 border-lime-600 rounded-t-lg active dark:text-lime-500 dark:border-lime-500"
@@ -200,6 +202,7 @@ const UserProfile = ({ userData }) => {
             }}
           >
             <span
+              data-testid="toWatch"
               className={
                 selectedUserInfo == "To Watch"
                   ? "inline-block p-4 text-lime-600 border-b-2 border-lime-600 rounded-t-lg active dark:text-lime-500 dark:border-lime-500"
@@ -216,6 +219,7 @@ const UserProfile = ({ userData }) => {
             }}
           >
             <span
+              data-testid="friends"
               className={
                 selectedUserInfo == "Friends"
                   ? "inline-block p-4 text-lime-600 border-b-2 border-lime-600 rounded-t-lg active dark:text-lime-500 dark:border-lime-500"
