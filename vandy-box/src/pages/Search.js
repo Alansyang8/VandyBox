@@ -11,7 +11,7 @@ const SEARCH_API_URL =
 
 function Search() {
   const [searchMovieAPI, setSearchMovieAPI] = useState();
-  const [searchBarValue, setSearchBar] = useState("Blackpink");
+  const [searchBarValue, setSearchBar] = useState("");
   const [genreIDFilters, setGenreIDFilters] = useState([]);
   async function get10Movies(url) {
     const res = await fetch(url);
