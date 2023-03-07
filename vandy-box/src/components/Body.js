@@ -10,7 +10,7 @@ const REVENUE_API_URL =
   "http://api.themoviedb.org/3/discover/movie?sort_by=revenue.desc&api_key=75e05708188d5f5a0a191495cf4a48db&page=1";
 const RATINGS_API_URL =
   "http://api.themoviedb.org/3/discover/movie?sort_by=vote_average.desc&vote_count.gte=3000&api_key=75e05708188d5f5a0a191495cf4a48db&page=1";
-const IMG_PATH = "https://image.tmdb.org/t/p/w500";
+const IMG_PATH = "https://image.tmdb.org/t/p/w780";
 const SEARCH_API_URL =
   'https://api.themoviedb.org/3/search/movie?api_key=75e05708188d5f5a0a191495cf4a48db&language=en-US&page=1&include_adult=false&query="';
 
@@ -89,7 +89,7 @@ const trendingMoviesVanderbilt = [
 //   }
 // ];
 
-function Body() {
+function Body({ userId }) {
   const [trendingMovieAPI, setTrendingMovieAPI] = useState();
   const [revenueMovieAPI, setRevenueMovieAPI] = useState();
   const [ratingMovieAPI, setRatingMovieAPI] = useState();
@@ -127,7 +127,7 @@ function Body() {
   }, []);
   return (
     <div className="space-y-4 pb-20">
-      <Header HandleSearch={HandleSearch} />
+      <Header HandleSearch={HandleSearch} userId={userId}/>
       <Container containerTitle="Trending this week">
         {trendingMovieAPI && (
           <MovieSlider movies={trendingMovieAPI}></MovieSlider>

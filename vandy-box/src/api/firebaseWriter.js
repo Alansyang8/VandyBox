@@ -1,5 +1,29 @@
-import { arrayUnion, updateDoc } from "firebase/firestore";
+import { arrayUnion, updateDoc, setDoc, doc, arrayRemove } from "firebase/firestore";
 import { db } from "../firebase";
+
+// Modifies user's name
+export async function modifyName(userId, name) {
+    const docRef = doc(db, "users", userId);
+    await setDoc(docRef, {
+        name: name,
+    }, { merge: true });
+}
+
+// Modifies user's status message
+export async function modifyStatusMsg(userId, msg) {
+    const docRef = doc(db, "users", userId);
+    await setDoc(docRef, {
+        statusMsg: msg,
+    }, { merge: true });
+}
+
+// Modifies user's additional info
+export async function modifyAddInfo(userId, info) {
+    const docRef = doc(db, "users", userId);
+    await setDoc(docRef, {
+        additionalInfo: info,
+    }, { merge: true });
+}
 
 // Add a movie to favorites collection
 export async function addToFavorites(userId, title) {

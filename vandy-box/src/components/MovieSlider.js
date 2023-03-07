@@ -6,12 +6,15 @@ const MovieSlider = ({ movies }) => {
   const [movieDescription, setMovieDescription] = useState("Test");
   const [movieRelease, setMovieRelease] = useState("Test");
   const [movieRating, setMovieRating] = useState("Test");
+  const [moviePoster, setMoviePoster] = useState("Test");
+  const [movieTitle, setMovieTitle] = useState("Test");
   const [showingPopup, setShowingPopup] = useState(false);
+
 
   return (
     <>
       {showingPopup && (
-        <MovieInfoPopUp description={movieDescription} release_date={movieRelease} vote_average={movieRating}></MovieInfoPopUp>
+        <MovieInfoPopUp description={movieDescription} title={movieTitle} release_date={movieRelease} vote_average={movieRating} image={moviePoster}></MovieInfoPopUp>
       )}
       <div className="flex space-x-5">
         {movies.map((movie) => (
@@ -24,10 +27,12 @@ const MovieSlider = ({ movies }) => {
                 setMovieDescription(movie.overview)
                 setMovieRelease(movie.release_date)
                 setMovieRating(movie.vote_average)
+                setMoviePoster(movie.image)
+                setMovieTitle(movie.title)
                 setShowingPopup(true)}}
               onMouseOut={() => setShowingPopup(false)}
             />
-            <span>{movie.title}</span>
+            <div className="text-center">{movie.title}</div>
           </div>
         ))}
       </div>

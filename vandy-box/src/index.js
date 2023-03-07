@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import './index.css';
-import App from './App';
+import Home from "./pages/Home";
 import reportWebVitals from './reportWebVitals';
 import ErrorPage from './pages/ErrorPage';
 import ProfilePage from './pages/ProfilePage';
@@ -13,7 +13,7 @@ import Search from './pages/Search';
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: <Home />,
     errorElement: <ErrorPage />,
   },
   {
@@ -29,7 +29,7 @@ const router = createBrowserRouter([
     element: <ProfilePage />,
     loader: userDataLoader,
   },
-])
+]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
