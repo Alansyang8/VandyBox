@@ -89,7 +89,7 @@ const trendingMoviesVanderbilt = [
 //   }
 // ];
 
-function Body() {
+function Body({ userId }) {
   const [trendingMovieAPI, setTrendingMovieAPI] = useState();
   const [revenueMovieAPI, setRevenueMovieAPI] = useState();
   const [ratingMovieAPI, setRatingMovieAPI] = useState();
@@ -127,7 +127,7 @@ function Body() {
   }, []);
   return (
     <div className="space-y-4 pb-20">
-      <Header HandleSearch={HandleSearch} />
+      <Header HandleSearch={HandleSearch} userId={userId}/>
       <Container containerTitle="Trending this week">
         {trendingMovieAPI && (
           <MovieSlider movies={trendingMovieAPI}></MovieSlider>

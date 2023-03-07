@@ -29,7 +29,7 @@ const router = createBrowserRouter([
     element: <ProfilePage />,
     loader: userDataLoader,
   },
-])
+]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
