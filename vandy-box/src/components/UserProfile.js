@@ -7,6 +7,8 @@ import {
   modifyAddInfo,
   modifyName,
   modifyStatusMsg,
+  addToFavorites,
+  deleteFromFavorites
 } from "../api/firebaseWriter";
 import { doc, getDoc } from "firebase/firestore";
 import Recommendations from "./Recommendations";
@@ -38,6 +40,9 @@ const UserProfile = ({ userData }) => {
   const [statusMsg, setStatusMsg] = useState("");
   const [additionalInfo, setAdditionalInfo] = useState("");
   const[thirtyMovieRec, setThirtyMovieRec] = useState([])
+  const[firebaseUserID, setFirebaseUserID] = useState("")
+
+ 
 
   async function get1MovieByID(url) {
     const res = await fetch(url);
@@ -46,7 +51,7 @@ const UserProfile = ({ userData }) => {
   }
 
   function Simplify(movie) {
-    const { title, poster_path, overview, release_date, vote_average } = movie;
+    const { title, poster_path, overview, release_date, vote_average, id } = movie;
 
     return {
       title: title,
@@ -54,7 +59,7 @@ const UserProfile = ({ userData }) => {
       overview: overview,
       release_date: release_date,
       vote_average: vote_average,
-    };
+      id: id    };
   }
 
   async function apiCall() {
@@ -152,7 +157,7 @@ const UserProfile = ({ userData }) => {
         ];
       }
     }
-    console.log(dictMovies);
+    // console.log(dictMovies);
     let dictMoviesSorted = []
 
     for(let i = userData.favorites.length; i >= 1; i--){
@@ -163,7 +168,7 @@ const UserProfile = ({ userData }) => {
       }
     }
 
-    console.log(dictMoviesSorted)
+    // console.log(dictMoviesSorted)
 
     let best30RecommendedMovieIDS = dictMoviesSorted.slice(0, 30)
     let best30RecommendedMovieObjects = []
@@ -173,7 +178,7 @@ const UserProfile = ({ userData }) => {
 
     setThirtyMovieRec(best30RecommendedMovieObjects)
 
-    console.log(best30RecommendedMovieObjects)
+    // console.log(best30RecommendedMovieObjects)
 
 
  
@@ -196,9 +201,18 @@ const UserProfile = ({ userData }) => {
     return data.results;
   }
 
+  async function storeFirebaseID() {
+    const userEmail = auth.currentUser.email;
+    const userIdRef = doc(db, "userIdMap", userEmail);
+    const docSnap = await getDoc(userIdRef);
+    setFirebaseUserID(docSnap.data().userId);
+  }
+
   useEffect(() => {
     apiCall();
     getRecommendedMovies();
+    storeFirebaseID()
+    
   }, []);
 
   const [selectedUserInfo, setSelectedUserInfo] = useState("Fav Movies");
@@ -217,6 +231,17 @@ const UserProfile = ({ userData }) => {
       modifyName(userId, userName);
       modifyStatusMsg(userId, statusMsg);
       modifyAddInfo(userId, additionalInfo);
+    } else {
+      console.error("Could not find document.");
+    }
+  };
+
+  async function handleAddToFavorites(userId, movieID)  {
+    const userEmail = auth.currentUser.email;
+    const userIdRef = doc(db, "userIdMap", userEmail);
+    const docSnap = await getDoc(userIdRef);
+    if (docSnap.exists()) {
+      addToFavorites(userId, movieID)
     } else {
       console.error("Could not find document.");
     }
@@ -326,7 +351,7 @@ const UserProfile = ({ userData }) => {
         {/* User TOP 3 Favorite Movies Display */}
         <div className="flex flex-row w-full justify-end">
           <div className="flex flex-row bg-lime-100 justify-center my-6 w-2/5 h-4/5 rounded-xl mr-8 p-8">
-            {movieObjects && <MovieSlider movies={movieObjects} />}
+            {movieObjects && <MovieSlider movies={movieObjects} userID={firebaseUserID} handleAddToFavorites={handleAddToFavorites}/>}
             {/* {movieObjects.length == 3 && <MovieSlider movies={movieObjects} />} */}
           </div>
         </div>

@@ -8,13 +8,17 @@ const MovieSliderGrid = ({ movies }) => {
   const [movieRating, setMovieRating] = useState("Test");
   const [moviePoster, setMoviePoster] = useState("Test");
   const [movieTitle, setMovieTitle] = useState("Test");
+  const [movieID, setMovieID] = useState("Test");
   const [showingPopup, setShowingPopup] = useState(false);
+  function handleOnMouseLeave(){
+    setShowingPopup(false)
+  }
 
 
   return (
     <>
       {showingPopup && (
-        <MovieInfoPopUp description={movieDescription} title={movieTitle} release_date={movieRelease} vote_average={movieRating} image={moviePoster}></MovieInfoPopUp>
+        <MovieInfoPopUp description={movieDescription} title={movieTitle} release_date={movieRelease} vote_average={movieRating} image={moviePoster} id={movieID} handleOnMouseLeave={handleOnMouseLeave}></MovieInfoPopUp>
       )}
       <div className="flex flex-wrap gap-5 w-full justify-center">
         {movies.map((movie) => (
@@ -29,8 +33,8 @@ const MovieSliderGrid = ({ movies }) => {
                 setMovieRating(movie.vote_average)
                 setMoviePoster(movie.image)
                 setMovieTitle(movie.title)
+                setMovieID(movie.id)
                 setShowingPopup(true)}}
-              onMouseOut={() => setShowingPopup(false)}
             />
             <div className="text-center">{movie.title}</div>
           </div>

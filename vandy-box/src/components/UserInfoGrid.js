@@ -16,7 +16,7 @@ function UserInfoGrid({ userData, selectedUserInfo }) {
   }
 
   function Simplify(movie) {
-    const { title, poster_path, overview, release_date, vote_average } = movie;
+    const { title, poster_path, overview, release_date, vote_average, id } = movie;
 
     return {
       title: title,
@@ -24,6 +24,7 @@ function UserInfoGrid({ userData, selectedUserInfo }) {
       overview: overview,
       release_date: release_date,
       vote_average: vote_average,
+      id: id
     };
   }
 
