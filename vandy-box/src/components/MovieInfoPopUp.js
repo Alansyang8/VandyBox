@@ -24,7 +24,7 @@ function MovieInfoPopUp(props) {
         </div>
         <div className="text-white pb-8">
           <span className="text-2xl">{props.description}</span>
-          
+  
         </div>
         <div className="text-white mt-auto text-xl">
           <span className="font-bold text-xl">Release Date: &nbsp;</span>
