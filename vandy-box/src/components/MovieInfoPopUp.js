@@ -9,6 +9,7 @@ function MovieInfoPopUp(props) {
   useEffect(() => {
     ref.current.style.top = `${document.documentElement.scrollTop}px`
     ref2.current.style.top = `${document.documentElement.scrollTop}px`
+    console.log(props.listOfFavorites)
     // ref2.current.style.marginTop = "500px"
   }, []);
   
@@ -19,8 +20,13 @@ function MovieInfoPopUp(props) {
         <div className="MovieInfo flex flex-col">
          <div className="text-white  pb-8 flex items-center">
          <span className="font-bold text-4xl">{props.title}</span>
-          <button onClick={() => {props.handleAddToFavorites(props.userID, props.id)
-          console.log(props.userID)}} className="ml-auto text-black bg-lime-100 pl-3 pr-3 pt-2 pb-2 rounded-xl">Add to Favorites</button>
+         <div className='ml-auto'>
+          {!props.listOfFavorites.includes(props.id) && <button className="AddToFavoritesButton ml-auto text-black bg-lime-100 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {props.handleAddToFavorites(props.userID, props.id)
+          console.log("Adding " + props.id + " to " + props.userID) }} >Add to Favorites</button>}
+          {props.listOfFavorites.includes(props.id) && <button className="RemoveFromFavoritesButton ml-auto text-black bg-lime-100 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {props.handleRemoveFromFavorites(props.userID, props.id)
+          console.log("Remove " + props.id + " from " + props.userID) }} >Remove from Favorites</button>}
+        </div>
+        
         </div>
         <div className="text-white pb-8">
           <span className="text-2xl">{props.description}</span>

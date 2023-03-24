@@ -7,7 +7,7 @@ const SEARCH_BY_ID_URL_SECOND_HALF =
   "?api_key=75e05708188d5f5a0a191495cf4a48db&language=en-US";
 const IMG_PATH = "https://image.tmdb.org/t/p/w500";
 
-function UserInfoGrid({ userData, selectedUserInfo }) {
+function UserInfoGrid({ userData, selectedUserInfo, userID, handleAddToFavorites, listOfFavorites, handleRemoveFromFavorites}) {
   const [favoriteMoviesObjects, setFavoriteMoviesObjects] = useState([]);
   async function get1MovieByID(url) {
     const res = await fetch(url);
@@ -48,7 +48,7 @@ function UserInfoGrid({ userData, selectedUserInfo }) {
       {(selectedUserInfo == "Fav Movies" && favoriteMoviesObjects.length != 0) && favoriteMoviesObjects.map((movieObject) => (
           <div className="flex justify-center items-center h-80">
             <div className="h-full w-64 flex justify-center items-center border border-yellow-500">
-              <SingleMovieFrame movie={movieObject} />
+              <SingleMovieFrame movie={movieObject} userID={userID} handleAddToFavorites={handleAddToFavorites} listOfFavorites={listOfFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites}/>
             </div>
           </div>
         ))}

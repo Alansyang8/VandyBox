@@ -2,7 +2,7 @@ import React from "react";
 import MovieInfoPopUp from "./MovieInfoPopUp";
 import { useState, useEffect } from "react";
 
-const MovieSliderGrid = ({ movies }) => {
+const MovieSliderGrid = ({ movies, userID, handleAddToFavorites, listOfFavorites, handleRemoveFromFavorites }) => {
   const [movieDescription, setMovieDescription] = useState("Test");
   const [movieRelease, setMovieRelease] = useState("Test");
   const [movieRating, setMovieRating] = useState("Test");
@@ -18,7 +18,7 @@ const MovieSliderGrid = ({ movies }) => {
   return (
     <>
       {showingPopup && (
-        <MovieInfoPopUp description={movieDescription} title={movieTitle} release_date={movieRelease} vote_average={movieRating} image={moviePoster} id={movieID} handleOnMouseLeave={handleOnMouseLeave}></MovieInfoPopUp>
+        <MovieInfoPopUp description={movieDescription} title={movieTitle} release_date={movieRelease} vote_average={movieRating} image={moviePoster} id={movieID} handleOnMouseLeave={handleOnMouseLeave} userID={userID} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} listOfFavorites={listOfFavorites}></MovieInfoPopUp>
       )}
       <div className="flex flex-wrap gap-5 w-full justify-center">
         {movies.map((movie) => (

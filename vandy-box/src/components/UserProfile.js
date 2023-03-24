@@ -247,6 +247,17 @@ const UserProfile = ({ userData }) => {
     }
   };
 
+  async function handleRemoveFromFavorites(userId, movieID)  {
+    const userEmail = auth.currentUser.email;
+    const userIdRef = doc(db, "userIdMap", userEmail);
+    const docSnap = await getDoc(userIdRef);
+    if (docSnap.exists()) {
+      deleteFromFavorites(userId, movieID)
+    } else {
+      console.error("Could not find document.");
+    }
+  };
+
   return (
     <div>
       {editMode && (
@@ -351,7 +362,7 @@ const UserProfile = ({ userData }) => {
         {/* User TOP 3 Favorite Movies Display */}
         <div className="flex flex-row w-full justify-end">
           <div className="flex flex-row bg-lime-100 justify-center my-6 w-2/5 h-4/5 rounded-xl mr-8 p-8">
-            {movieObjects && <MovieSlider movies={movieObjects} userID={firebaseUserID} handleAddToFavorites={handleAddToFavorites}/>}
+            {movieObjects && <MovieSlider movies={movieObjects} userID={firebaseUserID} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} listOfFavorites={userData.favorites}/>}
             {/* {movieObjects.length == 3 && <MovieSlider movies={movieObjects} />} */}
           </div>
         </div>
@@ -421,8 +432,8 @@ const UserProfile = ({ userData }) => {
           </div>
         </div>
       </div>
-      <UserInfoGrid userData={userData} selectedUserInfo={selectedUserInfo} />
-     <Recommendations movies={thirtyMovieRec}></Recommendations>
+      <UserInfoGrid userData={userData} selectedUserInfo={selectedUserInfo} userID={firebaseUserID} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} listOfFavorites={userData.favorites}/>
+     <Recommendations movies={thirtyMovieRec} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} userID={firebaseUserID} listOfFavorites={userData.favorites}></Recommendations>
     </div>
   );
 };
