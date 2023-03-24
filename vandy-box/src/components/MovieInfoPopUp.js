@@ -15,7 +15,7 @@ function MovieInfoPopUp(props) {
   
   return (
     <>
-      <div className="absolute w-[calc(100vw-16.5px)] h-screen left-0 top-0 bg-neutral-900/80 pointer-events-none" ref={ref2}></div>
+      <div className="absolute w-[calc(100vw-16.5px)] h-screen left-0 top-0 bg-neutral-900/80" ref={ref2}></div>
       <div className="MovieInfoPopUp absolute inset-0  ml-auto mr-auto mt-[25vh] w-fit h-fit max-w-[90vw] bg-neutral-800 rounded-3xl p-6 flex justify-evenly" onMouseLeave={props.handleOnMouseLeave} ref={ref}>
         <div className="MovieInfo flex flex-col">
          <div className="text-white  pb-8 flex items-center">
