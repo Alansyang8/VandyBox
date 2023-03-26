@@ -26,18 +26,18 @@ export async function modifyAddInfo(userId, info) {
 }
 
 // Add a movie to favorites collection
-export async function addToFavorites(userId, title) {
+export async function addToFavorites(userId, movieID) {
     const docRef = doc(db, "users", userId);
     await updateDoc(docRef, {
-        favorites: arrayUnion(title),
+        favorites: arrayUnion(movieID),
     });
 }
 
 // Delete a movie from favorites collection
-export async function deleteFromFavorites(userId, title) {
+export async function deleteFromFavorites(userId, movieID) {
     const docRef = doc(db, "users", userId);
     await updateDoc(docRef, {
-        favorites: arrayRemove(title),
+        favorites: arrayRemove(movieID),
     });
 }
 

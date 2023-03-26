@@ -28,13 +28,14 @@ function getFirstTen(array) {
 function addMoviesToArray(movies) {
   let array = [];
   movies.forEach((movie) => {
-    const { title, poster_path, overview, release_date, vote_average } = movie;
+    const { title, poster_path, overview, release_date, vote_average, id } = movie;
       array.push({
         title: title,
         image: `${IMG_PATH}${poster_path}`,
         overview: overview,
         release_date: release_date,
-        vote_average: vote_average
+        vote_average: vote_average,
+        id: id
       });
   });
   return array;
