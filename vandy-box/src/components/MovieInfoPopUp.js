@@ -1,8 +1,11 @@
 import { useRef, useEffect } from 'react';
 
+
 function MovieInfoPopUp(props) {
   const ref = useRef(); 
   const ref2 = useRef(); 
+
+  
 
   useEffect(() => {
     ref.current.style.top = `${document.documentElement.scrollTop}px`
@@ -13,14 +16,22 @@ function MovieInfoPopUp(props) {
   return (
     <>
       <div className="absolute w-[calc(100vw-16.5px)] h-screen left-0 top-0 bg-neutral-900/80 pointer-events-none" ref={ref2}></div>
+      
       <div className="MovieInfoPopUp absolute inset-0  ml-auto mr-auto mt-[25vh] w-fit h-fit max-w-[90vw] bg-neutral-800 pointer-events-none rounded-3xl p-6 flex justify-evenly" ref={ref}>
-        <div className="MovieInfo flex flex-col">
+      
+         <div className="MovieInfo flex flex-col" >
          <div className="text-white  pb-8">
          <span className="font-bold text-4xl">{props.title}</span>
           
         </div>
         <div className="text-white pb-8">
           <span className="text-2xl">{props.description}</span>
+          
+          <button class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
+          Add Rating
+          </button>
+
+
   
         </div>
         <div className="text-white mt-auto text-xl">
