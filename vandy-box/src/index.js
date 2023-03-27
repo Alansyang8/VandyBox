@@ -9,6 +9,7 @@ import ProfilePage from './pages/ProfilePage';
 import LoginPage from './pages/LoginPage';
 import { userDataLoader } from './api/userDataLoader';
 import Search from './pages/Search';
+import ProfileSetup from "./pages/ProfileSetup";
 
 const router = createBrowserRouter([
   {
@@ -29,6 +30,11 @@ const router = createBrowserRouter([
     element: <ProfilePage />,
     loader: userDataLoader,
   },
+  {
+    path: "profileSetup/:userId",
+    element: <ProfileSetup />,
+    loader: userDataLoader,
+  }
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

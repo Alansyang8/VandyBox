@@ -3,7 +3,7 @@ import UserInfoGrid from "./UserInfoGrid";
 import { useState, useEffect } from "react";
 import MovieSlider from "./MovieSlider";
 import { auth, db } from "../firebase";
-import { modifyAddInfo, modifyName, modifyStatusMsg } from "../api/firebaseWriter";
+import { modifyAddInfo, modifyName, modifyStatusMsg, addFriendRequest, addToFriends, addTopThreeMovie } from "../api/firebaseWriter";
 import { doc, getDoc } from "firebase/firestore";
 
 const IMG_PATH = "https://image.tmdb.org/t/p/w500";
@@ -16,6 +16,10 @@ const UserProfile = ({ userData }) => {
   const [userName, setUserName] = useState("");
   const [statusMsg, setStatusMsg] = useState("");
   const [additionalInfo, setAdditionalInfo] = useState("");
+  const [friendRequest, setFriendRequest] = useState([]);
+  const [favMovie1, setFavMovie1] = useState("");
+  const [favMovie2, setFavMovie2] = useState("");
+  const [favMovie3, setFavMovie3] = useState("");
 
   async function get1Movie(url) {
     const res = await fetch(url);
@@ -66,13 +70,52 @@ const UserProfile = ({ userData }) => {
 
       if (docSnap.exists()) {
         const userId = docSnap.data().userId;
-        modifyName(userId, userName);
-        modifyStatusMsg(userId, statusMsg);
-        modifyAddInfo(userId, additionalInfo);
+        if(userName != "")
+          modifyName(userId, userName);
+        if(statusMsg != "")
+          modifyStatusMsg(userId, statusMsg);
+        if(additionalInfo != "")
+          modifyAddInfo(userId, additionalInfo);
+        if(favMovie1 != ""){
+          addTopThreeMovie(userId, favMovie1);
+        }
+        if(favMovie2 != ""){
+          addTopThreeMovie(userId, favMovie2);
+        }
+        if(favMovie3 != ""){
+          addTopThreeMovie(userId, favMovie3);
+        }
+        window.location.reload(true);
       } else {
         console.error("Could not find document.");
       }
   };
+
+  const handleFollow = async () =>{
+    const userEmail = auth.currentUser.email;
+    const userIdRef = doc(db, 'userIdMap', userEmail);
+      const docSnap = await getDoc(userIdRef);
+
+      if (docSnap.exists()) {
+        const userId = docSnap.data().userId;
+        addFriendRequest(userData.handle, userId);
+      } else {
+        console.error("Could not find document.");
+      }
+  };
+
+  const handleAccept = async (ind) =>{
+    const userEmail = auth.currentUser.email;
+    const userIdRef = doc(db, 'userIdMap', userEmail);
+      const docSnap = await getDoc(userIdRef);
+
+      if (docSnap.exists()) {
+        const userId = docSnap.data().userId;
+        addToFriends(userId, userData.friendRequest[ind]);
+      } else {
+        console.error("Could not find document.");
+      }
+  }
 
   return (
     <div>
@@ -104,6 +147,33 @@ const UserProfile = ({ userData }) => {
               value={additionalInfo}
               onChange={(e) => {
                 setAdditionalInfo(e.target.value);
+              }}
+            />
+          </div>
+          <div className="flex flex-col space-y-2 mb-8">
+          <label className="font-bold">Top 3 Movies</label>
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              placeholder="Movie 1"
+              value={favMovie1}
+              onChange={(e) => {
+                setFavMovie1(e.target.value);
+              }}
+            />
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              placeholder="Movie 2"
+              value={favMovie2}
+              onChange={(e) => {
+                setFavMovie2(e.target.value);
+              }}
+            />
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              placeholder="Movie 3"
+              value={favMovie3}
+              onChange={(e) => {
+                setFavMovie3(e.target.value);
               }}
             />
           </div>
@@ -151,7 +221,8 @@ const UserProfile = ({ userData }) => {
 
               {/* Follow & Message Buttons */}
               <div className="flex flex-row justify-center font-semibold mx-auto my-4 w-40">
-                <div data-testid="follow" className="my-auto text-white bg-lime-500 hover:bg-lime-600 hover:cursor-pointer rounded-3xl py-2 px-4 mx-2">
+                <div data-testid="follow" className="my-auto text-white bg-lime-500 hover:bg-lime-600 hover:cursor-pointer rounded-3xl py-2 px-4 mx-2"
+                  onClick={handleFollow}>
                   Follow
                 </div>
                 <div

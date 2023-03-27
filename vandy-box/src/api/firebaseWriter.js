@@ -72,3 +72,28 @@ export async function deleteFromToWatch(userId, title) {
         toWatch: arrayRemove(title),
     });
 }
+
+//adds a friend request to the user
+export async function addFriendRequest(userId, id) {
+    const docRef = doc(db, "users", userId);
+    await updateDoc(docRef, {
+        friendRequest: arrayUnion(id),
+    });
+}
+
+//adds a movie to top 3 movies
+export async function addTopThreeMovie(userId, title) {
+    const docRef = doc(db, "users", userId);
+    await updateDoc(docRef, {
+        topThreeMovies: arrayUnion(title),
+    }, { merge: true });
+}
+
+//delete a movie to top 3 movies
+export async function deleteTopThreeMovie(userId, title) {
+    const docRef = doc(db, "users", userId);
+    await updateDoc(docRef, {
+        topThreeMovies: arrayRemove(title),
+    }, { merge: true });
+}
+
