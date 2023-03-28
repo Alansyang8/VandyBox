@@ -3,7 +3,7 @@ import UserInfoGrid from "./UserInfoGrid";
 import { useState, useEffect } from "react";
 import MovieSlider from "./MovieSlider";
 import { auth, db } from "../firebase";
-import { modifyAddInfo, modifyName, modifyStatusMsg, addFriendRequest, addToFriends, addTopThreeMovie } from "../api/firebaseWriter";
+import { modifyAddInfo, modifyName, modifyStatusMsg, addFriendRequest, addToFriends, addTopThreeMovie, deleteTopThreeMovie } from "../api/firebaseWriter";
 import { doc, getDoc } from "firebase/firestore";
 
 const IMG_PATH = "https://image.tmdb.org/t/p/w500";
@@ -70,19 +70,38 @@ const UserProfile = ({ userData }) => {
 
       if (docSnap.exists()) {
         const userId = docSnap.data().userId;
-        if(userName != "")
+        if(userName != ""){
           modifyName(userId, userName);
-        if(statusMsg != "")
+        }
+        if(statusMsg != ""){
           modifyStatusMsg(userId, statusMsg);
-        if(additionalInfo != "")
+        }
+        if(additionalInfo != ""){
           modifyAddInfo(userId, additionalInfo);
+        }
+        let list = userData.topThreeMovies.length;
         if(favMovie1 != ""){
+          if(list == 3){
+            deleteTopThreeMovie(userId, userData.topThreeMovies[0]);
+            list-=1;
+          }
+          list +=1;
           addTopThreeMovie(userId, favMovie1);
         }
         if(favMovie2 != ""){
+          if(list == 3){
+            deleteTopThreeMovie(userId, userData.topThreeMovies[1]);
+            list-=1;
+          }
+          list +=1;
           addTopThreeMovie(userId, favMovie2);
         }
         if(favMovie3 != ""){
+          if(list == 3){
+            deleteTopThreeMovie(userId, userData.topThreeMovies[2]);
+            list-=1;
+          }
+          list +=1;
           addTopThreeMovie(userId, favMovie3);
         }
         window.location.reload(true);
@@ -112,6 +131,7 @@ const UserProfile = ({ userData }) => {
       if (docSnap.exists()) {
         const userId = docSnap.data().userId;
         addToFriends(userId, userData.friendRequest[ind]);
+        addToFriends(ind, userId);
       } else {
         console.error("Could not find document.");
       }

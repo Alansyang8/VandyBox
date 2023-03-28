@@ -96,4 +96,3 @@ export async function deleteTopThreeMovie(userId, title) {
         topThreeMovies: arrayRemove(title),
     }, { merge: true });
 }
-
