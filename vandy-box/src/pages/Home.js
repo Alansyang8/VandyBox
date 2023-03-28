@@ -5,11 +5,65 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase";
+import {
+  addToFavorites,
+  deleteFromFavorites,
+  addToToWatch,
+  deleteFromToWatch
+} from "../api/firebaseWriter";
+import { useLoaderData } from "react-router-dom";
 
 function Home() {
-
+  //const userData = useLoaderData();
   const navigate = useNavigate();
   const [userId, setUserId] = useState("");
+  const [listOfFavorites, setListOfFavorites] = useState([]);
+  const [toWatchList, setToWatchList] = useState([]);
+  
+
+  async function handleAddToFavorites(userId, movieID)  {
+    const userEmail = auth.currentUser.email;
+    const userIdRef = doc(db, "userIdMap", userEmail);
+    const docSnap = await getDoc(userIdRef);
+    if (docSnap.exists()) {
+      addToFavorites(userId, movieID)
+    } else {
+      console.error("Could not find document.");
+    }
+  };
+
+  async function handleRemoveFromFavorites(userId, movieID)  {
+    const userEmail = auth.currentUser.email;
+    const userIdRef = doc(db, "userIdMap", userEmail);
+    const docSnap = await getDoc(userIdRef);
+    if (docSnap.exists()) {
+      deleteFromFavorites(userId, movieID)
+    } else {
+      console.error("Could not find document.");
+    }
+  };
+
+  async function handleAddToWatch(userId, movieID)  {
+    const userEmail = auth.currentUser.email;
+    const userIdRef = doc(db, "userIdMap", userEmail);
+    const docSnap = await getDoc(userIdRef);
+    if (docSnap.exists()) {
+      addToToWatch(userId, movieID)
+    } else {
+      console.error("Could not find document.");
+    }
+  };
+
+  async function handleRemoveFromWatch(userId, movieID)  {
+    const userEmail = auth.currentUser.email;
+    const userIdRef = doc(db, "userIdMap", userEmail);
+    const docSnap = await getDoc(userIdRef);
+    if (docSnap.exists()) {
+      deleteFromToWatch(userId, movieID)
+    } else {
+      console.error("Could not find document.");
+    }
+  };
 
   useEffect(() => {
     // Observe auth state to redirect to login/home page
@@ -22,6 +76,8 @@ function Home() {
 
       if (docSnap.exists()) {
         setUserId(docSnap.data().userId);
+        //setListOfFavorites(userData.favorites)
+
       } else {
         console.error("Could not find document.");
       }
@@ -33,7 +89,7 @@ function Home() {
 
   return (
     <div className="Home">
-      <Body userId={userId}></Body>
+      <Body userId={userId} listOfFavorites={listOfFavorites} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={toWatchList}></Body>
     </div>
   );
 }

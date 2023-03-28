@@ -8,7 +8,9 @@ import {
   modifyName,
   modifyStatusMsg,
   addToFavorites,
-  deleteFromFavorites
+  deleteFromFavorites,
+  deleteFromToWatch,
+  addToToWatch
 } from "../api/firebaseWriter";
 import { doc, getDoc } from "firebase/firestore";
 import Recommendations from "./Recommendations";
@@ -169,12 +171,28 @@ const UserProfile = ({ userData }) => {
     }
 
     // console.log(dictMoviesSorted)
+    for (const movieID of userData.favorites) {
+      let index = dictMoviesSorted.indexOf(movieID)
+      if(movieID > -1) {
+        dictMoviesSorted.splice(index, 1)
+      }
+    }
+
+    for (const movieID of userData.toWatch) {
+      let index = dictMoviesSorted.indexOf(movieID)
+      if(movieID > -1) {
+        dictMoviesSorted.splice(index, 1)
+      }
+    }
 
     let best30RecommendedMovieIDS = dictMoviesSorted.slice(0, 30)
+
     let best30RecommendedMovieObjects = []
     for(const MovieID of best30RecommendedMovieIDS) {
       best30RecommendedMovieObjects.push(await get1MovieByID(SEARCH_BY_ID_URL_FIRST_HALF + MovieID +SEARCH_BY_ID_URL_SECOND_HALF ))
     }
+
+
 
     setThirtyMovieRec(best30RecommendedMovieObjects)
 
@@ -253,6 +271,28 @@ const UserProfile = ({ userData }) => {
     const docSnap = await getDoc(userIdRef);
     if (docSnap.exists()) {
       deleteFromFavorites(userId, movieID)
+    } else {
+      console.error("Could not find document.");
+    }
+  };
+
+  async function handleAddToWatch(userId, movieID)  {
+    const userEmail = auth.currentUser.email;
+    const userIdRef = doc(db, "userIdMap", userEmail);
+    const docSnap = await getDoc(userIdRef);
+    if (docSnap.exists()) {
+      addToToWatch(userId, movieID)
+    } else {
+      console.error("Could not find document.");
+    }
+  };
+
+  async function handleRemoveFromWatch(userId, movieID)  {
+    const userEmail = auth.currentUser.email;
+    const userIdRef = doc(db, "userIdMap", userEmail);
+    const docSnap = await getDoc(userIdRef);
+    if (docSnap.exists()) {
+      deleteFromToWatch(userId, movieID)
     } else {
       console.error("Could not find document.");
     }
@@ -362,7 +402,7 @@ const UserProfile = ({ userData }) => {
         {/* User TOP 3 Favorite Movies Display */}
         <div className="flex flex-row w-full justify-end">
           <div className="flex flex-row bg-lime-100 justify-center my-6 w-2/5 h-4/5 rounded-xl mr-8 p-8">
-            {movieObjects && <MovieSlider movies={movieObjects} userID={firebaseUserID} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} listOfFavorites={userData.favorites}/>}
+            {movieObjects && <MovieSlider movies={movieObjects} userID={firebaseUserID} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} listOfFavorites={userData.favorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData.toWatch}/>}
             {/* {movieObjects.length == 3 && <MovieSlider movies={movieObjects} />} */}
           </div>
         </div>
@@ -432,8 +472,8 @@ const UserProfile = ({ userData }) => {
           </div>
         </div>
       </div>
-      <UserInfoGrid userData={userData} selectedUserInfo={selectedUserInfo} userID={firebaseUserID} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} listOfFavorites={userData.favorites}/>
-     <Recommendations movies={thirtyMovieRec} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} userID={firebaseUserID} listOfFavorites={userData.favorites}></Recommendations>
+      <UserInfoGrid userData={userData} selectedUserInfo={selectedUserInfo} userID={firebaseUserID} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} listOfFavorites={userData.favorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData.toWatch}/>
+     <Recommendations movies={thirtyMovieRec} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} userID={firebaseUserID} listOfFavorites={userData.favorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData.toWatch}></Recommendations>
     </div>
   );
 };
