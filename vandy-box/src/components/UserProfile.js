@@ -104,7 +104,7 @@ const UserProfile = ({ userData }) => {
           list +=1;
           addTopThreeMovie(userId, favMovie3);
         }
-        window.location.reload(true);
+        setTimeout(() => {window.location.reload(true);}, 1000);
       } else {
         console.error("Could not find document.");
       }
