@@ -9,7 +9,9 @@ import {
   addToFavorites,
   deleteFromFavorites,
   addToToWatch,
-  deleteFromToWatch
+  deleteFromToWatch,
+  addToToSeen,
+  deleteFromSeen
 } from "../api/firebaseWriter";
 import { useLoaderData } from "react-router-dom";
 
@@ -19,6 +21,8 @@ function Home() {
   const [userId, setUserId] = useState("");
   const [listOfFavorites, setListOfFavorites] = useState([]);
   const [toWatchList, setToWatchList] = useState([]);
+  const [seenList, setSeenWatchList] = useState([]);
+
   
 
   async function handleAddToFavorites(userId, movieID)  {
@@ -65,6 +69,29 @@ function Home() {
     }
   };
 
+  async function handleAddToSeen(userId, movieID)  {
+    const userEmail = auth.currentUser.email;
+    const userIdRef = doc(db, "userIdMap", userEmail);
+    const docSnap = await getDoc(userIdRef);
+    if (docSnap.exists()) {
+      addToToSeen(userId, movieID)
+    } else {
+      console.error("Could not find document.");
+    }
+  };
+
+  async function handleRemoveFromSeen(userId, movieID)  {
+    const userEmail = auth.currentUser.email;
+    const userIdRef = doc(db, "userIdMap", userEmail);
+    const docSnap = await getDoc(userIdRef);
+    if (docSnap.exists()) {
+      deleteFromSeen(userId, movieID)
+    } else {
+      console.error("Could not find document.");
+    }
+  };
+
+
   useEffect(() => {
     // Observe auth state to redirect to login/home page
   onAuthStateChanged(auth, async (user) => {
@@ -89,7 +116,7 @@ function Home() {
 
   return (
     <div className="Home">
-      <Body userId={userId} listOfFavorites={listOfFavorites} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={toWatchList}></Body>
+      <Body userId={userId} listOfFavorites={listOfFavorites} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={toWatchList} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={seenList}></Body>
     </div>
   );
 }

@@ -72,3 +72,18 @@ export async function deleteFromToWatch(userId, movieID) {
         toWatch: arrayRemove(movieID),
     });
 }
+
+export async function addToToSeen(userId, movieID) {
+    const docRef = doc(db, "users", userId);
+    await updateDoc(docRef, {
+        seen: arrayUnion(movieID),
+    });
+}
+
+// Delete a movie from to-watch collection
+export async function deleteFromSeen(userId, movieID) {
+    const docRef = doc(db, "users", userId);
+    await updateDoc(docRef, {
+        seen: arrayRemove(movieID),
+    });
+}

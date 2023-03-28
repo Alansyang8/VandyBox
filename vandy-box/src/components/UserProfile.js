@@ -10,7 +10,9 @@ import {
   addToFavorites,
   deleteFromFavorites,
   deleteFromToWatch,
-  addToToWatch
+  addToToWatch,
+  addToToSeen,
+  deleteFromSeen
 } from "../api/firebaseWriter";
 import { doc, getDoc } from "firebase/firestore";
 import Recommendations from "./Recommendations";
@@ -185,6 +187,13 @@ const UserProfile = ({ userData }) => {
       }
     }
 
+    for (const movieID of userData.seen) {
+      let index = dictMoviesSorted.indexOf(movieID)
+      if(movieID > -1) {
+        dictMoviesSorted.splice(index, 1)
+      }
+    }
+
     let best30RecommendedMovieIDS = dictMoviesSorted.slice(0, 30)
 
     let best30RecommendedMovieObjects = []
@@ -298,6 +307,29 @@ const UserProfile = ({ userData }) => {
     }
   };
 
+  
+  async function handleAddToSeen(userId, movieID)  {
+    const userEmail = auth.currentUser.email;
+    const userIdRef = doc(db, "userIdMap", userEmail);
+    const docSnap = await getDoc(userIdRef);
+    if (docSnap.exists()) {
+      addToToSeen(userId, movieID)
+    } else {
+      console.error("Could not find document.");
+    }
+  };
+
+  async function handleRemoveFromSeen(userId, movieID)  {
+    const userEmail = auth.currentUser.email;
+    const userIdRef = doc(db, "userIdMap", userEmail);
+    const docSnap = await getDoc(userIdRef);
+    if (docSnap.exists()) {
+      deleteFromSeen(userId, movieID)
+    } else {
+      console.error("Could not find document.");
+    }
+  };
+
   return (
     <div>
       {editMode && (
@@ -402,7 +434,7 @@ const UserProfile = ({ userData }) => {
         {/* User TOP 3 Favorite Movies Display */}
         <div className="flex flex-row w-full justify-end">
           <div className="flex flex-row bg-lime-100 justify-center my-6 w-2/5 h-4/5 rounded-xl mr-8 p-8">
-            {movieObjects && <MovieSlider movies={movieObjects} userID={firebaseUserID} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} listOfFavorites={userData.favorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData.toWatch}/>}
+            {movieObjects && <MovieSlider movies={movieObjects} userID={firebaseUserID} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} listOfFavorites={userData.favorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData.toWatch} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={userData.seen}/>}
             {/* {movieObjects.length == 3 && <MovieSlider movies={movieObjects} />} */}
           </div>
         </div>
@@ -441,6 +473,21 @@ const UserProfile = ({ userData }) => {
               To Watch
             </span>
           </div>
+          
+          <div
+            className="mr-2 w-1/4 flex justify-center"
+            onClick={() => {
+              setSelectedUserInfo("Seen");
+            }}>
+            <span
+              className={
+                selectedUserInfo == "Seen"
+                  ? "inline-block p-4 text-lime-600 border-b-2 border-lime-600 rounded-t-lg active dark:text-lime-500 dark:border-lime-500"
+                  : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+              }>
+              Seen
+            </span>
+          </div>
           <div
             className="mr-2 w-1/4 flex justify-center"
             onClick={() => {
@@ -456,24 +503,10 @@ const UserProfile = ({ userData }) => {
               Friends
             </span>
           </div>
-          <div
-            className="mr-2 w-1/4 flex justify-center"
-            onClick={() => {
-              setSelectedUserInfo("Watch Groups");
-            }}>
-            <span
-              className={
-                selectedUserInfo == "Watch Groups"
-                  ? "inline-block p-4 text-lime-600 border-b-2 border-lime-600 rounded-t-lg active dark:text-lime-500 dark:border-lime-500"
-                  : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
-              }>
-              Watch Groups
-            </span>
-          </div>
         </div>
       </div>
-      <UserInfoGrid userData={userData} selectedUserInfo={selectedUserInfo} userID={firebaseUserID} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} listOfFavorites={userData.favorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData.toWatch}/>
-     <Recommendations movies={thirtyMovieRec} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} userID={firebaseUserID} listOfFavorites={userData.favorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData.toWatch}></Recommendations>
+      <UserInfoGrid userData={userData} selectedUserInfo={selectedUserInfo} userID={firebaseUserID} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} listOfFavorites={userData.favorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData.toWatch}  handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={userData.seen}/>
+     <Recommendations movies={thirtyMovieRec} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} userID={firebaseUserID} listOfFavorites={userData.favorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData.toWatch} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={userData.seen}></Recommendations>
     </div>
   );
 };
