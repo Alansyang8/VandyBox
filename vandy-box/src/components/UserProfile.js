@@ -13,7 +13,8 @@ import {
   deleteFromToWatch,
   addToToWatch,
   addToToSeen,
-  deleteFromSeen
+  deleteFromSeen,
+  addFriend
 } from "../api/firebaseWriter";
 import { doc, getDoc } from "firebase/firestore";
 import Recommendations from "./Recommendations";
@@ -249,6 +250,20 @@ const UserProfile = ({ userData }) => {
     setEditMode(true);
   };
 
+  const handleFollow = async () =>{
+    const userEmail = auth.currentUser.email;
+    const userIdRef = doc(db, 'userIdMap', userEmail);
+      const docSnap = await getDoc(userIdRef);
+
+      if (docSnap.exists()) {
+        const userId = docSnap.data().userId;
+        addFriend(userId, userData.handle);
+        addFriend(userData.handle, userId)
+      } else {
+        console.error("Could not find document.");
+      }
+  };
+
   const handleUpdate = async () => {
     const userEmail = auth.currentUser.email;
     const userIdRef = doc(db, "userIdMap", userEmail);
@@ -418,7 +433,7 @@ const UserProfile = ({ userData }) => {
               <div className="flex flex-row justify-center font-semibold mx-auto my-4 w-40">
                 <div
                   data-testid="follow"
-                  className="my-auto text-white bg-lime-500 hover:bg-lime-600 hover:cursor-pointer rounded-3xl py-2 px-4 mx-2">
+                  className="my-auto text-white bg-lime-500 hover:bg-lime-600 hover:cursor-pointer rounded-3xl py-2 px-4 mx-2" onClick={handleFollow}>
                   Follow
                 </div>
                 <div
