@@ -2,6 +2,7 @@ import SuzyBaePic from "../assets/SuzyBaePic.png";
 import UserInfoGrid from "./UserInfoGrid";
 import { useState, useEffect } from "react";
 import MovieSlider from "./MovieSlider";
+import FriendList from "./FriendList";
 import { auth, db } from "../firebase";
 import {
   modifyAddInfo,
@@ -413,6 +414,7 @@ const UserProfile = ({ userData }) => {
                   ? "inline-block p-4 text-lime-600 border-b-2 border-lime-600 rounded-t-lg active dark:text-lime-500 dark:border-lime-500"
                   : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
               }>
+              
               Friends
             </span>
           </div>
@@ -432,7 +434,9 @@ const UserProfile = ({ userData }) => {
           </div>
         </div>
       </div>
+      
       <UserInfoGrid userData={userData} selectedUserInfo={selectedUserInfo} userID={firebaseUserID} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} listOfFavorites={userData.favorites}/>
+      
      <Recommendations movies={thirtyMovieRec} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} userID={firebaseUserID} listOfFavorites={userData.favorites}></Recommendations>
     </div>
   );
