@@ -74,10 +74,10 @@ export async function deleteFromToWatch(userId, title) {
 }
 
 //adds a friend request to the user
-export async function addFriendRequest(userId, id) {
+export async function addToFollowsMe(userId, id) {
     const docRef = doc(db, "users", userId);
     await updateDoc(docRef, {
-        friendRequest: arrayUnion(id),
+        followsMe: arrayUnion(id),
     });
 }
 
@@ -95,4 +95,12 @@ export async function deleteTopThreeMovie(userId, title) {
     await updateDoc(docRef, {
         topThreeMovies: arrayRemove(title),
     }, { merge: true });
+}
+
+//adds a user to followed
+export async function addToFollowed(userId, id) {
+    const docRef = doc(db, "users", userId);
+    await updateDoc(docRef, {
+        followed: arrayUnion(id),
+    });
 }

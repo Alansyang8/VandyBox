@@ -3,7 +3,7 @@ import UserInfoGrid from "./UserInfoGrid";
 import { useState, useEffect } from "react";
 import MovieSlider from "./MovieSlider";
 import { auth, db } from "../firebase";
-import { modifyAddInfo, modifyName, modifyStatusMsg, addFriendRequest, addToFriends, addTopThreeMovie, deleteTopThreeMovie } from "../api/firebaseWriter";
+import { modifyAddInfo, modifyName, modifyStatusMsg, addToFollowsMe, addToFriends, addTopThreeMovie, deleteTopThreeMovie, addToFollowed} from "../api/firebaseWriter";
 import { doc, getDoc } from "firebase/firestore";
 
 const IMG_PATH = "https://image.tmdb.org/t/p/w500";
@@ -117,25 +117,12 @@ const UserProfile = ({ userData }) => {
 
       if (docSnap.exists()) {
         const userId = docSnap.data().userId;
-        addFriendRequest(userData.handle, userId);
+        addToFollowsMe(userData.handle, userId);
+        addToFollowed(userId, userData.handle);
       } else {
         console.error("Could not find document.");
       }
   };
-
-  const handleAccept = async (ind) =>{
-    const userEmail = auth.currentUser.email;
-    const userIdRef = doc(db, 'userIdMap', userEmail);
-      const docSnap = await getDoc(userIdRef);
-
-      if (docSnap.exists()) {
-        const userId = docSnap.data().userId;
-        addToFriends(userId, userData.friendRequest[ind]);
-        addToFriends(ind, userId);
-      } else {
-        console.error("Could not find document.");
-      }
-  }
 
   return (
     <div>

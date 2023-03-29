@@ -29,13 +29,14 @@ const LoginPage = () => {
             await setDoc(doc(db, "users", id), {
               additionalInfo: "",
               favorites: [],
-              friends: [],
               handle: id,
               name: "",
               statusMsg: "",
               toWatch: [],
               topThreeMovies: [],
               watchGroups: [],
+              followsMe: [],
+              followed: [],
             });
           }
         } else {
