@@ -22,12 +22,12 @@ const router = createBrowserRouter([
   },
   {
     path: "search",
-    element: <Search />
+    element: <Search />,
   },
   {
     path: "profile/:userId",
     element: <ProfilePage />,
-    loader: userDataLoader,
+    loader: userDataLoader
   },
 ]);
 

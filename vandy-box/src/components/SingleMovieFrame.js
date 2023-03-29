@@ -2,7 +2,7 @@ import React from "react";
 import MovieInfoPopUp from "./MovieInfoPopUp";
 import { useState, useEffect } from "react";
 
-const SingleMovieFrame = ({ movie, userID, handleAddToFavorites, listOfFavorites, handleRemoveFromFavorites }) => {
+const SingleMovieFrame = ({ movie, userID, handleAddToFavorites, listOfFavorites, handleRemoveFromFavorites, handleAddToWatch, handleRemoveFromWatch, toWatchList, seenList, handleAddToSeen, handleRemoveFromSeen }) => {
   const [movieDescription, setMovieDescription] = useState("Test");
   const [movieRelease, setMovieRelease] = useState("Test");
   const [movieRating, setMovieRating] = useState("Test");
@@ -18,7 +18,7 @@ const SingleMovieFrame = ({ movie, userID, handleAddToFavorites, listOfFavorites
   return (
     <>
       {showingPopup && (
-        <MovieInfoPopUp description={movieDescription} title={movieTitle} release_date={movieRelease} vote_average={movieRating} image={moviePoster} id={movieID} handleOnMouseLeave={handleOnMouseLeave} userID={userID} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} listOfFavorites={listOfFavorites}></MovieInfoPopUp>
+        <MovieInfoPopUp description={movieDescription} title={movieTitle} release_date={movieRelease} vote_average={movieRating} image={moviePoster} id={movieID} handleOnMouseLeave={handleOnMouseLeave} userID={userID} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} listOfFavorites={listOfFavorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={toWatchList} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={seenList}></MovieInfoPopUp>
       )}
       <div className="">
           <div className="flex flex-col items-center">
