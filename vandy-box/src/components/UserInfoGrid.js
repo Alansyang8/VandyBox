@@ -2,6 +2,7 @@ import React from "react";
 import MovieSlider from "./MovieSlider";
 import { useState, useEffect } from "react";
 import SingleMovieFrame from "./SingleMovieFrame";
+import FriendList from "./FriendList";
 const SEARCH_BY_ID_URL_FIRST_HALF = "https://api.themoviedb.org/3/movie/";
 const SEARCH_BY_ID_URL_SECOND_HALF =
   "?api_key=75e05708188d5f5a0a191495cf4a48db&language=en-US";
@@ -71,9 +72,10 @@ function UserInfoGrid({ userData, selectedUserInfo, userID, handleAddToFavorites
 
   return (
     <div className="grid grid-cols-4 gap-2">
+      
       {(selectedUserInfo == "Fav Movies" && favoriteMoviesObjects.length != 0) && favoriteMoviesObjects.map((movieObject) => (
           <div className="flex justify-center items-center h-80">
-            <div className="h-full w-64 flex justify-center items-center border border-yellow-500">
+            <div className="h-full w-64 flex justify-center items-center border border-lime-400">
               <SingleMovieFrame movie={movieObject} userID={userID} handleAddToFavorites={handleAddToFavorites} listOfFavorites={listOfFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={toWatchList} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={seenList}/>
             </div>
           </div>
@@ -88,9 +90,10 @@ function UserInfoGrid({ userData, selectedUserInfo, userID, handleAddToFavorites
       {selectedUserInfo == "Friends" &&
         userData.friends.map((friend) => (
           <div className="flex justify-center items-center h-80">
-            <span className="h-full w-64 flex justify-center items-center border border-yellow-500">
+            <div className="h-full w-64 flex justify-center items-center border border-yellow-500">
+              
               <span className="text-lg font-bold italic">{friend}</span>
-            </span>
+            </div>
           </div>
         ))}
       {(selectedUserInfo == "Seen" && seenMoviesObjects.length != 0) && seenMoviesObjects.map((movieObject) => (

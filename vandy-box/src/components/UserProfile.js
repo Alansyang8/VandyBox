@@ -2,6 +2,7 @@ import SuzyBaePic from "../assets/SuzyBaePic.png";
 import UserInfoGrid from "./UserInfoGrid";
 import { useState, useEffect } from "react";
 import MovieSlider from "./MovieSlider";
+import FriendList from "./FriendList";
 import { auth, db } from "../firebase";
 import {
   modifyAddInfo,
