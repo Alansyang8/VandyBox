@@ -95,6 +95,12 @@ function Body({handleAddToFavorites, handleRemoveFromFavorites, handleAddToWatch
   const [trendingMovieAPI, setTrendingMovieAPI] = useState();
   const [revenueMovieAPI, setRevenueMovieAPI] = useState();
   const [ratingMovieAPI, setRatingMovieAPI] = useState();
+  const [showingPopup, setShowingPopup] = useState(false);
+
+  function handleOnClick() {
+    if(showingPopup==true)
+      setShowingPopup(false);
+  }
   const [userData, setUserData] = useState();
 
   const getUserData = async () => {
@@ -123,20 +129,20 @@ function Body({handleAddToFavorites, handleRemoveFromFavorites, handleAddToWatch
     apiCall3();
   }, []);
   return (
-    <div className="space-y-4 pb-20">
-      <Header />
+    <div className="space-y-4 pb-20" onClick={handleOnClick}>
+      <Header userId={userId} />
       <Container containerTitle="Trending this week">
         {trendingMovieAPI && userData && (
-          <MovieSlider movies={trendingMovieAPI} listOfFavorites={userData.favorites} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} userID = {userData.handle} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData.toWatch} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={userData.seen}></MovieSlider>
+          <MovieSlider movies={trendingMovieAPI} listOfFavorites={userData.favorites} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} userID = {userData.handle} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData.toWatch} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={userData.seen} setShowingPopup={setShowingPopup} showingPopup={showingPopup}></MovieSlider>
         )}
       </Container>
       <Container containerTitle="Trending at Vanderbilt">
         {revenueMovieAPI && userData && (
-          <MovieSlider movies={revenueMovieAPI} listOfFavorites={userData.favorites} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} userID = {userData.handle} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData.toWatch} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={userData.seen}></MovieSlider>
+          <MovieSlider movies={revenueMovieAPI} listOfFavorites={userData.favorites} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} userID = {userData.handle} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData.toWatch} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={userData.seen} setShowingPopup={setShowingPopup} showingPopup={showingPopup}></MovieSlider>
         )}
       </Container>
       <Container containerTitle="Favorites">
-        {ratingMovieAPI && userData && <MovieSlider movies={ratingMovieAPI} listOfFavorites={userData.favorites} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} userID = {userData.handle} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData.toWatch} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={userData.seen}></MovieSlider>}
+        {ratingMovieAPI && userData && <MovieSlider movies={ratingMovieAPI} listOfFavorites={userData.favorites} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} userID = {userData.handle} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData.toWatch} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={userData.seen} setShowingPopup={setShowingPopup} showingPopup={showingPopup}></MovieSlider>}
       </Container>
 
       {/* <Container containerTitle={"Search"}>
