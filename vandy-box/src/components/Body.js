@@ -99,14 +99,8 @@ function Body({handleAddToFavorites, handleRemoveFromFavorites, handleAddToWatch
 
   const getUserData = async () => {
     const userData = await fetchCurrentUserData();
-    setUserData(userData)
+    setUserData(userData);
   }
-
-  useEffect(() => {
-    getUserData()
-  }, [])
-
-
 
   useEffect(() => {
     async function apiCall() {
@@ -122,7 +116,7 @@ function Body({handleAddToFavorites, handleRemoveFromFavorites, handleAddToWatch
       setRatingMovieAPI(apiResponse3);
     }
 
-    getUserData()
+    getUserData();
 
     apiCall();
     apiCall2();
