@@ -90,10 +90,8 @@ function UserInfoGrid({ userData, selectedUserInfo, userID, handleAddToFavorites
         ))}
       {selectedUserInfo == "Friends" &&
         userData.friends.map((person) => (
-          <div className="flex justify-center items-center h-80">
+          <div key={person} className="flex justify-center items-center h-80">
             <div className="h-full w-64 flex justify-center items-center border border-yellow-500">
-
-              
               <FriendList friend={person}></FriendList>
             </div>
           </div>
