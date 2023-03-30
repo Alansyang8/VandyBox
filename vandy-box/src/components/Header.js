@@ -39,10 +39,7 @@ function Header() {
         <li className="">
           <a href="">Recommendations</a>
         </li>
-        
-        <li className="">
-          <a href="">Watch Groups</a>
-        </li>
+    
        
 
         <li className="">
