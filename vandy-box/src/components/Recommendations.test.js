@@ -2,7 +2,7 @@ import Recommendations from "./Recommendations";
 import { render } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 
-describe(MovieSlider, () => {
+describe(Recommendations, () => {
     const userData = {
       id: 13,
       topThreeMovies: [324, 19, 30],

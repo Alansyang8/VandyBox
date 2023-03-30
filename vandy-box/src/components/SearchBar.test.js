@@ -11,6 +11,4 @@ describe(SearchBar, () => {
         const EmptyTest = getByTestId("EmptyTest").textContent
         expect(EmptyTest).toBe("")
     })
-    
-    
 })
