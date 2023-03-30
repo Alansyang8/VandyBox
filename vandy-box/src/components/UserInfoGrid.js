@@ -4,6 +4,7 @@ import MovieSlider from "./MovieSlider";
 import { useState, useEffect } from "react";
 import SingleMovieFrame from "./SingleMovieFrame";
 import FriendList from "./FriendList";
+import { fetchCurrentUserData } from "../auth/auth";
 const SEARCH_BY_ID_URL_FIRST_HALF = "https://api.themoviedb.org/3/movie/";
 const SEARCH_BY_ID_URL_SECOND_HALF =
   "?api_key=75e05708188d5f5a0a191495cf4a48db&language=en-US";
@@ -13,6 +14,16 @@ function UserInfoGrid({ userData, selectedUserInfo, userID, handleAddToFavorites
   const [favoriteMoviesObjects, setFavoriteMoviesObjects] = useState([]);
   const [toWatchMoviesObjects, setToWatchMoviesObjects] = useState([]);
   const [seenMoviesObjects, setSeenMoviesObjects] = useState([]);
+  const [userData2, setUserData] = useState();
+
+  const getUserData = async () => {
+    const userData2 = await fetchCurrentUserData();
+    setUserData(userData2)
+  }
+
+  useEffect(() => {
+    getUserData()
+  }, [])
   async function get1MovieByID(url) {
     const res = await fetch(url);
     const data = await res.json();
@@ -77,14 +88,14 @@ function UserInfoGrid({ userData, selectedUserInfo, userID, handleAddToFavorites
       {(selectedUserInfo == "Fav Movies" && favoriteMoviesObjects.length != 0) && favoriteMoviesObjects.map((movieObject) => (
           <div className="flex justify-center items-center h-80">
             <div className="h-full w-64 flex justify-center items-center border border-lime-400">
-              <SingleMovieFrame movie={movieObject} userID={userID} handleAddToFavorites={handleAddToFavorites} listOfFavorites={listOfFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={toWatchList} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={seenList}/>
+              {userData2 && <SingleMovieFrame movie={movieObject} userID={userData2.handle} handleAddToFavorites={handleAddToFavorites} listOfFavorites={userData2.favorites} handleRemoveFromFavorites={handleRemoveFromFavorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData2.toWatch} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={userData.seen}/>}
             </div>
           </div>
         ))}
       {(selectedUserInfo == "To Watch" && toWatchMoviesObjects.length != 0) && toWatchMoviesObjects.map((movieObject) => (
           <div className="flex justify-center items-center h-80">
             <div className="h-full w-64 flex justify-center items-center border border-yellow-500">
-              <SingleMovieFrame movie={movieObject} userID={userID} handleAddToFavorites={handleAddToFavorites} listOfFavorites={listOfFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={toWatchList} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={seenList}/>
+            {userData2 && <SingleMovieFrame movie={movieObject} userID={userData2.handle} handleAddToFavorites={handleAddToFavorites} listOfFavorites={userData2.favorites} handleRemoveFromFavorites={handleRemoveFromFavorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData2.toWatch} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={userData.seen}/>}
             </div>
           </div>
         ))}
@@ -101,7 +112,7 @@ function UserInfoGrid({ userData, selectedUserInfo, userID, handleAddToFavorites
       {(selectedUserInfo == "Seen" && seenMoviesObjects.length != 0) && seenMoviesObjects.map((movieObject) => (
           <div className="flex justify-center items-center h-80">
             <div className="h-full w-64 flex justify-center items-center border border-yellow-500">
-              <SingleMovieFrame movie={movieObject} userID={userID} handleAddToFavorites={handleAddToFavorites} listOfFavorites={listOfFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={toWatchList} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={seenList}/>
+            {userData2 && <SingleMovieFrame movie={movieObject} userID={userData2.handle} handleAddToFavorites={handleAddToFavorites} listOfFavorites={userData2.favorites} handleRemoveFromFavorites={handleRemoveFromFavorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData2.toWatch} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={userData.seen}/>}
             </div>
           </div>
         ))}
