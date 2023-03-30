@@ -94,6 +94,12 @@ function Body({ userId, handleAddToFavorites, handleRemoveFromFavorites, listOfF
   const [trendingMovieAPI, setTrendingMovieAPI] = useState();
   const [revenueMovieAPI, setRevenueMovieAPI] = useState();
   const [ratingMovieAPI, setRatingMovieAPI] = useState();
+  const [showingPopup, setShowingPopup] = useState(false);
+
+  function handleOnClick() {
+    if(showingPopup==true)
+      setShowingPopup(false);
+  }
 
 
 
@@ -116,20 +122,20 @@ function Body({ userId, handleAddToFavorites, handleRemoveFromFavorites, listOfF
     apiCall3();
   }, []);
   return (
-    <div className="space-y-4 pb-20">
+    <div className="space-y-4 pb-20" onClick={handleOnClick}>
       <Header userId={userId} />
       <Container containerTitle="Trending this week">
         {trendingMovieAPI && (
-          <MovieSlider movies={trendingMovieAPI} listOfFavorites={listOfFavorites} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} userID = {userId} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={toWatchList} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={seenList}></MovieSlider>
+          <MovieSlider movies={trendingMovieAPI} listOfFavorites={listOfFavorites} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} userID = {userId} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={toWatchList} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={seenList} setShowingPopup={setShowingPopup} showingPopup={showingPopup}></MovieSlider>
         )}
       </Container>
       <Container containerTitle="Trending at Vanderbilt">
         {revenueMovieAPI && (
-          <MovieSlider movies={revenueMovieAPI} listOfFavorites={listOfFavorites} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} userID = {userId} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={toWatchList} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={seenList}></MovieSlider>
+          <MovieSlider movies={revenueMovieAPI} listOfFavorites={listOfFavorites} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} userID = {userId} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={toWatchList} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={seenList} setShowingPopup={setShowingPopup} showingPopup={showingPopup}></MovieSlider>
         )}
       </Container>
       <Container containerTitle="Favorites">
-        {ratingMovieAPI && <MovieSlider movies={ratingMovieAPI} listOfFavorites={listOfFavorites} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} userID = {userId} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={toWatchList} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={seenList}></MovieSlider>}
+        {ratingMovieAPI && <MovieSlider movies={ratingMovieAPI} listOfFavorites={listOfFavorites} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} userID = {userId} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={toWatchList} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={seenList} setShowingPopup={setShowingPopup} showingPopup={showingPopup}></MovieSlider>}
       </Container>
 
       {/* <Container containerTitle={"Search"}>

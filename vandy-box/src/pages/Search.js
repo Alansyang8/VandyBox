@@ -4,17 +4,7 @@ import Container from "../components/Container";
 import MovieSlider from "../components/MovieSlider";
 import GenreCheckBox from "../components/GenreCheckBox";
 import { useState, useEffect } from "react";
-import { auth, db } from "../firebase";
-import {
-  addToFavorites,
-  deleteFromFavorites,
-  deleteFromToWatch,
-  addToToWatch,
-  addToToSeen,
-  deleteFromSeen,
-  addFriend
-} from "../api/firebaseWriter";
-import { doc, getDoc } from "firebase/firestore";
+
 
 const IMG_PATH = "https://image.tmdb.org/t/p/w500";
 const SEARCH_API_URL =
@@ -89,76 +79,11 @@ function Search() {
       });
     }
   }
-  async function handleAddToFavorites(userId, movieID)  {
-    const userEmail = auth.currentUser.email;
-    const userIdRef = doc(db, "userIdMap", userEmail);
-    const docSnap = await getDoc(userIdRef);
-    if (docSnap.exists()) {
-      addToFavorites(userId, movieID)
-    } else {
-      console.error("Could not find document.");
-    }
-  };
-
-  async function handleRemoveFromFavorites(userId, movieID)  {
-    const userEmail = auth.currentUser.email;
-    const userIdRef = doc(db, "userIdMap", userEmail);
-    const docSnap = await getDoc(userIdRef);
-    if (docSnap.exists()) {
-      deleteFromFavorites(userId, movieID)
-    } else {
-      console.error("Could not find document.");
-    }
-  };
-
-  async function handleAddToWatch(userId, movieID)  {
-    const userEmail = auth.currentUser.email;
-    const userIdRef = doc(db, "userIdMap", userEmail);
-    const docSnap = await getDoc(userIdRef);
-    if (docSnap.exists()) {
-      addToToWatch(userId, movieID)
-    } else {
-      console.error("Could not find document.");
-    }
-  };
-
-  async function handleRemoveFromWatch(userId, movieID)  {
-    const userEmail = auth.currentUser.email;
-    const userIdRef = doc(db, "userIdMap", userEmail);
-    const docSnap = await getDoc(userIdRef);
-    if (docSnap.exists()) {
-      deleteFromToWatch(userId, movieID)
-    } else {
-      console.error("Could not find document.");
-    }
-  };
-
-  
-  async function handleAddToSeen(userId, movieID)  {
-    const userEmail = auth.currentUser.email;
-    const userIdRef = doc(db, "userIdMap", userEmail);
-    const docSnap = await getDoc(userIdRef);
-    if (docSnap.exists()) {
-      addToToSeen(userId, movieID)
-    } else {
-      console.error("Could not find document.");
-    }
-  };
-
-  async function handleRemoveFromSeen(userId, movieID)  {
-    const userEmail = auth.currentUser.email;
-    const userIdRef = doc(db, "userIdMap", userEmail);
-    const docSnap = await getDoc(userIdRef);
-    if (docSnap.exists()) {
-      deleteFromSeen(userId, movieID)
-    } else {
-      console.error("Could not find document.");
-    }
-  };
 
   useEffect(() => {
     apiCall4();
   }, [apiCall4]);
+
   return (
     <div className="flex flex-col justify-center items-center">
       <Header></Header>
@@ -288,7 +213,7 @@ function Search() {
       <SearchBar HandleSearch={HandleSearch}></SearchBar>
       <Container containerTitle={"Search"}>
         {searchMovieAPI && searchMovieAPI.length > 0 ? (
-          <MovieSlider movies={searchMovieAPI} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} listOfFavorites={userData.favorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData.toWatch} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={userData.seen}></MovieSlider>
+          <MovieSlider movies={searchMovieAPI}></MovieSlider>
         ) : (
           "No Results"
         )}

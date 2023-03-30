@@ -2,25 +2,29 @@ import React from "react";
 import MovieInfoPopUp from "./MovieInfoPopUp";
 import { useState, useEffect } from "react";
 
-const MovieSlider = ({ movies, userID, handleAddToFavorites, listOfFavorites, handleRemoveFromFavorites, toWatchList, handleAddToWatch, handleRemoveFromWatch, seenList, handleRemoveFromSeen, handleAddToSeen }) => {
+const MovieSlider = ({ movies, userID, handleAddToFavorites, listOfFavorites, handleRemoveFromFavorites, toWatchList, handleAddToWatch, handleRemoveFromWatch, seenList, handleRemoveFromSeen, handleAddToSeen, showingPopup, setShowingPopup }) => {
   const [movieDescription, setMovieDescription] = useState("Test");
   const [movieRelease, setMovieRelease] = useState("Test");
   const [movieRating, setMovieRating] = useState("Test");
   const [moviePoster, setMoviePoster] = useState("Test");
   const [movieTitle, setMovieTitle] = useState("Test");
-  const [showingPopup, setShowingPopup] = useState(false);
   const [movieID, setMovieID] = useState("Test");
+  const [thisSlider, setThisSlider] = useState(false);
+  
 
   function handleOnClose(){
     setShowingPopup(false)
   }
 
-
+  useEffect(() =>{
+    if(showingPopup == false)
+      setThisSlider(false);
+  });
 
 
   return (
     <>
-      {showingPopup && (
+      {showingPopup && thisSlider && (
         <MovieInfoPopUp description={movieDescription} title={movieTitle} release_date={movieRelease} vote_average={movieRating} image={moviePoster} id={movieID} handleOnClose={handleOnClose} userID={userID} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} listOfFavorites={listOfFavorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={toWatchList} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={seenList}></MovieInfoPopUp>
       )}
       <div className="flex space-x-5">
@@ -37,7 +41,8 @@ const MovieSlider = ({ movies, userID, handleAddToFavorites, listOfFavorites, ha
                 setMoviePoster(movie.image)
                 setMovieTitle(movie.title)
                 setMovieID(movie.id)
-                setShowingPopup(true)}}
+                setShowingPopup(true)
+                setThisSlider(true)}}
 
             />
             <div className="text-center">{movie.title}</div>

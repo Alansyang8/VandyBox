@@ -3,18 +3,15 @@ import { useRef, useEffect } from 'react';
 
 function MovieInfoPopUp(props) {
   const ref = useRef(); 
-  const ref2 = useRef(); 
 
   useEffect(() => {
     ref.current.style.top = `${document.documentElement.scrollTop}px`
-    ref2.current.style.top = `${document.documentElement.scrollTop}px`
     console.log(props.listOfFavorites)
-    // ref2.current.style.marginTop = "500px"
   }, []);
   
   return (
     <>
-      <div className="absolute w-[calc(100vw-16.5px)] h-screen left-0 top-0 bg-neutral-900/80" ref={ref2}></div>
+      <div className="fixed w-[calc(100vw-16.5px)] h-full left-0 top-0 bg-neutral-900/80 overflow-auto pointer-events-none"></div>
       <div className="MovieInfoPopUp absolute inset-0  ml-auto mr-auto mt-[25vh] w-fit h-fit max-w-[90vw] bg-neutral-800 rounded-3xl p-6 flex justify-evenly" ref={ref}>
       <div className="MovieInfo flex flex-col">
          <div className="text-white  pb-8 flex items-center">
