@@ -27,11 +27,11 @@ const FriendList = ({ friend }) => {
           <div className="rounded-full overflow-hidden h-32 w-32 flex justify-center items-center">
             <img src={image ? image : anonymousPic} alt="Friend image"/>
           </div>
-          <h3 className="mt-6 text-center text-xl text-gray-900 font-medium leading-8">
+          <h3 className="mt-6 text-center text-xl text-gray-900 font-medium leading-8" data-testid="name">
             {name}
           </h3>
           <div className="text-center text-gray-400 text-xs font-semibold">
-            <p>@{handle}</p>
+            <p data-testid="handle">@{handle}</p>
           </div>
           {/* Click this to get to another friend's user profile */}
           <div className="text-center my-3">
