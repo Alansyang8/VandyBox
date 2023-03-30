@@ -2,9 +2,8 @@ import SuzyBaePic from "../assets/SuzyBaePic.png";
 import UserInfoGrid from "./UserInfoGrid";
 import { useState, useEffect } from "react";
 import MovieSlider from "./MovieSlider";
-import { auth, db } from "../firebase";
-import { modifyAddInfo, modifyName, modifyStatusMsg } from "../api/firebaseWriter";
-import { doc, getDoc } from "firebase/firestore";
+import ProfileEditPopUp from "./ProfileEditPopUp";
+import { fetchCurrentUserData } from "../auth/auth";
 
 const IMG_PATH = "https://image.tmdb.org/t/p/w500";
 const SEARCH_API_URL =
@@ -13,9 +12,7 @@ const SEARCH_API_URL =
 const UserProfile = ({ userData }) => {
   const [movieObjects, setMovieObjects] = useState([]);
   const [editMode, setEditMode] = useState(false);
-  const [userName, setUserName] = useState("");
-  const [statusMsg, setStatusMsg] = useState("");
-  const [additionalInfo, setAdditionalInfo] = useState("");
+  const [currentUserData, setCurrentUserData] = useState([]);
 
   async function get1Movie(url) {
     const res = await fetch(url);
@@ -51,116 +48,81 @@ const UserProfile = ({ userData }) => {
     }
 
     apiCall();
+
+    const getUserData = async () => {
+      const userData = await fetchCurrentUserData();
+      setCurrentUserData(userData);
+    };
+
+    getUserData();
   }, []);
 
   const [selectedUserInfo, setSelectedUserInfo] = useState("Fav Movies");
 
   const handleEdit = () => {
-    setEditMode(true);
-  };
-
-  const handleUpdate = async () => {
-    const userEmail = auth.currentUser.email;
-    const userIdRef = doc(db, 'userIdMap', userEmail);
-      const docSnap = await getDoc(userIdRef);
-
-      if (docSnap.exists()) {
-        const userId = docSnap.data().userId;
-        modifyName(userId, userName);
-        modifyStatusMsg(userId, statusMsg);
-        modifyAddInfo(userId, additionalInfo);
-      } else {
-        console.error("Could not find document.");
-      }
+    setEditMode(!editMode);
   };
 
   return (
     <div>
-      {editMode && (
-        <div className="MovieInfoPopUp absolute inset-0 m-auto w-fit h-fit max-w-screen-xl bg-white  rounded-3xl p-6 flex justify-evenly border-2 flex-col">
-          <div className="flex flex-col space-y-2 mb-8">
-            <label className="font-bold">Name</label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              placeholder="Your name"
-              value={userName}
-              onChange={(e) => {
-                setUserName(e.target.value);
-              }}
-            />
-            <label className="font-bold">Status Message</label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              placeholder="Status message"
-              value={statusMsg}
-              onChange={(e) => {
-                setStatusMsg(e.target.value);
-              }}
-            />
-            <label className="font-bold">Additional Info</label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              placeholder="Additional info"
-              value={additionalInfo}
-              onChange={(e) => {
-                setAdditionalInfo(e.target.value);
-              }}
-            />
-          </div>
-          <div className="space-x-4">
-            <button
-              className="bg-gray-200 p-2 rounded-md"
-              onClick={() => {
-                setEditMode(false);
-              }}
-            >
-              Cancel
-            </button>
-            <button className="bg-gray-200 p-2 rounded-md text-red-500" onClick={handleUpdate}>
-              Update
-            </button>
-          </div>
-        </div>
-      )}
+      {editMode && <ProfileEditPopUp setEditMode={setEditMode} currentUserData={currentUserData} />}
 
       <div className="flex items-center p-4 w-full">
         <div className="flex  flex-col">
           {/* User Information Section */}
           <div className="relative flex flex-col items-center w-80 h-60 -translate-y-12">
-            <div className="h-40 w-40 md rounded-full relative avatar flex items-end justify-end text-purple-600 min-w-max absolute -top-16 flex bg-purple-200 text-purple-100 row-start-1 row-end-3 text-purple-650 ring-1 ring-white">
+            <div className="h-40 w-40 md rounded-full relative avatar flex items-end justify-end text-purple-600 min-w-max -top-16 flex bg-purple-200 text-purple-100 row-start-1 row-end-3 text-purple-650 ring-1 ring-white">
               <img
                 className="h-40 w-40 md rounded-full relative"
-                src={SuzyBaePic}
-                alt=""
+                src={userData.image}
+                alt="User Image"
               ></img>
               {/* <div className="absolute"></div> */}
             </div>
             <div className="flex flex-col space-y-1 justify-center items-left -mt-12 w-80">
-              <span data-testid={"name"} className="font-bold text-xl text-center text-gray-800 hover:text-lime-500 hover:cursor-pointer ">
+              <span
+                data-testid={"name"}
+                className="font-bold text-xl text-center text-gray-800 hover:text-lime-500 hover:cursor-pointer "
+              >
                 {userData.name}
               </span>
-              <p data-testid={"handle"} className="text-gray-600 text-sm text-center">
+              <p
+                data-testid={"handle"}
+                className="text-gray-600 text-sm text-center"
+              >
                 @{userData.handle}
               </p>
-              <p data-testid={"statusMsg"} className="text-black-600 text-sm text-center">
+              <p
+                data-testid={"statusMsg"}
+                className="text-black-600 text-sm text-center"
+              >
                 {userData.statusMsg}
               </p>
-              <p data-testid={"additionalInfo"} className="text-black-600 text-sm text-center">
+              <p
+                data-testid={"additionalInfo"}
+                className="text-black-600 text-sm text-center"
+              >
                 {userData.additionalInfo}
               </p>
 
               {/* Follow & Message Buttons */}
               <div className="flex flex-row justify-center font-semibold mx-auto my-4 w-40">
-                <div data-testid="follow" className="my-auto text-white bg-lime-500 hover:bg-lime-600 hover:cursor-pointer rounded-3xl py-2 px-4 mx-2">
-                  Follow
-                </div>
-                <div
-                  data-testid="edit"
-                  className="my-auto text-white bg-gray-400 hover:bg-gray-500 hover:cursor-pointer rounded-3xl py-2 px-4 mx-2"
-                  onClick={handleEdit}
-                >
-                  Edit
-                </div>
+                {currentUserData?.handle != userData.handle ? (
+                  <div
+                    data-testid="follow"
+                    className="my-auto text-white bg-lime-500 hover:bg-lime-600 hover:cursor-pointer rounded-3xl py-2 px-4 mx-2"
+                  >
+                    Follow
+                  </div>
+                ) : (
+                  <div
+                    data-testid="edit"
+                    className="my-auto text-white bg-gray-400 hover:bg-gray-500 hover:cursor-pointer rounded-3xl py-2 px-4 mx-2"
+                    onClick={handleEdit}
+                  >
+                    Edit
+                  </div>
+                )}
                 {/* <div class="my-auto text-gray-800 py-1 px-4 border-2 border-lime-500 hover:bg-lime-500 hover:cursor-pointer hover:text-white rounded-3xl mx-2">Add to Box</div> */}
               </div>
             </div>

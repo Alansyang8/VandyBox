@@ -1,5 +1,7 @@
 import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 import { auth } from "../firebase";
+import { db } from "../firebase";
 
 const provider = new GoogleAuthProvider();
 
@@ -42,4 +44,21 @@ export const logOut = () => {
     }).catch((error) => {
         console.error(error.code);
     })
+}
+
+export const fetchCurrentUserData = async () => {
+    if (auth && auth.currentUser.email) {
+        const userIdRef = doc(db, "userIdMap", auth.currentUser.email);
+        const userIdSnap = await getDoc(userIdRef);
+        if (!userIdSnap.exists()) {
+            return null;
+        }
+        const userId = userIdSnap.data().userId;
+        const userDataRef = doc(db, "users", userId);
+        const userDataSnap = await getDoc(userDataRef);
+        if (userDataSnap.exists()) {
+            return userDataSnap.data();
+        }
+    }
+    return null;
 }

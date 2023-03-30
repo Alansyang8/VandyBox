@@ -1,11 +1,20 @@
 import React, { useEffect, useState } from "react";
-import SuzyBaePic from "../assets/SuzyBaePic.png";
 import { Link } from 'react-router-dom';
-import { logOut } from "../auth/auth";
-import { auth, db } from "../firebase";
-import { onValue, ref } from "firebase/database";
+import { fetchCurrentUserData, logOut } from "../auth/auth";
+import anonymousPic from "../assets/anonymous_user_img.jpg";
 
 function Header(props) {
+
+  const [userImage, setUserImage] = useState("");
+
+  useEffect(() => {
+    const getCurrentUserImage = async () => {
+      const userData = await fetchCurrentUserData();
+      setUserImage(userData.image);
+    }
+
+    getCurrentUserImage();
+  }, [])
 
   return (
     <nav className="navbar flex w-screen   p-2 pl-10 pr-10 shadow-md gap-10 bg-lime-100 justify-start items-center">
@@ -44,7 +53,7 @@ function Header(props) {
       /> */}
       <Link className="ml-auto" to={`/profile/${props.userId}`}>
         <img
-          src={SuzyBaePic}
+          src={userImage != "" ? userImage : anonymousPic}
           className="object-cover rounded-full w-16 h-16 "
         />
       </Link>
