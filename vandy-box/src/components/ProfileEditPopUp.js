@@ -13,7 +13,6 @@ const ProfileEditPopUp = ({ setEditMode, currentUserData }) => {
   const [userName, setUserName] = useState(currentUserData.name);
   const [statusMsg, setStatusMsg] = useState(currentUserData.statusMsg);
   const [additionalInfo, setAdditionalInfo] = useState(currentUserData.additionalInfo);
-  const [userImageActive, setUserImageActive] = useState(false);
   const [userImage, setUserImage] = useState(currentUserData.image);
   const imageLoaderRef = useRef(null);
 
@@ -78,6 +77,7 @@ const ProfileEditPopUp = ({ setEditMode, currentUserData }) => {
       <div className="flex flex-col space-y-2 mb-8 p-6">
         <label className="font-bold">Name</label>
         <input
+            data-testid="name-input"
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           placeholder="Your name"
           value={userName}
@@ -87,6 +87,7 @@ const ProfileEditPopUp = ({ setEditMode, currentUserData }) => {
         />
         <label className="font-bold">Status Message</label>
         <input
+            data-testid="status-msg-input"
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           placeholder="Status message"
           value={statusMsg}
@@ -96,6 +97,7 @@ const ProfileEditPopUp = ({ setEditMode, currentUserData }) => {
         />
         <label className="font-bold">Additional Info</label>
         <input
+            data-testid="add-info-input"
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           placeholder="Additional info"
           value={additionalInfo}
@@ -106,6 +108,7 @@ const ProfileEditPopUp = ({ setEditMode, currentUserData }) => {
       </div>
       <div className="space-x-4 p-6">
         <button
+            data-testid="cancel-btn"
           className="bg-gray-200 p-2 rounded-md hover:bg-gray-300"
           onClick={() => {
             setEditMode(false);
@@ -114,6 +117,7 @@ const ProfileEditPopUp = ({ setEditMode, currentUserData }) => {
           Cancel
         </button>
         <button
+            data-testid="update-btn"
           className="bg-gray-200 p-2 rounded-md text-red-500 hover:bg-gray-300"
           onClick={handleUpdate}
         >
