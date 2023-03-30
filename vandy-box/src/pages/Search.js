@@ -15,6 +15,7 @@ import {
   addFriend
 } from "../api/firebaseWriter";
 import { doc, getDoc } from "firebase/firestore";
+import { fetchCurrentUserData } from "../auth/auth";
 
 const IMG_PATH = "https://image.tmdb.org/t/p/w500";
 const SEARCH_API_URL =
@@ -26,6 +27,7 @@ function Search() {
   const [searchMovieAPI, setSearchMovieAPI] = useState();
   const [searchBarValue, setSearchBar] = useState("Blackpink");
   const [genreIDFilters, setGenreIDFilters] = useState([]);
+  const [userData, setUserData] = useState();
   async function get10Movies(url) {
     const res = await fetch(url);
     const data = await res.json();
@@ -42,13 +44,14 @@ function Search() {
   function addMoviesToArray(movies) {
     let array = [];
     movies.forEach((movie) => {
-      const { title, poster_path, overview, release_date, vote_average } = movie;
+      const { title, poster_path, overview, release_date, vote_average, id } = movie;
       array.push({
         title: title,
         image: `${IMG_PATH}${poster_path}`,
         overview: overview,
         release_date: release_date,
-        vote_average: vote_average
+        vote_average: vote_average,
+        id: id
       });
     });
     return array;
@@ -155,10 +158,19 @@ function Search() {
       console.error("Could not find document.");
     }
   };
+  const getUserData = async () => {
+    const userData = await fetchCurrentUserData();
+    setUserData(userData)
+  }
 
   useEffect(() => {
     apiCall4();
+
   }, [apiCall4]);
+
+  useEffect(() => {
+    getUserData()
+  }, [])
   return (
     <div className="flex flex-col justify-center items-center">
       <Header></Header>
@@ -287,8 +299,8 @@ function Search() {
       </div>
       <SearchBar HandleSearch={HandleSearch}></SearchBar>
       <Container containerTitle={"Search"}>
-        {searchMovieAPI && searchMovieAPI.length > 0 ? (
-          <MovieSlider movies={searchMovieAPI} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} listOfFavorites={userData.favorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData.toWatch} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={userData.seen}></MovieSlider>
+        { userData && searchMovieAPI && searchMovieAPI.length > 0 ? (
+          <MovieSlider movies={searchMovieAPI} userID={userData.handle} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} listOfFavorites={userData.favorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData.toWatch} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={userData.seen}></MovieSlider>
         ) : (
           "No Results"
         )}
