@@ -4,6 +4,18 @@ import Container from "../components/Container";
 import MovieSlider from "../components/MovieSlider";
 import GenreCheckBox from "../components/GenreCheckBox";
 import { useState, useEffect } from "react";
+import { auth, db } from "../firebase";
+import {
+  addToFavorites,
+  deleteFromFavorites,
+  deleteFromToWatch,
+  addToToWatch,
+  addToToSeen,
+  deleteFromSeen,
+  addFriend
+} from "../api/firebaseWriter";
+import { doc, getDoc } from "firebase/firestore";
+import { fetchCurrentUserData } from "../auth/auth";
 
 const IMG_PATH = "https://image.tmdb.org/t/p/w500";
 const SEARCH_API_URL =
@@ -11,12 +23,15 @@ const SEARCH_API_URL =
 
 const genreID= [{"id":28,"name":"Action"},{"id":12,"name":"Adventure"},{"id":16,"name":"Animation"},{"id":35,"name":"Comedy"},{"id":80,"name":"Crime"},{"id":99,"name":"Documentary"},{"id":18,"name":"Drama"},{"id":10751,"name":"Family"},{"id":14,"name":"Fantasy"},{"id":36,"name":"History"},{"id":27,"name":"Horror"},{"id":10402,"name":"Music"},{"id":9648,"name":"Mystery"},{"id":10749,"name":"Romance"},{"id":878,"name":"Science Fiction"},{"id":10770,"name":"TV Movie"},{"id":53,"name":"Thriller"},{"id":10752,"name":"War"},{"id":37,"name":"Western"}]
 function Search() {
+  console.log("hi")
   const [searchMovieAPI, setSearchMovieAPI] = useState();
   const [searchBarValue, setSearchBar] = useState("Blackpink");
   const [genreIDFilters, setGenreIDFilters] = useState([]);
+  const [userData, setUserData] = useState();
   async function get10Movies(url) {
     const res = await fetch(url);
     const data = await res.json();
+    console.log(data)
     let filteredMovies = filterGenres(data.results);
     let firstTen = getFirstTen(filteredMovies);
     return addMoviesToArray(firstTen);
@@ -29,13 +44,14 @@ function Search() {
   function addMoviesToArray(movies) {
     let array = [];
     movies.forEach((movie) => {
-      const { title, poster_path, overview, release_date, vote_average } = movie;
+      const { title, poster_path, overview, release_date, vote_average, id } = movie;
       array.push({
         title: title,
         image: `${IMG_PATH}${poster_path}`,
         overview: overview,
         release_date: release_date,
-        vote_average: vote_average
+        vote_average: vote_average,
+        id: id
       });
     });
     return array;
@@ -76,10 +92,85 @@ function Search() {
       });
     }
   }
+  async function handleAddToFavorites(userId, movieID)  {
+    const userEmail = auth.currentUser.email;
+    const userIdRef = doc(db, "userIdMap", userEmail);
+    const docSnap = await getDoc(userIdRef);
+    if (docSnap.exists()) {
+      addToFavorites(userId, movieID)
+    } else {
+      console.error("Could not find document.");
+    }
+  };
+
+  async function handleRemoveFromFavorites(userId, movieID)  {
+    const userEmail = auth.currentUser.email;
+    const userIdRef = doc(db, "userIdMap", userEmail);
+    const docSnap = await getDoc(userIdRef);
+    if (docSnap.exists()) {
+      deleteFromFavorites(userId, movieID)
+    } else {
+      console.error("Could not find document.");
+    }
+  };
+
+  async function handleAddToWatch(userId, movieID)  {
+    const userEmail = auth.currentUser.email;
+    const userIdRef = doc(db, "userIdMap", userEmail);
+    const docSnap = await getDoc(userIdRef);
+    if (docSnap.exists()) {
+      addToToWatch(userId, movieID)
+    } else {
+      console.error("Could not find document.");
+    }
+  };
+
+  async function handleRemoveFromWatch(userId, movieID)  {
+    const userEmail = auth.currentUser.email;
+    const userIdRef = doc(db, "userIdMap", userEmail);
+    const docSnap = await getDoc(userIdRef);
+    if (docSnap.exists()) {
+      deleteFromToWatch(userId, movieID)
+    } else {
+      console.error("Could not find document.");
+    }
+  };
+
+  
+  async function handleAddToSeen(userId, movieID)  {
+    const userEmail = auth.currentUser.email;
+    const userIdRef = doc(db, "userIdMap", userEmail);
+    const docSnap = await getDoc(userIdRef);
+    if (docSnap.exists()) {
+      addToToSeen(userId, movieID)
+    } else {
+      console.error("Could not find document.");
+    }
+  };
+
+  async function handleRemoveFromSeen(userId, movieID)  {
+    const userEmail = auth.currentUser.email;
+    const userIdRef = doc(db, "userIdMap", userEmail);
+    const docSnap = await getDoc(userIdRef);
+    if (docSnap.exists()) {
+      deleteFromSeen(userId, movieID)
+    } else {
+      console.error("Could not find document.");
+    }
+  };
+  const getUserData = async () => {
+    const userData = await fetchCurrentUserData();
+    setUserData(userData)
+  }
 
   useEffect(() => {
     apiCall4();
+
   }, [apiCall4]);
+
+  useEffect(() => {
+    getUserData()
+  }, [])
   return (
     <div className="flex flex-col justify-center items-center">
       <Header></Header>
@@ -208,8 +299,8 @@ function Search() {
       </div>
       <SearchBar HandleSearch={HandleSearch}></SearchBar>
       <Container containerTitle={"Search"}>
-        {searchMovieAPI && searchMovieAPI.length > 0 ? (
-          <MovieSlider movies={searchMovieAPI}></MovieSlider>
+        { userData && searchMovieAPI && searchMovieAPI.length > 0 ? (
+          <MovieSlider movies={searchMovieAPI} userID={userData.handle} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} listOfFavorites={userData.favorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData.toWatch} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={userData.seen}></MovieSlider>
         ) : (
           "No Results"
         )}

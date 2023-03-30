@@ -4,29 +4,62 @@ import { useState, useEffect } from "react";
 import MovieSlider from "./MovieSlider";
 import ProfileEditPopUp from "./ProfileEditPopUp";
 import { fetchCurrentUserData } from "../auth/auth";
+import FriendList from "./FriendList";
+import { auth, db } from "../firebase";
+import {
+  modifyAddInfo,
+  modifyName,
+  modifyStatusMsg,
+  addToFavorites,
+  deleteFromFavorites,
+  deleteFromToWatch,
+  addToToWatch,
+  addToToSeen,
+  deleteFromSeen,
+  addFriend
+} from "../api/firebaseWriter";
+import { doc, getDoc } from "firebase/firestore";
+import Recommendations from "./Recommendations";
 
 const IMG_PATH = "https://image.tmdb.org/t/p/w500";
 const SEARCH_API_URL =
   'https://api.themoviedb.org/3/search/movie?api_key=75e05708188d5f5a0a191495cf4a48db&language=en-US&page=1&include_adult=false&query="';
 
+const SEARCH_BY_ID_URL_FIRST_HALF = "https://api.themoviedb.org/3/movie/";
+const SEARCH_BY_ID_URL_SECOND_HALF =
+  "?api_key=75e05708188d5f5a0a191495cf4a48db&language=en-US";
+let tangled =
+  "https://api.themoviedb.org/3/movie/38757/similar?api_key=75e05708188d5f5a0a191495cf4a48db&language=en-US&page=1";
+
+let GET_SIMILAR_MOVIES_URL_FIRST_THIRD = "https://api.themoviedb.org/3/movie/";
+let GET_SIMILAR_MOVIES_URL_SECOND_THIRD =
+  "/similar?api_key=75e05708188d5f5a0a191495cf4a48db&language=en-US&page=";
+
+let GET_RECOMMENDED_MOVIES_URL_FIRST_THIRD =
+  "https://api.themoviedb.org/3/movie/";
+let GET_RECOMMENDED_MOVIES_URL_SECOND_THIRD =
+  "/recommendations?api_key=75e05708188d5f5a0a191495cf4a48db&language=en-US&page=";
+
 const UserProfile = ({ userData }) => {
   const [movieObjects, setMovieObjects] = useState([]);
   const [editMode, setEditMode] = useState(false);
   const [currentUserData, setCurrentUserData] = useState([]);
+  const [userName, setUserName] = useState("");
+  const [statusMsg, setStatusMsg] = useState("");
+  const [additionalInfo, setAdditionalInfo] = useState("");
+  const[thirtyMovieRec, setThirtyMovieRec] = useState([])
+  const[firebaseUserID, setFirebaseUserID] = useState("")
 
-  async function get1Movie(url) {
+ 
+
+  async function get1MovieByID(url) {
     const res = await fetch(url);
     const data = await res.json();
-    let first = getFirst(data.results);
-    return Simplify(first[0]);
-  }
-
-  function getFirst(array) {
-    return array.slice(0, 1);
+    return Simplify(data);
   }
 
   function Simplify(movie) {
-    const { title, poster_path, overview, release_date, vote_average } = movie;
+    const { title, poster_path, overview, release_date, vote_average, id } = movie;
 
     return {
       title: title,
@@ -34,27 +67,188 @@ const UserProfile = ({ userData }) => {
       overview: overview,
       release_date: release_date,
       vote_average: vote_average,
-    };
+      id: id    };
+  }
+
+  async function apiCall() {
+    let movieObjectsArray = [];
+    for (const movieID of userData.topThreeMovies) {
+      const movieObject = await get1MovieByID(
+        SEARCH_BY_ID_URL_FIRST_HALF + movieID + SEARCH_BY_ID_URL_SECOND_HALF
+      );
+      movieObjectsArray.push(movieObject);
+    }
+    setMovieObjects(movieObjectsArray);
+  }
+
+  async function getRecommendedMovies() {
+    let movieObjectsArray = [];
+    let totalRecommendedMovies = [];
+    let totalRecommendedMoviesNames = [];
+
+    // for (const movieID of userData.favorites) {
+    //   for (let i = 1; i < 100; i++) {
+    //     totalRecommendedMovies.push(...await getSimilarMovies(GET_RECOMMENDED_MOVIES_URL_FIRST_THIRD + movieID + GET_RECOMMENDED_MOVIES_URL_SECOND_THIRD + i))
+    //   }
+    // }
+
+    // for(const i in totalRecommendedMovies){
+    //   let movieCount = 0
+    //   for(const j in totalRecommendedMovies){
+    //     if(j!= i && totalRecommendedMovies[j].title == totalRecommendedMovies[i].title){
+    //       movieCount++
+    //       if(movieCount>=4){
+    //       movieObjectsArray.push(totalRecommendedMovies[j].title)
+    //       }
+    //     }
+    //   }
+    // }
+
+    for (const movieID of userData.favorites) {
+      totalRecommendedMovies.push(
+        ...(await APIRecommended(
+          GET_RECOMMENDED_MOVIES_URL_FIRST_THIRD +
+            movieID +
+            GET_RECOMMENDED_MOVIES_URL_SECOND_THIRD +
+            1
+        ))
+      );
+      totalRecommendedMovies.push(
+        ...(await APIRecommended(
+          GET_RECOMMENDED_MOVIES_URL_FIRST_THIRD +
+            movieID +
+            GET_RECOMMENDED_MOVIES_URL_SECOND_THIRD +
+            2
+        ))
+      );
+    }
+
+    for (let i = userData.favorites.length; i >= 1; i--){
+      totalRecommendedMovies.splice(i * 41 - 21, 1)
+    }
+
+    for (const movieObject of totalRecommendedMovies) {
+      totalRecommendedMoviesNames.push(movieObject.title);
+    }
+
+    // for(const i in totalRecommendedMovies){
+    //   let movieCount = 0
+    //   for(const j in totalRecommendedMovies){
+    //     if(j!= i && totalRecommendedMovies[j].title == totalRecommendedMovies[i].title){
+    //       movieCount++
+    //       if(movieCount>=1){
+    //       movieObjectsArray.push(totalRecommendedMovies[j].title)
+    //       }
+    //     }
+    //   }
+    // }
+
+    var dictMovies = {};
+    var movieCount = 0;
+    let totalRecommendedMoviesNamesSET = new Set(totalRecommendedMoviesNames);
+    for (const movieObjectFromTotal of totalRecommendedMovies) {
+      movieCount = 0;
+      for (const movieName of totalRecommendedMoviesNamesSET) {
+        if (movieObjectFromTotal.title === movieName) {
+          movieCount += 1;
+        }
+      }
+      if (!Object.hasOwn(dictMovies, `${movieObjectFromTotal.title}`)) {
+        dictMovies[`${movieObjectFromTotal.title}`] = [
+          movieCount,
+          movieObjectFromTotal.id
+        ];
+      } else {
+        dictMovies[`${movieObjectFromTotal.title}`] = [
+          dictMovies[`${movieObjectFromTotal.title}`][0] + 1,
+          movieObjectFromTotal.id
+        ];
+      }
+    }
+    // console.log(dictMovies);
+    let dictMoviesSorted = []
+
+    for(let i = userData.favorites.length; i >= 1; i--){
+      for(const [key, value] of Object.entries(dictMovies)) {
+        if(value[0] == i){
+          dictMoviesSorted.push(value[1])
+        }
+      }
+    }
+
+    // console.log(dictMoviesSorted)
+    for (const movieID of userData.favorites) {
+      let index = dictMoviesSorted.indexOf(movieID)
+      if(movieID > -1) {
+        dictMoviesSorted.splice(index, 1)
+      }
+    }
+
+    for (const movieID of userData.toWatch) {
+      let index = dictMoviesSorted.indexOf(movieID)
+      if(movieID > -1) {
+        dictMoviesSorted.splice(index, 1)
+      }
+    }
+
+    for (const movieID of userData.seen) {
+      let index = dictMoviesSorted.indexOf(movieID)
+      if(movieID > -1) {
+        dictMoviesSorted.splice(index, 1)
+      }
+    }
+
+    let best30RecommendedMovieIDS = dictMoviesSorted.slice(0, 30)
+
+    let best30RecommendedMovieObjects = []
+    for(const MovieID of best30RecommendedMovieIDS) {
+      best30RecommendedMovieObjects.push(await get1MovieByID(SEARCH_BY_ID_URL_FIRST_HALF + MovieID +SEARCH_BY_ID_URL_SECOND_HALF ))
+    }
+
+
+
+    setThirtyMovieRec(best30RecommendedMovieObjects)
+
+    // console.log(best30RecommendedMovieObjects)
+
+
+ 
+    // for(const movie of totalRecommendedMovies){
+    //   totalRecommendedMoviesNames.push(movie.title)
+    // }
+    // console.log(totalRecommendedMoviesNames.length)
+    // console.log(new Set(totalRecommendedMoviesNames).size)
+  }
+
+  async function getSimilarMovies(url) {
+    const res = await fetch(url);
+    const data = await res.json();
+    return data.results;
+  }
+
+  async function APIRecommended(url) {
+    const res = await fetch(url);
+    const data = await res.json();
+    return data.results;
+  }
+
+  async function storeFirebaseID() {
+    const userEmail = auth.currentUser.email;
+    const userIdRef = doc(db, "userIdMap", userEmail);
+    const docSnap = await getDoc(userIdRef);
+    setFirebaseUserID(docSnap.data().userId);
   }
 
   useEffect(() => {
-    async function apiCall() {
-      let movieObjectsArray = [];
-      for (const movieName of userData.topThreeMovies) {
-        const movieObject = await get1Movie(SEARCH_API_URL + movieName);
-        movieObjectsArray.push(movieObject);
-      }
-      setMovieObjects(movieObjectsArray);
-    }
-
     apiCall();
-
     const getUserData = async () => {
       const userData = await fetchCurrentUserData();
       setCurrentUserData(userData);
     };
 
     getUserData();
+    getRecommendedMovies();
+    storeFirebaseID()
   }, []);
 
   const [selectedUserInfo, setSelectedUserInfo] = useState("Fav Movies");
@@ -63,10 +257,105 @@ const UserProfile = ({ userData }) => {
     setEditMode(!editMode);
   };
 
+  const handleFollow = async () =>{
+    const userEmail = auth.currentUser.email;
+    const userIdRef = doc(db, 'userIdMap', userEmail);
+      const docSnap = await getDoc(userIdRef);
+
+      if (docSnap.exists()) {
+        const userId = docSnap.data().userId;
+        addFriend(userId, userData.handle);
+        addFriend(userData.handle, userId)
+      } else {
+        console.error("Could not find document.");
+      }
+  };
+
+  const handleUpdate = async () => {
+    const userEmail = auth.currentUser.email;
+    const userIdRef = doc(db, "userIdMap", userEmail);
+    const docSnap = await getDoc(userIdRef);
+
+    if (docSnap.exists()) {
+      const userId = docSnap.data().userId;
+      modifyName(userId, userName);
+      modifyStatusMsg(userId, statusMsg);
+      modifyAddInfo(userId, additionalInfo);
+    } else {
+      console.error("Could not find document.");
+    }
+  };
+
+  async function handleAddToFavorites(userId, movieID)  {
+    const userEmail = auth.currentUser.email;
+    const userIdRef = doc(db, "userIdMap", userEmail);
+    const docSnap = await getDoc(userIdRef);
+    if (docSnap.exists()) {
+      addToFavorites(userId, movieID)
+    } else {
+      console.error("Could not find document.");
+    }
+  };
+
+  async function handleRemoveFromFavorites(userId, movieID)  {
+    const userEmail = auth.currentUser.email;
+    const userIdRef = doc(db, "userIdMap", userEmail);
+    const docSnap = await getDoc(userIdRef);
+    if (docSnap.exists()) {
+      deleteFromFavorites(userId, movieID)
+    } else {
+      console.error("Could not find document.");
+    }
+  };
+
+  async function handleAddToWatch(userId, movieID)  {
+    const userEmail = auth.currentUser.email;
+    const userIdRef = doc(db, "userIdMap", userEmail);
+    const docSnap = await getDoc(userIdRef);
+    if (docSnap.exists()) {
+      addToToWatch(userId, movieID)
+    } else {
+      console.error("Could not find document.");
+    }
+  };
+
+  async function handleRemoveFromWatch(userId, movieID)  {
+    const userEmail = auth.currentUser.email;
+    const userIdRef = doc(db, "userIdMap", userEmail);
+    const docSnap = await getDoc(userIdRef);
+    if (docSnap.exists()) {
+      deleteFromToWatch(userId, movieID)
+    } else {
+      console.error("Could not find document.");
+    }
+  };
+
+  
+  async function handleAddToSeen(userId, movieID)  {
+    const userEmail = auth.currentUser.email;
+    const userIdRef = doc(db, "userIdMap", userEmail);
+    const docSnap = await getDoc(userIdRef);
+    if (docSnap.exists()) {
+      addToToSeen(userId, movieID)
+    } else {
+      console.error("Could not find document.");
+    }
+  };
+
+  async function handleRemoveFromSeen(userId, movieID)  {
+    const userEmail = auth.currentUser.email;
+    const userIdRef = doc(db, "userIdMap", userEmail);
+    const docSnap = await getDoc(userIdRef);
+    if (docSnap.exists()) {
+      deleteFromSeen(userId, movieID)
+    } else {
+      console.error("Could not find document.");
+    }
+  };
+
   return (
     <div>
       {editMode && <ProfileEditPopUp setEditMode={setEditMode} currentUserData={currentUserData} />}
-
       <div className="flex items-center p-4 w-full">
         <div className="flex  flex-col">
           {/* User Information Section */}
@@ -131,7 +420,7 @@ const UserProfile = ({ userData }) => {
         {/* User TOP 3 Favorite Movies Display */}
         <div className="flex flex-row w-full justify-end">
           <div className="flex flex-row bg-lime-100 justify-center my-6 w-2/5 h-4/5 rounded-xl mr-8 p-8">
-            {movieObjects && <MovieSlider movies={movieObjects} />}
+            {movieObjects && <MovieSlider movies={movieObjects} userID={firebaseUserID} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} listOfFavorites={userData.favorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData.toWatch} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={userData.seen}/>}
             {/* {movieObjects.length == 3 && <MovieSlider movies={movieObjects} />} */}
           </div>
         </div>
@@ -144,16 +433,14 @@ const UserProfile = ({ userData }) => {
             className="mr-2 w-1/4 flex justify-center"
             onClick={() => {
               setSelectedUserInfo("Fav Movies");
-            }}
-          >
+            }}>
             <span
               data-testid="favMovies"
               className={
                 selectedUserInfo == "Fav Movies"
                   ? "inline-block p-4 text-lime-600 border-b-2 border-lime-600 rounded-t-lg active dark:text-lime-500 dark:border-lime-500"
                   : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
-              }
-            >
+              }>
               Fav Movies
             </span>
           </div>
@@ -161,55 +448,51 @@ const UserProfile = ({ userData }) => {
             className="mr-2 w-1/4 flex justify-center"
             onClick={() => {
               setSelectedUserInfo("To Watch");
-            }}
-          >
+            }}>
             <span
               data-testid="toWatch"
               className={
                 selectedUserInfo == "To Watch"
                   ? "inline-block p-4 text-lime-600 border-b-2 border-lime-600 rounded-t-lg active dark:text-lime-500 dark:border-lime-500"
                   : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
-              }
-            >
+              }>
               To Watch
+            </span>
+          </div>
+          
+          <div
+            className="mr-2 w-1/4 flex justify-center"
+            onClick={() => {
+              setSelectedUserInfo("Seen");
+            }}>
+            <span
+              className={
+                selectedUserInfo == "Seen"
+                  ? "inline-block p-4 text-lime-600 border-b-2 border-lime-600 rounded-t-lg active dark:text-lime-500 dark:border-lime-500"
+                  : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+              }>
+              Seen
             </span>
           </div>
           <div
             className="mr-2 w-1/4 flex justify-center"
             onClick={() => {
               setSelectedUserInfo("Friends");
-            }}
-          >
+            }}>
             <span
               data-testid="friends"
               className={
                 selectedUserInfo == "Friends"
                   ? "inline-block p-4 text-lime-600 border-b-2 border-lime-600 rounded-t-lg active dark:text-lime-500 dark:border-lime-500"
                   : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
-              }
-            >
+              }>
               Friends
-            </span>
-          </div>
-          <div
-            className="mr-2 w-1/4 flex justify-center"
-            onClick={() => {
-              setSelectedUserInfo("Watch Groups");
-            }}
-          >
-            <span
-              className={
-                selectedUserInfo == "Watch Groups"
-                  ? "inline-block p-4 text-lime-600 border-b-2 border-lime-600 rounded-t-lg active dark:text-lime-500 dark:border-lime-500"
-                  : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
-              }
-            >
-              Watch Groups
             </span>
           </div>
         </div>
       </div>
-      <UserInfoGrid userData={userData} selectedUserInfo={selectedUserInfo} />
+      <UserInfoGrid userData={userData} selectedUserInfo={selectedUserInfo} userID={firebaseUserID} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} listOfFavorites={userData.favorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData.toWatch}  handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={userData.seen}/>
+     <Recommendations movies={thirtyMovieRec} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} userID={firebaseUserID} listOfFavorites={userData.favorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData.toWatch} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={userData.seen}></Recommendations>
     </div>
   );
 };

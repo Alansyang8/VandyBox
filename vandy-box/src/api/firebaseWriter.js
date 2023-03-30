@@ -26,18 +26,18 @@ export async function modifyAddInfo(userId, info) {
 }
 
 // Add a movie to favorites collection
-export async function addToFavorites(userId, title) {
+export async function addToFavorites(userId, movieID) {
     const docRef = doc(db, "users", userId);
     await updateDoc(docRef, {
-        favorites: arrayUnion(title),
+        favorites: arrayUnion(movieID),
     });
 }
 
 // Delete a movie from favorites collection
-export async function deleteFromFavorites(userId, title) {
+export async function deleteFromFavorites(userId, movieID) {
     const docRef = doc(db, "users", userId);
     await updateDoc(docRef, {
-        favorites: arrayRemove(title),
+        favorites: arrayRemove(movieID),
     });
 }
 
@@ -58,17 +58,39 @@ export async function deleteFromFriends(userId, name) {
 }
 
 // Add a movie to to-watch collection
-export async function addToToWatch(userId, title) {
+export async function addToToWatch(userId, movieID) {
     const docRef = doc(db, "users", userId);
     await updateDoc(docRef, {
-        toWatch: arrayUnion(title),
+        toWatch: arrayUnion(movieID),
     });
 }
 
 // Delete a movie from to-watch collection
-export async function deleteFromToWatch(userId, title) {
+export async function deleteFromToWatch(userId, movieID) {
     const docRef = doc(db, "users", userId);
     await updateDoc(docRef, {
-        toWatch: arrayRemove(title),
+        toWatch: arrayRemove(movieID),
+    });
+}
+
+export async function addToToSeen(userId, movieID) {
+    const docRef = doc(db, "users", userId);
+    await updateDoc(docRef, {
+        seen: arrayUnion(movieID),
+    });
+}
+
+// Delete a movie from to-watch collection
+export async function deleteFromSeen(userId, movieID) {
+    const docRef = doc(db, "users", userId);
+    await updateDoc(docRef, {
+        seen: arrayRemove(movieID),
+    });
+}
+
+export async function addFriend(userId, id) {
+    const docRef = doc(db, "users", userId);
+    await updateDoc(docRef, {
+        friends: arrayUnion(id),
     });
 }

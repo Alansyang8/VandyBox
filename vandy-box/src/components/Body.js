@@ -4,6 +4,7 @@ import sampleMovieImage from "../assets/sample-movie-poster.jpeg";
 import Header from "../components/Header";
 import MovieSlider from "./MovieSlider";
 import { useState, useEffect } from "react";
+import { fetchCurrentUserData } from "../auth/auth";
 const TRENDING_API_URL =
   "http://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=75e05708188d5f5a0a191495cf4a48db&page=1";
 const REVENUE_API_URL =
@@ -28,13 +29,14 @@ function getFirstTen(array) {
 function addMoviesToArray(movies) {
   let array = [];
   movies.forEach((movie) => {
-    const { title, poster_path, overview, release_date, vote_average } = movie;
+    const { title, poster_path, overview, release_date, vote_average, id } = movie;
       array.push({
         title: title,
         image: `${IMG_PATH}${poster_path}`,
         overview: overview,
         release_date: release_date,
-        vote_average: vote_average
+        vote_average: vote_average,
+        id: id
       });
   });
   return array;
@@ -89,22 +91,22 @@ const trendingMoviesVanderbilt = [
 //   }
 // ];
 
-function Body({ userId }) {
+function Body({handleAddToFavorites, handleRemoveFromFavorites, handleAddToWatch, handleRemoveFromWatch, handleAddToSeen, handleRemoveFromSeen }) {
   const [trendingMovieAPI, setTrendingMovieAPI] = useState();
   const [revenueMovieAPI, setRevenueMovieAPI] = useState();
   const [ratingMovieAPI, setRatingMovieAPI] = useState();
-  const [searchMovieAPI, setSearchMovieAPI] = useState();
-  const [searchBarValue, setSearchBar] = useState("Avengers");
+  const [userData, setUserData] = useState();
 
-  async function apiCall4() {
-    let apiResponse4 = await get10Movies(SEARCH_API_URL + searchBarValue);
-    setSearchMovieAPI(apiResponse4);
+  const getUserData = async () => {
+    const userData = await fetchCurrentUserData();
+    setUserData(userData)
   }
 
-  function HandleSearch(searchValue) {
-    setSearchBar(searchValue);
-    apiCall4();
-  }
+  useEffect(() => {
+    getUserData()
+  }, [])
+
+
 
   useEffect(() => {
     async function apiCall() {
@@ -120,26 +122,27 @@ function Body({ userId }) {
       setRatingMovieAPI(apiResponse3);
     }
 
+    getUserData()
+
     apiCall();
     apiCall2();
     apiCall3();
-    apiCall4();
   }, []);
   return (
     <div className="space-y-4 pb-20">
-      <Header HandleSearch={HandleSearch} userId={userId}/>
+      <Header />
       <Container containerTitle="Trending this week">
-        {trendingMovieAPI && (
-          <MovieSlider movies={trendingMovieAPI}></MovieSlider>
+        {trendingMovieAPI && userData && (
+          <MovieSlider movies={trendingMovieAPI} listOfFavorites={userData.favorites} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} userID = {userData.handle} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData.toWatch} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={userData.seen}></MovieSlider>
         )}
       </Container>
       <Container containerTitle="Trending at Vanderbilt">
-        {revenueMovieAPI && (
-          <MovieSlider movies={revenueMovieAPI}></MovieSlider>
+        {revenueMovieAPI && userData && (
+          <MovieSlider movies={revenueMovieAPI} listOfFavorites={userData.favorites} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} userID = {userData.handle} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData.toWatch} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={userData.seen}></MovieSlider>
         )}
       </Container>
       <Container containerTitle="Favorites">
-        {ratingMovieAPI && <MovieSlider movies={ratingMovieAPI}></MovieSlider>}
+        {ratingMovieAPI && userData && <MovieSlider movies={ratingMovieAPI} listOfFavorites={userData.favorites} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} userID = {userData.handle} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData.toWatch} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={userData.seen}></MovieSlider>}
       </Container>
 
       {/* <Container containerTitle={"Search"}>

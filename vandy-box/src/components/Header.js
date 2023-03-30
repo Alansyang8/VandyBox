@@ -2,8 +2,21 @@ import React, { useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
 import { fetchCurrentUserData, logOut } from "../auth/auth";
 import anonymousPic from "../assets/anonymous_user_img.jpg";
+import { auth, db } from "../firebase";
+import { onValue, ref } from "firebase/database";
 
-function Header(props) {
+function Header() {
+  const [userData, setUserData] = useState();
+
+  const getUserData = async () => {
+    const userData = await fetchCurrentUserData();
+    setUserData(userData)
+  }
+
+  useEffect(() => {
+    getUserData()
+  }, [])
+  
 
   const [userImage, setUserImage] = useState("");
 
@@ -51,12 +64,13 @@ function Header(props) {
         })}
         onChange={(event) => props.HandleSearch(event.target.value)}
       /> */}
-      <Link className="ml-auto" to={`/profile/${props.userId}`}>
+      {userData && <Link className="ml-auto" to={`/profile/${userData.handle}`}>
         <img
           src={userImage != "" ? userImage : anonymousPic}
           className="object-cover rounded-full w-16 h-16 "
         />
       </Link>
+}
     </nav>
   );
 }
