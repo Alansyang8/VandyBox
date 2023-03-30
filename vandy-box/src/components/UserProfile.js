@@ -400,6 +400,7 @@ const UserProfile = ({ userData }) => {
                   <div
                     data-testid="follow"
                     className="my-auto text-white bg-lime-500 hover:bg-lime-600 hover:cursor-pointer rounded-3xl py-2 px-4 mx-2"
+                    onClick={handleFollow}
                   >
                     Follow
                   </div>
