@@ -12,7 +12,7 @@ const MovieSliderGrid = ({ movies, userID, handleAddToFavorites, listOfFavorites
   const [showingPopup, setShowingPopup] = useState(false);
 
   function handleOnClose(){
-    setShowingPopup(false)
+    setShowingPopup(false);
   }
 
 

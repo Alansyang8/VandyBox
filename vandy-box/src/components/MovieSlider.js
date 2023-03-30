@@ -13,7 +13,7 @@ const MovieSlider = ({ movies, userID, handleAddToFavorites, listOfFavorites, ha
   
 
   function handleOnClose(){
-    setShowingPopup(false)
+    setShowingPopup(false);
   }
 
   useEffect(() =>{

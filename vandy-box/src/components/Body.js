@@ -130,7 +130,7 @@ function Body({handleAddToFavorites, handleRemoveFromFavorites, handleAddToWatch
   }, []);
   return (
     <div className="space-y-4 pb-20" onClick={handleOnClick}>
-      <Header userId={userId} />
+      <Header />
       <Container containerTitle="Trending this week">
         {trendingMovieAPI && userData && (
           <MovieSlider movies={trendingMovieAPI} listOfFavorites={userData.favorites} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} userID = {userData.handle} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData.toWatch} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={userData.seen} setShowingPopup={setShowingPopup} showingPopup={showingPopup}></MovieSlider>

@@ -27,6 +27,7 @@ const ProfileEditPopUp = ({ setEditMode, currentUserData }) => {
       modifyName(userId, userName);
       modifyStatusMsg(userId, statusMsg);
       modifyAddInfo(userId, additionalInfo);
+      setTimeout(() => {window.location.reload(true);}, 200);
     } else {
       console.error("Could not find document.");
     }
