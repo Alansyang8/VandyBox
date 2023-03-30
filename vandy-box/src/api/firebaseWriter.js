@@ -87,3 +87,10 @@ export async function deleteFromSeen(userId, movieID) {
         seen: arrayRemove(movieID),
     });
 }
+
+export async function addFriend(userId, id) {
+    const docRef = doc(db, "users", userId);
+    await updateDoc(docRef, {
+        friends: arrayUnion(id),
+    });
+}
