@@ -10,7 +10,8 @@ const MovieSliderGrid = ({ movies, userID, handleAddToFavorites, listOfFavorites
   const [movieTitle, setMovieTitle] = useState("Test");
   const [movieID, setMovieID] = useState("Test");
   const [showingPopup, setShowingPopup] = useState(false);
-  function handleOnMouseLeave(){
+
+  function handleOnClose(){
     setShowingPopup(false)
   }
 
@@ -18,7 +19,7 @@ const MovieSliderGrid = ({ movies, userID, handleAddToFavorites, listOfFavorites
   return (
     <>
       {showingPopup && (
-        <MovieInfoPopUp description={movieDescription} title={movieTitle} release_date={movieRelease} vote_average={movieRating} image={moviePoster} id={movieID} handleOnMouseLeave={handleOnMouseLeave} userID={userID} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} listOfFavorites={listOfFavorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={toWatchList} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={seenList}></MovieInfoPopUp>
+        <MovieInfoPopUp description={movieDescription} title={movieTitle} release_date={movieRelease} vote_average={movieRating} image={moviePoster} id={movieID} handleOnClose={handleOnClose} userID={userID} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} listOfFavorites={listOfFavorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={toWatchList} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={seenList}></MovieInfoPopUp>
       )}
       <div className="flex flex-wrap gap-5 w-full justify-center">
         {movies.map((movie) => (

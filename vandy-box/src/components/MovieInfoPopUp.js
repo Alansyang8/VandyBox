@@ -14,8 +14,8 @@ function MovieInfoPopUp(props) {
   
   return (
     <>
-      <div className="absolute w-[calc(100vw-16.5px)] h-screen left-0 top-0 bg-neutral-900/80 pointer-events-none" ref={ref2}></div>
-      <div className="MovieInfoPopUp absolute inset-0  ml-auto mr-auto mt-[25vh] w-fit h-fit max-w-[90vw] bg-neutral-800 rounded-3xl p-6 flex justify-evenly" onMouseLeave={props.handleOnMouseLeave} ref={ref}>
+      <div className="absolute w-[calc(100vw-16.5px)] h-screen left-0 top-0 bg-neutral-900/80" ref={ref2}></div>
+      <div className="MovieInfoPopUp absolute inset-0  ml-auto mr-auto mt-[25vh] w-fit h-fit max-w-[90vw] bg-neutral-800 rounded-3xl p-6 flex justify-evenly" ref={ref}>
       <div className="MovieInfo flex flex-col">
          <div className="text-white  pb-8 flex items-center">
          <span className="font-bold text-4xl">{props.title}</span>
@@ -70,6 +70,13 @@ function MovieInfoPopUp(props) {
           <span className="font-bold text-xl">Rating: &nbsp;</span>
           {props.vote_average}
         </div> */}
+        <div>
+          <button type="button" class="bg-grey rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500" onClick={()=> {props.handleOnClose()}}>
+            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
       </div>
     </>
   );
