@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import MovieSlider from "./MovieSlider";
 import { useState, useEffect } from "react";
 import SingleMovieFrame from "./SingleMovieFrame";
