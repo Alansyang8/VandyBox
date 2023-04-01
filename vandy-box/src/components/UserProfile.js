@@ -16,7 +16,8 @@ import {
   addToToWatch,
   addToToSeen,
   deleteFromSeen,
-  addFriend
+  addFriend,
+  deleteFriend
 } from "../api/firebaseWriter";
 import { doc, getDoc } from "firebase/firestore";
 import Recommendations from "./Recommendations";
@@ -47,10 +48,9 @@ const UserProfile = ({ userData }) => {
   const [userName, setUserName] = useState("");
   const [statusMsg, setStatusMsg] = useState("");
   const [additionalInfo, setAdditionalInfo] = useState("");
-  const[thirtyMovieRec, setThirtyMovieRec] = useState([])
-  const[firebaseUserID, setFirebaseUserID] = useState("")
-
- 
+  const [thirtyMovieRec, setThirtyMovieRec] = useState([]);
+  const [firebaseUserID, setFirebaseUserID] = useState("");
+  const [isFriend, setIsFriend] = useState(false);
 
   async function get1MovieByID(url) {
     const res = await fetch(url);
@@ -59,7 +59,8 @@ const UserProfile = ({ userData }) => {
   }
 
   function Simplify(movie) {
-    const { title, poster_path, overview, release_date, vote_average, id } = movie;
+    const { title, poster_path, overview, release_date, vote_average, id } =
+      movie;
 
     return {
       title: title,
@@ -67,7 +68,8 @@ const UserProfile = ({ userData }) => {
       overview: overview,
       release_date: release_date,
       vote_average: vote_average,
-      id: id    };
+      id: id,
+    };
   }
 
   async function apiCall() {
@@ -123,8 +125,8 @@ const UserProfile = ({ userData }) => {
       );
     }
 
-    for (let i = userData.favorites.length; i >= 1; i--){
-      totalRecommendedMovies.splice(i * 41 - 21, 1)
+    for (let i = userData.favorites.length; i >= 1; i--) {
+      totalRecommendedMovies.splice(i * 41 - 21, 1);
     }
 
     for (const movieObject of totalRecommendedMovies) {
@@ -156,63 +158,63 @@ const UserProfile = ({ userData }) => {
       if (!Object.hasOwn(dictMovies, `${movieObjectFromTotal.title}`)) {
         dictMovies[`${movieObjectFromTotal.title}`] = [
           movieCount,
-          movieObjectFromTotal.id
+          movieObjectFromTotal.id,
         ];
       } else {
         dictMovies[`${movieObjectFromTotal.title}`] = [
           dictMovies[`${movieObjectFromTotal.title}`][0] + 1,
-          movieObjectFromTotal.id
+          movieObjectFromTotal.id,
         ];
       }
     }
     // console.log(dictMovies);
-    let dictMoviesSorted = []
+    let dictMoviesSorted = [];
 
-    for(let i = userData.favorites.length; i >= 1; i--){
-      for(const [key, value] of Object.entries(dictMovies)) {
-        if(value[0] == i){
-          dictMoviesSorted.push(value[1])
+    for (let i = userData.favorites.length; i >= 1; i--) {
+      for (const [key, value] of Object.entries(dictMovies)) {
+        if (value[0] == i) {
+          dictMoviesSorted.push(value[1]);
         }
       }
     }
 
     // console.log(dictMoviesSorted)
     for (const movieID of userData.favorites) {
-      let index = dictMoviesSorted.indexOf(movieID)
-      if(movieID > -1) {
-        dictMoviesSorted.splice(index, 1)
+      let index = dictMoviesSorted.indexOf(movieID);
+      if (movieID > -1) {
+        dictMoviesSorted.splice(index, 1);
       }
     }
 
     for (const movieID of userData.toWatch) {
-      let index = dictMoviesSorted.indexOf(movieID)
-      if(movieID > -1) {
-        dictMoviesSorted.splice(index, 1)
+      let index = dictMoviesSorted.indexOf(movieID);
+      if (movieID > -1) {
+        dictMoviesSorted.splice(index, 1);
       }
     }
 
     for (const movieID of userData.seen) {
-      let index = dictMoviesSorted.indexOf(movieID)
-      if(movieID > -1) {
-        dictMoviesSorted.splice(index, 1)
+      let index = dictMoviesSorted.indexOf(movieID);
+      if (movieID > -1) {
+        dictMoviesSorted.splice(index, 1);
       }
     }
 
-    let best30RecommendedMovieIDS = dictMoviesSorted.slice(0, 30)
+    let best30RecommendedMovieIDS = dictMoviesSorted.slice(0, 30);
 
-    let best30RecommendedMovieObjects = []
-    for(const MovieID of best30RecommendedMovieIDS) {
-      best30RecommendedMovieObjects.push(await get1MovieByID(SEARCH_BY_ID_URL_FIRST_HALF + MovieID +SEARCH_BY_ID_URL_SECOND_HALF ))
+    let best30RecommendedMovieObjects = [];
+    for (const MovieID of best30RecommendedMovieIDS) {
+      best30RecommendedMovieObjects.push(
+        await get1MovieByID(
+          SEARCH_BY_ID_URL_FIRST_HALF + MovieID + SEARCH_BY_ID_URL_SECOND_HALF
+        )
+      );
     }
 
-
-
-    setThirtyMovieRec(best30RecommendedMovieObjects)
+    setThirtyMovieRec(best30RecommendedMovieObjects);
 
     // console.log(best30RecommendedMovieObjects)
 
-
- 
     // for(const movie of totalRecommendedMovies){
     //   totalRecommendedMoviesNames.push(movie.title)
     // }
@@ -239,16 +241,19 @@ const UserProfile = ({ userData }) => {
     setFirebaseUserID(docSnap.data().userId);
   }
 
-  useEffect(() => {
-    apiCall();
-    const getUserData = async () => {
-      const userData = await fetchCurrentUserData();
-      setCurrentUserData(userData);
+  const getUserData = async () => {
+    const LoggedInUserData = await fetchCurrentUserData()
+      setCurrentUserData(LoggedInUserData);
+      if (LoggedInUserData.friends.includes(userData.handle)) {
+        setIsFriend(true)
+      }
     };
 
+  useEffect(() => {
+    apiCall();
     getUserData();
     getRecommendedMovies();
-    storeFirebaseID()
+    storeFirebaseID();
   }, []);
 
   const [selectedUserInfo, setSelectedUserInfo] = useState("Fav Movies");
@@ -257,18 +262,32 @@ const UserProfile = ({ userData }) => {
     setEditMode(!editMode);
   };
 
-  const handleFollow = async () =>{
+  const handleFollow = async () => {
     const userEmail = auth.currentUser.email;
-    const userIdRef = doc(db, 'userIdMap', userEmail);
-      const docSnap = await getDoc(userIdRef);
+    const userIdRef = doc(db, "userIdMap", userEmail);
+    const docSnap = await getDoc(userIdRef);
 
-      if (docSnap.exists()) {
-        const userId = docSnap.data().userId;
-        addFriend(userId, userData.handle);
-        addFriend(userData.handle, userId)
-      } else {
-        console.error("Could not find document.");
-      }
+    if (docSnap.exists()) {
+      const userId = docSnap.data().userId;
+      addFriend(userId, userData.handle);
+      addFriend(userData.handle, userId);
+    } else {
+      console.error("Could not find document.");
+    }
+  };
+
+  const handleUnfriend = async () => {
+    const userEmail = auth.currentUser.email;
+    const userIdRef = doc(db, "userIdMap", userEmail);
+    const docSnap = await getDoc(userIdRef);
+
+    if (docSnap.exists()) {
+      const userId = docSnap.data().userId;
+      deleteFriend(userId, userData.handle);
+      deleteFriend(userData.handle, userId);
+    } else {
+      console.error("Could not find document.");
+    }
   };
 
   const handleUpdate = async () => {
@@ -286,76 +305,80 @@ const UserProfile = ({ userData }) => {
     }
   };
 
-  async function handleAddToFavorites(userId, movieID)  {
+  async function handleAddToFavorites(userId, movieID) {
     const userEmail = auth.currentUser.email;
     const userIdRef = doc(db, "userIdMap", userEmail);
     const docSnap = await getDoc(userIdRef);
     if (docSnap.exists()) {
-      addToFavorites(userId, movieID)
+      addToFavorites(userId, movieID);
     } else {
       console.error("Could not find document.");
     }
-  };
+  }
 
-  async function handleRemoveFromFavorites(userId, movieID)  {
+  async function handleRemoveFromFavorites(userId, movieID) {
     const userEmail = auth.currentUser.email;
     const userIdRef = doc(db, "userIdMap", userEmail);
     const docSnap = await getDoc(userIdRef);
     if (docSnap.exists()) {
-      deleteFromFavorites(userId, movieID)
+      deleteFromFavorites(userId, movieID);
     } else {
       console.error("Could not find document.");
     }
-  };
+  }
 
-  async function handleAddToWatch(userId, movieID)  {
+  async function handleAddToWatch(userId, movieID) {
     const userEmail = auth.currentUser.email;
     const userIdRef = doc(db, "userIdMap", userEmail);
     const docSnap = await getDoc(userIdRef);
     if (docSnap.exists()) {
-      addToToWatch(userId, movieID)
+      addToToWatch(userId, movieID);
     } else {
       console.error("Could not find document.");
     }
-  };
+  }
 
-  async function handleRemoveFromWatch(userId, movieID)  {
+  async function handleRemoveFromWatch(userId, movieID) {
     const userEmail = auth.currentUser.email;
     const userIdRef = doc(db, "userIdMap", userEmail);
     const docSnap = await getDoc(userIdRef);
     if (docSnap.exists()) {
-      deleteFromToWatch(userId, movieID)
+      deleteFromToWatch(userId, movieID);
     } else {
       console.error("Could not find document.");
     }
-  };
+  }
 
-  
-  async function handleAddToSeen(userId, movieID)  {
+  async function handleAddToSeen(userId, movieID) {
     const userEmail = auth.currentUser.email;
     const userIdRef = doc(db, "userIdMap", userEmail);
     const docSnap = await getDoc(userIdRef);
     if (docSnap.exists()) {
-      addToToSeen(userId, movieID)
+      addToToSeen(userId, movieID);
     } else {
       console.error("Could not find document.");
     }
-  };
+  }
 
-  async function handleRemoveFromSeen(userId, movieID)  {
+  async function handleRemoveFromSeen(userId, movieID) {
     const userEmail = auth.currentUser.email;
     const userIdRef = doc(db, "userIdMap", userEmail);
     const docSnap = await getDoc(userIdRef);
     if (docSnap.exists()) {
-      deleteFromSeen(userId, movieID)
+      deleteFromSeen(userId, movieID);
     } else {
       console.error("Could not find document.");
     }
-  };
+  }
 
   return (
     <div>
-      {editMode && <ProfileEditPopUp setEditMode={setEditMode} currentUserData={currentUserData} />}
+      {editMode && (
+        <ProfileEditPopUp
+          setEditMode={setEditMode}
+          currentUserData={currentUserData}
+        />
+      )}
       <div className="flex items-center p-4 w-full">
         <div className="flex  flex-col">
           {/* User Information Section */}
@@ -364,55 +387,55 @@ const UserProfile = ({ userData }) => {
               <img
                 className="h-40 w-40 md rounded-full relative"
                 src={userData.image}
-                alt="User Image"
-              ></img>
+                alt="User Image"></img>
               {/* <div className="absolute"></div> */}
             </div>
             <div className="flex flex-col space-y-1 justify-center items-left -mt-12 w-80">
               <span
                 data-testid={"name"}
-                className="font-bold text-xl text-center text-gray-800 hover:text-lime-500 hover:cursor-pointer "
-              >
+                className="font-bold text-xl text-center text-gray-800 hover:text-lime-500 hover:cursor-pointer ">
                 {userData.name}
               </span>
               <p
                 data-testid={"handle"}
-                className="text-gray-600 text-sm text-center"
-              >
+                className="text-gray-600 text-sm text-center">
                 @{userData.handle}
               </p>
               <p
                 data-testid={"statusMsg"}
-                className="text-black-600 text-sm text-center"
-              >
+                className="text-black-600 text-sm text-center">
                 {userData.statusMsg}
               </p>
               <p
                 data-testid={"additionalInfo"}
-                className="text-black-600 text-sm text-center"
-              >
+                className="text-black-600 text-sm text-center">
                 {userData.additionalInfo}
               </p>
 
               {/* Follow & Message Buttons */}
               <div className="flex flex-row justify-center font-semibold mx-auto my-4 w-40">
-                {currentUserData?.handle != userData.handle ? (
-                  <div
+                {currentUserData?.handle != userData.handle ? 
+                 isFriend ? <div
+                    data-testid="follow"
+                    className="my-auto text-white bg-red-500 hover:bg-red-600 hover:cursor-pointer rounded-3xl py-2 px-4 mx-2"
+                    onClick={handleUnfriend}>
+                    Unfriend
+                    </div> :
+                    <div
                     data-testid="follow"
                     className="my-auto text-white bg-lime-500 hover:bg-lime-600 hover:cursor-pointer rounded-3xl py-2 px-4 mx-2"
-                    onClick={handleFollow}
-                  >
-                    Follow
-                  </div>
-                ) : (
+                    onClick={handleFollow}>
+                    Friend
+                    </div>
+
+                  : 
                   <div
                     data-testid="edit"
                     className="my-auto text-white bg-gray-400 hover:bg-gray-500 hover:cursor-pointer rounded-3xl py-2 px-4 mx-2"
-                    onClick={handleEdit}
-                  >
+                    onClick={handleEdit}>
                     Edit
                   </div>
-                )}
+                }
                 {/* <div class="my-auto text-gray-800 py-1 px-4 border-2 border-lime-500 hover:bg-lime-500 hover:cursor-pointer hover:text-white rounded-3xl mx-2">Add to Box</div> */}
               </div>
             </div>
@@ -421,7 +444,21 @@ const UserProfile = ({ userData }) => {
         {/* User TOP 3 Favorite Movies Display */}
         <div className="flex flex-row w-full justify-end">
           <div className="flex flex-row bg-lime-100 justify-center my-6 w-2/5 h-4/5 rounded-xl mr-8 p-8">
-            {movieObjects && <MovieSlider movies={movieObjects} userID={firebaseUserID} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} listOfFavorites={userData.favorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData.toWatch} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={userData.seen}/>}
+            {movieObjects && (
+              <MovieSlider
+                movies={movieObjects}
+                userID={firebaseUserID}
+                handleAddToFavorites={handleAddToFavorites}
+                handleRemoveFromFavorites={handleRemoveFromFavorites}
+                listOfFavorites={userData.favorites}
+                handleAddToWatch={handleAddToWatch}
+                handleRemoveFromWatch={handleRemoveFromWatch}
+                toWatchList={userData.toWatch}
+                handleAddToSeen={handleAddToSeen}
+                handleRemoveFromSeen={handleRemoveFromSeen}
+                seenList={userData.seen}
+              />
+            )}
             {/* {movieObjects.length == 3 && <MovieSlider movies={movieObjects} />} */}
           </div>
         </div>
@@ -460,7 +497,7 @@ const UserProfile = ({ userData }) => {
               To Watch
             </span>
           </div>
-          
+
           <div
             className="mr-2 w-1/4 flex justify-center"
             onClick={() => {
@@ -492,8 +529,32 @@ const UserProfile = ({ userData }) => {
           </div>
         </div>
       </div>
-      <UserInfoGrid userData={userData} selectedUserInfo={selectedUserInfo} userID={firebaseUserID} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} listOfFavorites={userData.favorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData.toWatch}  handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={userData.seen}/>
-     <Recommendations movies={thirtyMovieRec} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} userID={firebaseUserID} listOfFavorites={userData.favorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData.toWatch} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={userData.seen}></Recommendations>
+      <UserInfoGrid
+        userData={userData}
+        selectedUserInfo={selectedUserInfo}
+        userID={firebaseUserID}
+        handleAddToFavorites={handleAddToFavorites}
+        handleRemoveFromFavorites={handleRemoveFromFavorites}
+        listOfFavorites={userData.favorites}
+        handleAddToWatch={handleAddToWatch}
+        handleRemoveFromWatch={handleRemoveFromWatch}
+        toWatchList={userData.toWatch}
+        handleAddToSeen={handleAddToSeen}
+        handleRemoveFromSeen={handleRemoveFromSeen}
+        seenList={userData.seen}
+      />
+      <Recommendations
+        movies={thirtyMovieRec}
+        handleAddToFavorites={handleAddToFavorites}
+        handleRemoveFromFavorites={handleRemoveFromFavorites}
+        userID={firebaseUserID}
+        listOfFavorites={userData.favorites}
+        handleAddToWatch={handleAddToWatch}
+        handleRemoveFromWatch={handleRemoveFromWatch}
+        toWatchList={userData.toWatch}
+        handleAddToSeen={handleAddToSeen}
+        handleRemoveFromSeen={handleRemoveFromSeen}
+        seenList={userData.seen}></Recommendations>
     </div>
   );
 };

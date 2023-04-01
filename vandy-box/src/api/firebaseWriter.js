@@ -94,3 +94,10 @@ export async function addFriend(userId, id) {
         friends: arrayUnion(id),
     });
 }
+
+export async function deleteFriend(userId, id) {
+    const docRef = doc(db, "users", userId);
+    await updateDoc(docRef, {
+        friends: arrayRemove(id),
+    });
+}
