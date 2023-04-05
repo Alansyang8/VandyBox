@@ -10,8 +10,8 @@ import {
   deleteFromFavorites,
   addToToWatch,
   deleteFromToWatch,
-  addToToSeen,
-  deleteFromSeen
+  likeMovie,
+  dislikeMovie
 } from "../api/firebaseWriter";
 import { useLoaderData } from "react-router-dom";
 
@@ -69,28 +69,27 @@ function Home() {
     }
   };
 
-  async function handleAddToSeen(userId, movieID)  {
+  async function handleAddToLikes(userId, movieID) {
     const userEmail = auth.currentUser.email;
     const userIdRef = doc(db, "userIdMap", userEmail);
     const docSnap = await getDoc(userIdRef);
     if (docSnap.exists()) {
-      addToToSeen(userId, movieID)
+      likeMovie(userId, movieID);
     } else {
       console.error("Could not find document.");
     }
-  };
+  }
 
-  async function handleRemoveFromSeen(userId, movieID)  {
+  async function handleAddToDislikes(userId, movieID) {
     const userEmail = auth.currentUser.email;
     const userIdRef = doc(db, "userIdMap", userEmail);
     const docSnap = await getDoc(userIdRef);
     if (docSnap.exists()) {
-      deleteFromSeen(userId, movieID)
+      dislikeMovie(userId, movieID);
     } else {
       console.error("Could not find document.");
     }
-  };
-
+  }
 
   useEffect(() => {
     // Observe auth state to redirect to login/home page
@@ -116,7 +115,7 @@ function Home() {
 
   return (
     <div className="Home">
-      <Body userId={userId} listOfFavorites={listOfFavorites} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={toWatchList} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={seenList}></Body>
+      <Body userId={userId} listOfFavorites={listOfFavorites} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={toWatchList} handleAddToLikes={handleAddToLikes} handleAddToDislikes={handleAddToDislikes}></Body>
     </div>
   );
 }

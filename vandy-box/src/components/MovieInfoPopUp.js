@@ -6,7 +6,6 @@ function MovieInfoPopUp(props) {
 
   useEffect(() => {
     ref.current.style.top = `${document.documentElement.scrollTop}px`
-    console.log(props.listOfFavorites)
   }, []);
   
   return (
@@ -18,17 +17,23 @@ function MovieInfoPopUp(props) {
          <span className="font-bold text-4xl">{props.title}</span>
          <div className='ml-auto flex gap-2'>
           {!props.listOfFavorites.includes(props.id) && <button className="AddToFavoritesButton ml-auto text-black bg-lime-100 hover:bg-lime-200 active:bg-lime-300 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {props.handleAddToFavorites(props.userID, props.id)
+          props.handleOnClose()
           console.log("Adding " + props.id + " to " + props.userID) }} >Add to Favorites</button>}
           {props.listOfFavorites.includes(props.id) && <button className="RemoveFromFavoritesButton ml-auto text-black bg-lime-100 hover:bg-lime-200 active:bg-lime-300 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {props.handleRemoveFromFavorites(props.userID, props.id)
+          props.handleOnClose()
           console.log("Remove " + props.id + " from " + props.userID) }} >Remove from Favorites</button>}
           {!props.toWatchList.includes(props.id) && <button className="AddToFavoritesButton ml-auto text-black bg-lime-100 hover:bg-lime-200 active:bg-lime-300 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {props.handleAddToWatch(props.userID, props.id)
+          props.handleOnClose()
           console.log("Adding " + props.id + " to " + props.userID) }} >Add to Watch List</button>}
           {props.toWatchList.includes(props.id) && <button className="RemoveFromFavoritesButton ml-auto text-black bg-lime-100 hover:bg-lime-200 active:bg-lime-300 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {props.handleRemoveFromWatch(props.userID, props.id)
+          props.handleOnClose()
           console.log("Remove " + props.id + " from " + props.userID) }} >Remove from Watch List</button>}
-          {!props.seenList.includes(props.id) && <button className="AddToFavoritesButton ml-auto text-black bg-lime-100 hover:bg-lime-200 active:bg-lime-300 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {props.handleAddToSeen(props.userID, props.id)
-          console.log("Adding " + props.id + " to " + props.userID) }} >Add to Seen</button>}
-          {props.seenList.includes(props.id) && <button className="RemoveFromFavoritesButton ml-auto text-black bg-lime-100 hover:bg-lime-200 active:bg-lime-300 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {props.handleRemoveFromSeen(props.userID, props.id)
-          console.log("Remove " + props.id + " from " + props.userID) }} >Remove from Seen</button>}
+          <button className="AddToFavoritesButton ml-auto text-black bg-green-500 hover:bg-green-600 active:bg-green-700 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {props.handleAddToLikes(props.userID, props.id)
+          props.handleOnClose()
+          console.log("Adding " + props.id + " to " + props.userID) }}>Like</button>
+          <button className="RemoveFromFavoritesButton ml-auto text-black bg-red-500 hover:bg-red-600 active:bg-red-700 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {props.handleAddToDislikes(props.userID, props.id)
+          props.handleOnClose()
+          console.log("Adding " + props.id + " to " + props.userID) }}>Dislike</button>
         </div>
         
         </div>

@@ -10,8 +10,8 @@ import {
   deleteFromFavorites,
   deleteFromToWatch,
   addToToWatch,
-  addToToSeen,
-  deleteFromSeen,
+  likeMovie,
+  dislikeMovie,
   addFriend
 } from "../api/firebaseWriter";
 import { doc, getDoc } from "firebase/firestore";
@@ -138,28 +138,27 @@ function Search() {
   };
 
   
-  async function handleAddToSeen(userId, movieID)  {
+  async function handleAddToLikes(userId, movieID) {
     const userEmail = auth.currentUser.email;
     const userIdRef = doc(db, "userIdMap", userEmail);
     const docSnap = await getDoc(userIdRef);
     if (docSnap.exists()) {
-      addToToSeen(userId, movieID)
+      likeMovie(userId, movieID);
     } else {
       console.error("Could not find document.");
     }
-  };
+  }
 
-  async function handleRemoveFromSeen(userId, movieID)  {
+  async function handleAddToDislikes(userId, movieID) {
     const userEmail = auth.currentUser.email;
     const userIdRef = doc(db, "userIdMap", userEmail);
     const docSnap = await getDoc(userIdRef);
     if (docSnap.exists()) {
-      deleteFromSeen(userId, movieID)
+      dislikeMovie(userId, movieID);
     } else {
       console.error("Could not find document.");
     }
-  };
-  const getUserData = async () => {
+  }  const getUserData = async () => {
     const userData = await fetchCurrentUserData();
     setUserData(userData)
   }
@@ -302,7 +301,7 @@ function Search() {
       <SearchBar HandleSearch={HandleSearch}></SearchBar>
       <Container containerTitle={"Search"}>
         { userData && searchMovieAPI && searchMovieAPI.length > 0 ? (
-          <MovieSlider movies={searchMovieAPI} userID={userData.handle} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} listOfFavorites={userData.favorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData.toWatch} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={userData.seen} setShowingPopup={setShowingPopup} showingPopup={showingPopup}></MovieSlider>
+          <MovieSlider movies={searchMovieAPI} userID={userData.handle} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} listOfFavorites={userData.favorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData.toWatch} handleAddToLikes={handleAddToLikes} handleAddToDislikes={handleAddToDislikes}  seenList={userData.seen} setShowingPopup={setShowingPopup} showingPopup={showingPopup}></MovieSlider>
         ) : (
           "No Results"
         )}

@@ -30,6 +30,9 @@ export async function addToFavorites(userId, movieID) {
     const docRef = doc(db, "users", userId);
     await updateDoc(docRef, {
         favorites: arrayUnion(movieID),
+        toWatch: arrayRemove(movieID),
+        Likes: arrayUnion(movieID),
+        Dislikes: arrayRemove(movieID)
     });
 }
 
@@ -62,6 +65,9 @@ export async function addToToWatch(userId, movieID) {
     const docRef = doc(db, "users", userId);
     await updateDoc(docRef, {
         toWatch: arrayUnion(movieID),
+        favorites: arrayRemove(movieID),
+        Likes: arrayRemove(movieID),
+        Dislikes: arrayRemove(movieID)
     });
 }
 
@@ -73,20 +79,20 @@ export async function deleteFromToWatch(userId, movieID) {
     });
 }
 
-export async function addToToSeen(userId, movieID) {
-    const docRef = doc(db, "users", userId);
-    await updateDoc(docRef, {
-        seen: arrayUnion(movieID),
-    });
-}
+// export async function addToToSeen(userId, movieID) {
+//     const docRef = doc(db, "users", userId);
+//     await updateDoc(docRef, {
+//         seen: arrayUnion(movieID),
+//     });
+// }
 
-// Delete a movie from to-watch collection
-export async function deleteFromSeen(userId, movieID) {
-    const docRef = doc(db, "users", userId);
-    await updateDoc(docRef, {
-        seen: arrayRemove(movieID),
-    });
-}
+// // Delete a movie from to-watch collection
+// export async function deleteFromSeen(userId, movieID) {
+//     const docRef = doc(db, "users", userId);
+//     await updateDoc(docRef, {
+//         seen: arrayRemove(movieID),
+//     });
+// }
 
 export async function addFriend(userId, id) {
     const docRef = doc(db, "users", userId);
@@ -101,3 +107,26 @@ export async function deleteFriend(userId, id) {
         friends: arrayRemove(id),
     });
 }
+
+export async function likeMovie(userId, id) {
+    const docRef = doc(db, "users", userId);
+    console.log("Like")
+    await updateDoc(docRef, {
+        Likes: arrayUnion(id),
+        Dislikes: arrayRemove(id),
+        toWatch: arrayRemove(id),
+    });
+}
+
+export async function dislikeMovie(userId, id) {
+    const docRef = doc(db, "users", userId);
+    console.log("Dislike")
+    await updateDoc(docRef, {
+        Dislikes: arrayUnion(id),
+        Likes: arrayRemove(id),
+        toWatch: arrayRemove(id),
+        favorites: arrayRemove(id),
+    });
+}
+
+

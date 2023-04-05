@@ -35,7 +35,9 @@ const LoginPage = () => {
               toWatch: [],
               seen: [],
               topThreeMovies: [],
-              friends: [],
+              friends: ['richardli'],
+              Likes: [],
+              Dislikes: []
             });
           }
         } else {

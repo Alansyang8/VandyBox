@@ -21,15 +21,15 @@ describe(Recommendations, () => {
     const handleRemoveFromFavorites = jest.fn()
     const handleAddToWatch = jest.fn()
     const handleRemoveFromWatch = jest.fn()
-    const handleAddToSeen = jest.fn()
-    const handleRemoveFromSeen = jest.fn()
+    const handleAddToLikes = jest.fn()
+    const  = jest.fn()
     const setShowingPopup = jest.fn()
     const showingPopup = false
 
     
     it("MovieSlider displays movies", () => {
         const { getByTestId = "slider" } = render(
-          <Recommendations  movies={movies} listOfFavorites={userData.favorites} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} userID = {userData.handle} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData.toWatch} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={userData.seen} setShowingPopup={setShowingPopup} showingPopup={showingPopup}/>,
+          <Recommendations  movies={movies} listOfFavorites={userData.favorites} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} userID = {userData.handle} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData.toWatch} handleAddToLikes={handleAddToLikes} handleAddToDislikes={handleAddToDislikes}  seenList={userData.seen} setShowingPopup={setShowingPopup} showingPopup={showingPopup}/>,
           { wrapper: MemoryRouter }
         );
         // const test = getByTestId("name").textContent;

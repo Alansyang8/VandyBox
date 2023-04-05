@@ -10,9 +10,11 @@ const SEARCH_BY_ID_URL_SECOND_HALF =
   "?api_key=75e05708188d5f5a0a191495cf4a48db&language=en-US";
 const IMG_PATH = "https://image.tmdb.org/t/p/w500";
 
-function UserInfoGrid({ userData, selectedUserInfo, userID, handleAddToFavorites, listOfFavorites, handleRemoveFromFavorites, toWatchList, handleAddToWatch, handleRemoveFromWatch, seenList, handleAddToSeen, handleRemoveFromSeen}) {
+function UserInfoGrid({ userData, selectedUserInfo, userID, handleAddToFavorites, listOfFavorites, handleRemoveFromFavorites, toWatchList, handleAddToWatch, handleRemoveFromWatch, seenList, handleAddToLikes, handleAddToDislikes }) {
   const [favoriteMoviesObjects, setFavoriteMoviesObjects] = useState([]);
   const [toWatchMoviesObjects, setToWatchMoviesObjects] = useState([]);
+  const [LikesMoviesObjects, setLikesMoviesObjects] = useState([]);
+  const [DislikesMoviesObjects, setDislikesMoviesObjects] = useState([]);
   const [seenMoviesObjects, setSeenMoviesObjects] = useState([]);
   const [userData2, setUserData] = useState();
 
@@ -76,10 +78,33 @@ function UserInfoGrid({ userData, selectedUserInfo, userID, handleAddToFavorites
     setSeenMoviesObjects(movieObjectsArray);
   }
 
+  async function PopulateLikesMovies() {
+    let movieObjectsArray = [];
+    for (const movieID of userData.Likes) {
+      const movieObject = await get1MovieByID(
+        SEARCH_BY_ID_URL_FIRST_HALF + movieID + SEARCH_BY_ID_URL_SECOND_HALF
+      );
+      movieObjectsArray.push(movieObject);
+    }
+    setLikesMoviesObjects(movieObjectsArray);
+  }
+
+  async function PopulateDislikesMovies() {
+    let movieObjectsArray = [];
+    for (const movieID of userData.Dislikes) {
+      const movieObject = await get1MovieByID(
+        SEARCH_BY_ID_URL_FIRST_HALF + movieID + SEARCH_BY_ID_URL_SECOND_HALF
+      );
+      movieObjectsArray.push(movieObject);
+    }
+    setDislikesMoviesObjects(movieObjectsArray);
+  }
+
   useEffect(() => {
     PopulateFavoriteMovies();
     PopulateToWatchMovies();
-    PopulateSeenMovies();
+    PopulateLikesMovies();
+    PopulateDislikesMovies();
   }, []);
 
   return (
@@ -88,14 +113,14 @@ function UserInfoGrid({ userData, selectedUserInfo, userID, handleAddToFavorites
       {(selectedUserInfo == "Fav Movies" && favoriteMoviesObjects.length != 0) && favoriteMoviesObjects.map((movieObject) => (
           <div className="flex justify-center items-center h-80">
             <div className="h-full w-64 flex justify-center items-center border border-lime-400">
-              {userData2 && <SingleMovieFrame movie={movieObject} userID={userData2.handle} handleAddToFavorites={handleAddToFavorites} listOfFavorites={userData2.favorites} handleRemoveFromFavorites={handleRemoveFromFavorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData2.toWatch} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={userData.seen}/>}
+              {userData2 && <SingleMovieFrame movie={movieObject} userID={userData2.handle} handleAddToFavorites={handleAddToFavorites} listOfFavorites={userData2.favorites} handleRemoveFromFavorites={handleRemoveFromFavorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData2.toWatch} handleAddToLikes={handleAddToLikes} handleAddToDislikes={handleAddToDislikes}  seenList={userData.seen}/>}
             </div>
           </div>
         ))}
       {(selectedUserInfo == "To Watch" && toWatchMoviesObjects.length != 0) && toWatchMoviesObjects.map((movieObject) => (
           <div className="flex justify-center items-center h-80">
             <div className="h-full w-64 flex justify-center items-center border border-yellow-500">
-            {userData2 && <SingleMovieFrame movie={movieObject} userID={userData2.handle} handleAddToFavorites={handleAddToFavorites} listOfFavorites={userData2.favorites} handleRemoveFromFavorites={handleRemoveFromFavorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData2.toWatch} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={userData.seen}/>}
+            {userData2 && <SingleMovieFrame movie={movieObject} userID={userData2.handle} handleAddToFavorites={handleAddToFavorites} listOfFavorites={userData2.favorites} handleRemoveFromFavorites={handleRemoveFromFavorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData2.toWatch} handleAddToLikes={handleAddToLikes} handleAddToDislikes={handleAddToDislikes}  seenList={userData.seen}/>}
             </div>
           </div>
         ))}
@@ -110,7 +135,21 @@ function UserInfoGrid({ userData, selectedUserInfo, userID, handleAddToFavorites
       {(selectedUserInfo == "Seen" && seenMoviesObjects.length != 0) && seenMoviesObjects.map((movieObject) => (
           <div className="flex justify-center items-center h-80">
             <div className="h-full w-64 flex justify-center items-center border border-yellow-500">
-            {userData2 && <SingleMovieFrame movie={movieObject} userID={userData2.handle} handleAddToFavorites={handleAddToFavorites} listOfFavorites={userData2.favorites} handleRemoveFromFavorites={handleRemoveFromFavorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData2.toWatch} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={userData.seen}/>}
+            {userData2 && <SingleMovieFrame movie={movieObject} userID={userData2.handle} handleAddToFavorites={handleAddToFavorites} listOfFavorites={userData2.favorites} handleRemoveFromFavorites={handleRemoveFromFavorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData2.toWatch} handleAddToLikes={handleAddToLikes} handleAddToDislikes={handleAddToDislikes}  seenList={userData.seen}/>}
+            </div>
+          </div>
+        ))}
+        {(selectedUserInfo == "Likes" && LikesMoviesObjects.length != 0) && LikesMoviesObjects.map((movieObject) => (
+          <div className="flex justify-center items-center h-80">
+            <div className="h-full w-64 flex justify-center items-center border border-yellow-500">
+            {userData2 && <SingleMovieFrame movie={movieObject} userID={userData2.handle} handleAddToFavorites={handleAddToFavorites} listOfFavorites={userData2.favorites} handleRemoveFromFavorites={handleRemoveFromFavorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData2.toWatch} handleAddToLikes={handleAddToLikes} handleAddToDislikes={handleAddToDislikes}  seenList={userData.seen}/>}
+            </div>
+          </div>
+        ))}
+        {(selectedUserInfo == "Dislikes" && DislikesMoviesObjects.length != 0) && DislikesMoviesObjects.map((movieObject) => (
+          <div className="flex justify-center items-center h-80">
+            <div className="h-full w-64 flex justify-center items-center border border-yellow-500">
+            {userData2 && <SingleMovieFrame movie={movieObject} userID={userData2.handle} handleAddToFavorites={handleAddToFavorites} listOfFavorites={userData2.favorites} handleRemoveFromFavorites={handleRemoveFromFavorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData2.toWatch} handleAddToLikes={handleAddToLikes} handleAddToDislikes={handleAddToDislikes}  seenList={userData.seen}/>}
             </div>
           </div>
         ))}

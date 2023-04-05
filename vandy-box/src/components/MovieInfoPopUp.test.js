@@ -20,8 +20,8 @@ describe(MovieInfoPopUp, () => {
     const handleRemoveFromFavorites = jest.fn()
     const handleAddToWatch = jest.fn()
     const handleRemoveFromWatch = jest.fn()
-    const handleAddToSeen = jest.fn()
-    const handleRemoveFromSeen = jest.fn()
+    const handleAddToLikes = jest.fn()
+    const  = jest.fn()
     const handleOnClose = jest.fn()
 
 
@@ -29,7 +29,7 @@ describe(MovieInfoPopUp, () => {
 
     it("MovieInfoPopUp displays User's name", () => {
         const { getByTestId = "popup" } = render(
-          <MovieInfoPopUp description={"Hi"} title={"hi"} release_date={"2012-1-04"} vote_average={6.7} image={"moviePoster"} id={12} handleOnClose={handleOnClose} userID={123} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} listOfFavorites={userData.favorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData.toWatch} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={userData.seen} />,
+          <MovieInfoPopUp description={"Hi"} title={"hi"} release_date={"2012-1-04"} vote_average={6.7} image={"moviePoster"} id={12} handleOnClose={handleOnClose} userID={123} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} listOfFavorites={userData.favorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData.toWatch} handleAddToLikes={handleAddToLikes} handleAddToDislikes={handleAddToDislikes}  seenList={userData.seen} />,
           { wrapper: MemoryRouter }
         );
         // const test = getByTestId("name").textContent;

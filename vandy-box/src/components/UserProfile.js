@@ -17,7 +17,9 @@ import {
   addToToSeen,
   deleteFromSeen,
   addFriend,
-  deleteFriend
+  deleteFriend,
+  likeMovie,
+  dislikeMovie
 } from "../api/firebaseWriter";
 import { doc, getDoc } from "firebase/firestore";
 import Recommendations from "./Recommendations";
@@ -193,7 +195,14 @@ const UserProfile = ({ userData }) => {
       }
     }
 
-    for (const movieID of userData.seen) {
+    for (const movieID of userData.Likes) {
+      let index = dictMoviesSorted.indexOf(movieID);
+      if (movieID > -1) {
+        dictMoviesSorted.splice(index, 1);
+      }
+    }
+
+    for (const movieID of userData.Dislikes) {
       let index = dictMoviesSorted.indexOf(movieID);
       if (movieID > -1) {
         dictMoviesSorted.splice(index, 1);
@@ -349,27 +358,28 @@ const UserProfile = ({ userData }) => {
     }
   }
 
-  async function handleAddToSeen(userId, movieID) {
+  async function handleAddToLikes(userId, movieID) {
     const userEmail = auth.currentUser.email;
     const userIdRef = doc(db, "userIdMap", userEmail);
     const docSnap = await getDoc(userIdRef);
     if (docSnap.exists()) {
-      addToToSeen(userId, movieID);
+      likeMovie(userId, movieID);
     } else {
       console.error("Could not find document.");
     }
   }
 
-  async function handleRemoveFromSeen(userId, movieID) {
+  async function handleAddToDislikes(userId, movieID) {
     const userEmail = auth.currentUser.email;
     const userIdRef = doc(db, "userIdMap", userEmail);
     const docSnap = await getDoc(userIdRef);
     if (docSnap.exists()) {
-      deleteFromSeen(userId, movieID);
+      dislikeMovie(userId, movieID);
     } else {
       console.error("Could not find document.");
     }
   }
+
 
   return (
     <div>
@@ -454,9 +464,7 @@ const UserProfile = ({ userData }) => {
                 handleAddToWatch={handleAddToWatch}
                 handleRemoveFromWatch={handleRemoveFromWatch}
                 toWatchList={userData.toWatch}
-                handleAddToSeen={handleAddToSeen}
-                handleRemoveFromSeen={handleRemoveFromSeen}
-                seenList={userData.seen}
+                handleAddToLikes={handleAddToLikes} handleAddToDislikes={handleAddToDislikes}
               />
             )}
             {/* {movieObjects.length == 3 && <MovieSlider movies={movieObjects} />} */}
@@ -501,15 +509,30 @@ const UserProfile = ({ userData }) => {
           <div
             className="mr-2 w-1/4 flex justify-center"
             onClick={() => {
-              setSelectedUserInfo("Seen");
+              setSelectedUserInfo("Likes");
             }}>
             <span
               className={
-                selectedUserInfo == "Seen"
+                selectedUserInfo == "Likes"
                   ? "inline-block p-4 text-lime-600 border-b-2 border-lime-600 rounded-t-lg active dark:text-lime-500 dark:border-lime-500"
                   : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
               }>
-              Seen
+              Likes
+            </span>
+          </div>
+
+          <div
+            className="mr-2 w-1/4 flex justify-center"
+            onClick={() => {
+              setSelectedUserInfo("Dislikes");
+            }}>
+            <span
+              className={
+                selectedUserInfo == "Disikes"
+                  ? "inline-block p-4 text-lime-600 border-b-2 border-lime-600 rounded-t-lg active dark:text-lime-500 dark:border-lime-500"
+                  : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+              }>
+              Dislikes
             </span>
           </div>
           <div
@@ -539,9 +562,7 @@ const UserProfile = ({ userData }) => {
         handleAddToWatch={handleAddToWatch}
         handleRemoveFromWatch={handleRemoveFromWatch}
         toWatchList={userData.toWatch}
-        handleAddToSeen={handleAddToSeen}
-        handleRemoveFromSeen={handleRemoveFromSeen}
-        seenList={userData.seen}
+        handleAddToLikes={handleAddToLikes} handleAddToDislikes={handleAddToDislikes}
       />
       <Recommendations
         movies={thirtyMovieRec}
@@ -552,9 +573,8 @@ const UserProfile = ({ userData }) => {
         handleAddToWatch={handleAddToWatch}
         handleRemoveFromWatch={handleRemoveFromWatch}
         toWatchList={userData.toWatch}
-        handleAddToSeen={handleAddToSeen}
-        handleRemoveFromSeen={handleRemoveFromSeen}
-        seenList={userData.seen}></Recommendations>
+        handleAddToLikes={handleAddToLikes} handleAddToDislikes={handleAddToDislikes}
+        ></Recommendations>
     </div>
   );
 };

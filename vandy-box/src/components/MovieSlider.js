@@ -2,7 +2,7 @@ import React from "react";
 import MovieInfoPopUp from "./MovieInfoPopUp";
 import { useState, useEffect } from "react";
 
-const MovieSlider = ({ movies, userID, handleAddToFavorites, listOfFavorites, handleRemoveFromFavorites, toWatchList, handleAddToWatch, handleRemoveFromWatch, seenList, handleRemoveFromSeen, handleAddToSeen, showingPopup, setShowingPopup }) => {
+const MovieSlider = ({ movies, userID, handleAddToFavorites, listOfFavorites, handleRemoveFromFavorites, toWatchList, handleAddToWatch, handleRemoveFromWatch, seenList, handleAddToLikes, handleAddToDislikes, showingPopup, setShowingPopup }) => {
   const [movieDescription, setMovieDescription] = useState("Test");
   const [movieRelease, setMovieRelease] = useState("Test");
   const [movieRating, setMovieRating] = useState("Test");
@@ -25,7 +25,7 @@ const MovieSlider = ({ movies, userID, handleAddToFavorites, listOfFavorites, ha
   return (
     <>
       {showingPopup && thisSlider && (
-        <MovieInfoPopUp description={movieDescription} title={movieTitle} release_date={movieRelease} vote_average={movieRating} image={moviePoster} id={movieID} handleOnClose={handleOnClose} userID={userID} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} listOfFavorites={listOfFavorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={toWatchList} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={seenList}></MovieInfoPopUp>
+        <MovieInfoPopUp description={movieDescription} title={movieTitle} release_date={movieRelease} vote_average={movieRating} image={moviePoster} id={movieID} handleOnClose={handleOnClose} userID={userID} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} listOfFavorites={listOfFavorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={toWatchList} handleAddToLikes={handleAddToLikes} handleAddToDislikes={handleAddToDislikes}  seenList={seenList}></MovieInfoPopUp>
       )}
       <div className="flex space-x-5">
         {movies.map((movie) => (

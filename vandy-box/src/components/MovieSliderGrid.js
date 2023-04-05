@@ -2,7 +2,7 @@ import React from "react";
 import MovieInfoPopUp from "./MovieInfoPopUp";
 import { useState, useEffect } from "react";
 
-const MovieSliderGrid = ({ movies, userID, handleAddToFavorites, listOfFavorites, handleRemoveFromFavorites, handleAddToWatch, handleRemoveFromWatch, toWatchList, handleAddToSeen, handleRemoveFromSeen, seenList }) => {
+const MovieSliderGrid = ({ movies, userID, handleAddToFavorites, listOfFavorites, handleRemoveFromFavorites, handleAddToWatch, handleRemoveFromWatch, toWatchList, handleAddToLikes, handleAddToDislikes , seenList }) => {
   const [movieDescription, setMovieDescription] = useState("Test");
   const [movieRelease, setMovieRelease] = useState("Test");
   const [movieRating, setMovieRating] = useState("Test");
@@ -15,11 +15,13 @@ const MovieSliderGrid = ({ movies, userID, handleAddToFavorites, listOfFavorites
     setShowingPopup(false);
   }
 
+  console.log("sildergrid render")
+
 
   return (
     <>
       {showingPopup && (
-        <MovieInfoPopUp description={movieDescription} title={movieTitle} release_date={movieRelease} vote_average={movieRating} image={moviePoster} id={movieID} handleOnClose={handleOnClose} userID={userID} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} listOfFavorites={listOfFavorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={toWatchList} handleAddToSeen={handleAddToSeen} handleRemoveFromSeen={handleRemoveFromSeen} seenList={seenList}></MovieInfoPopUp>
+        <MovieInfoPopUp description={movieDescription} title={movieTitle} release_date={movieRelease} vote_average={movieRating} image={moviePoster} id={movieID} handleOnClose={handleOnClose} userID={userID} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} listOfFavorites={listOfFavorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={toWatchList} handleAddToLikes={handleAddToLikes} handleAddToDislikes={handleAddToDislikes}></MovieInfoPopUp>
       )}
       <div className="flex flex-wrap gap-5 w-full justify-center">
         {movies.map((movie) => (
