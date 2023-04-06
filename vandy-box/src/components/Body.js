@@ -97,10 +97,7 @@ function Body({handleAddToFavorites, handleRemoveFromFavorites, handleAddToWatch
   const [ratingMovieAPI, setRatingMovieAPI] = useState();
   const [showingPopup, setShowingPopup] = useState(false);
 
-  function handleOnClick() {
-    if(showingPopup==true)
-      setShowingPopup(false);
-  }
+
   const [userData, setUserData] = useState();
 
   const getUserData = async () => {
@@ -129,7 +126,7 @@ function Body({handleAddToFavorites, handleRemoveFromFavorites, handleAddToWatch
     apiCall3();
   }, []);
   return (
-    <div className="space-y-4 pb-20" onClick={handleOnClick}>
+    <div className="space-y-4 pb-20">
       <Header />
       <Container containerTitle="Trending this week">
         {trendingMovieAPI && userData && (
