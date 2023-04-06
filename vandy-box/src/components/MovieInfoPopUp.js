@@ -6,7 +6,10 @@ import { faThumbsUp as faThumbsUpSolid} from '@fortawesome/free-solid-svg-icons'
 import { faThumbsUp as faThumbsUpOutline} from '@fortawesome/free-regular-svg-icons'
 import { faThumbsDown as faThumbsDownSolid} from '@fortawesome/free-solid-svg-icons'
 import { faThumbsDown as faThumbsDownOutline} from '@fortawesome/free-regular-svg-icons'
-
+import { faHeart as faHeartSolid} from '@fortawesome/free-solid-svg-icons'
+import { faHeart as faHeartOutline} from '@fortawesome/free-regular-svg-icons'
+import { faClipboardList } from '@fortawesome/free-solid-svg-icons'
+import { faClipboard}  from '@fortawesome/free-regular-svg-icons'
 
 
 function MovieInfoPopUp(props) {
@@ -36,28 +39,29 @@ function MovieInfoPopUp(props) {
          {userData && <div className='ml-auto flex gap-2'>
           {!userData.favorites.includes(props.id) && <button className="AddToFavoritesButton ml-auto text-black bg-lime-100 hover:bg-lime-200 active:bg-lime-300 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {addToFavorites(userData.handle, props.id)
           // props.handleOnClose()
-           }} >Add to Favorites</button>}
-          {userData.favorites.includes(props.id) && <button className="RemoveFromFavoritesButton ml-auto text-black bg-lime-100 hover:bg-lime-200 active:bg-lime-300 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {deleteFromFavorites(userData.handle, props.id)
+           }} ><FontAwesomeIcon icon={faHeartOutline}  style={{color: "#fe6cdf"}} /></button>}
+          {userData.favorites.includes(props.id) && <button className="RemoveFromFavoritesButton ml-auto text-black bg-fuchsia-700 hover:bg-fuchsia-800 active:bg-fuchsia-900 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {deleteFromFavorites(userData.handle, props.id)
          
-          }} >Remove from Favorites</button>}
-          {!userData.toWatch.includes(props.id) && <button className="AddToFavoritesButton ml-auto text-black bg-lime-100 hover:bg-lime-200 active:bg-lime-300 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {addToToWatch(userData.handle, props.id)
-         
-           }} >Add to Watch List</button>}
-          {userData.toWatch.includes(props.id) && <button className="RemoveFromFavoritesButton ml-auto text-black bg-lime-100 hover:bg-lime-200 active:bg-lime-300 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {deleteFromToWatch(userData.handle, props.id)
+          }} ><FontAwesomeIcon icon={faHeartSolid} beat  style={{color: "#fe6cdf"}} /></button>}
           
-           }} >Remove from Watch List</button>}
           {!userData.Likes.includes(props.id) && <button className="AddToFavoritesButton ml-auto text-black bg-lime-100 hover:bg-lime-200 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {likeMovie(userData.handle, props.id)
           
           }} ><FontAwesomeIcon icon={faThumbsUpOutline}  style={{color: "#16da47"}} /></button>}
           {userData.Likes.includes(props.id) && <button className="AddToFavoritesButton ml-auto text-black bg-green-600 hover:bg-green-700 active:bg-green-900 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {unlikeMovie(userData.handle, props.id)
          
-           }} ><FontAwesomeIcon icon={faThumbsUpSolid}  style={{color: "#16da47"}} /></button>}
+           }} ><FontAwesomeIcon icon={faThumbsUpSolid}  bounce style={{color: "#16da47"}} /></button>}
           {!userData.Dislikes.includes(props.id) && <button className="AddToFavoritesButton ml-auto text-black bg-lime-100 hover:bg-lime-200 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {dislikeMovie(userData.handle, props.id)
           
           }} ><FontAwesomeIcon icon={faThumbsDownOutline}  style={{color: "#da1616"}} /></button>}
           {userData.Dislikes.includes(props.id) && <button className="AddToFavoritesButton ml-auto text-black bg-red-800 hover:bg-red-900 active:bg-red-1000 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {undislikeMovie(userData.handle, props.id)
           
-           }} ><FontAwesomeIcon icon={faThumbsDownSolid}  style={{color: "#da1616"}} /></button>}
+           }} ><FontAwesomeIcon icon={faThumbsDownSolid}  shake style={{color: "#da1616"}} /></button>}
+           {!userData.toWatch.includes(props.id) && <button className="AddToFavoritesButton ml-auto text-black bg-lime-100 hover:bg-lime-200 active:bg-lime-300 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {addToToWatch(userData.handle, props.id)
+         
+        }} ><FontAwesomeIcon icon={faClipboard}  style={{color: "blue"}} /></button>}
+       {userData.toWatch.includes(props.id) && <button className="RemoveFr  omFavoritesButton ml-auto text-black bg-cyan-500 hover:bg-cyan-600 active:bg-cyan-700 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {deleteFromToWatch(userData.handle, props.id)
+       
+        }} ><FontAwesomeIcon icon={faClipboardList} flip style={{color: "blue", animationDuration: "2s", animationTimingFunction: "linear"}} /></button>}
           {/* <button className="AddToFavoritesButton ml-auto text-black bg-green-500 hover:bg-green-600 active:bg-green-700 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {props.handleAddToLikes(props.userID, props.id)
           props.handleOnClose()
           console.log("Adding " + props.id + " to " + props.userID) }}>Like</button>
