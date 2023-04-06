@@ -69,14 +69,22 @@ function UserInfoGrid({ userData, selectedUserInfo, userID, handleAddToFavorites
 
   async function PopulateSeenMovies() {
     let movieObjectsArray = [];
-    for (const movieID of userData.seen) {
+    for (const movieID of userData.Likes) {
+      const movieObject = await get1MovieByID(
+        SEARCH_BY_ID_URL_FIRST_HALF + movieID + SEARCH_BY_ID_URL_SECOND_HALF
+      );
+      
+      movieObjectsArray.push(movieObject);
+    }
+    for (const movieID of userData.Dislikes) {
       const movieObject = await get1MovieByID(
         SEARCH_BY_ID_URL_FIRST_HALF + movieID + SEARCH_BY_ID_URL_SECOND_HALF
       );
       movieObjectsArray.push(movieObject);
-    }
-    setSeenMoviesObjects(movieObjectsArray);
+    
   }
+  setSeenMoviesObjects(movieObjectsArray);
+}
 
   async function PopulateLikesMovies() {
     let movieObjectsArray = [];
@@ -88,6 +96,7 @@ function UserInfoGrid({ userData, selectedUserInfo, userID, handleAddToFavorites
     }
     setLikesMoviesObjects(movieObjectsArray);
   }
+
 
   async function PopulateDislikesMovies() {
     let movieObjectsArray = [];
@@ -103,8 +112,7 @@ function UserInfoGrid({ userData, selectedUserInfo, userID, handleAddToFavorites
   useEffect(() => {
     PopulateFavoriteMovies();
     PopulateToWatchMovies();
-    PopulateLikesMovies();
-    PopulateDislikesMovies();
+    PopulateSeenMovies();
   }, []);
 
   return (
@@ -139,7 +147,7 @@ function UserInfoGrid({ userData, selectedUserInfo, userID, handleAddToFavorites
             </div>
           </div>
         ))}
-        {(selectedUserInfo == "Likes" && LikesMoviesObjects.length != 0) && LikesMoviesObjects.map((movieObject) => (
+        {/* {(selectedUserInfo == "Likes" && LikesMoviesObjects.length != 0) && LikesMoviesObjects.map((movieObject) => (
           <div className="flex justify-center items-center h-80">
             <div className="h-full w-64 flex justify-center items-center border border-yellow-500">
             {userData2 && <SingleMovieFrame movie={movieObject} userID={userData2.handle} handleAddToFavorites={handleAddToFavorites} listOfFavorites={userData2.favorites} handleRemoveFromFavorites={handleRemoveFromFavorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData2.toWatch} handleAddToLikes={handleAddToLikes} handleAddToDislikes={handleAddToDislikes}  seenList={userData.seen}/>}
@@ -152,7 +160,7 @@ function UserInfoGrid({ userData, selectedUserInfo, userID, handleAddToFavorites
             {userData2 && <SingleMovieFrame movie={movieObject} userID={userData2.handle} handleAddToFavorites={handleAddToFavorites} listOfFavorites={userData2.favorites} handleRemoveFromFavorites={handleRemoveFromFavorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData2.toWatch} handleAddToLikes={handleAddToLikes} handleAddToDislikes={handleAddToDislikes}  seenList={userData.seen}/>}
             </div>
           </div>
-        ))}
+        ))} */}
     </div>
   );
 }

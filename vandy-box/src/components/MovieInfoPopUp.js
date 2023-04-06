@@ -1,12 +1,30 @@
 import { useRef, useEffect, useState } from 'react';
+import { fetchCurrentUserData } from "../auth/auth";
+import { dislikeMovie, likeMovie, undislikeMovie, unlikeMovie } from '../api/firebaseWriter';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faThumbsUp as faThumbsUpSolid} from '@fortawesome/free-solid-svg-icons'
+import { faThumbsUp as faThumbsUpOutline} from '@fortawesome/free-regular-svg-icons'
+import { faThumbsDown as faThumbsDownSolid} from '@fortawesome/free-solid-svg-icons'
+import { faThumbsDown as faThumbsDownOutline} from '@fortawesome/free-regular-svg-icons'
+
 
 
 function MovieInfoPopUp(props) {
-  const ref = useRef(); 
+  const ref = useRef();
+  const [userData, setUserData] = useState();
+
+  const getUserData = async () => {
+    const userData = await fetchCurrentUserData();
+    setUserData(userData);
+  }
 
   useEffect(() => {
     ref.current.style.top = `${document.documentElement.scrollTop}px`
   }, []);
+
+  useEffect(() => {
+   getUserData()
+  });
   
   return (
     <>
@@ -15,7 +33,7 @@ function MovieInfoPopUp(props) {
       <div className="MovieInfo flex flex-col">
          <div className="text-white  pb-8 flex items-center">
          <span className="font-bold text-4xl">{props.title}</span>
-         <div className='ml-auto flex gap-2'>
+         {userData && <div className='ml-auto flex gap-2'>
           {!props.listOfFavorites.includes(props.id) && <button className="AddToFavoritesButton ml-auto text-black bg-lime-100 hover:bg-lime-200 active:bg-lime-300 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {props.handleAddToFavorites(props.userID, props.id)
           props.handleOnClose()
           console.log("Adding " + props.id + " to " + props.userID) }} >Add to Favorites</button>}
@@ -28,13 +46,25 @@ function MovieInfoPopUp(props) {
           {props.toWatchList.includes(props.id) && <button className="RemoveFromFavoritesButton ml-auto text-black bg-lime-100 hover:bg-lime-200 active:bg-lime-300 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {props.handleRemoveFromWatch(props.userID, props.id)
           props.handleOnClose()
           console.log("Remove " + props.id + " from " + props.userID) }} >Remove from Watch List</button>}
-          <button className="AddToFavoritesButton ml-auto text-black bg-green-500 hover:bg-green-600 active:bg-green-700 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {props.handleAddToLikes(props.userID, props.id)
+          {!userData.Likes.includes(props.id) && <button className="AddToFavoritesButton ml-auto text-black bg-lime-100 hover:bg-lime-200 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {likeMovie(props.userID, props.id)
+          
+          console.log("Adding " + props.id + " to " + props.userID) }} ><FontAwesomeIcon icon={faThumbsUpOutline}  style={{color: "#16da47"}} /></button>}
+          {userData.Likes.includes(props.id) && <button className="AddToFavoritesButton ml-auto text-black bg-green-600 hover:bg-green-700 active:bg-green-900 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {unlikeMovie(props.userID, props.id)
+         
+          console.log("Adding " + props.id + " to " + props.userID) }} ><FontAwesomeIcon icon={faThumbsUpSolid}  style={{color: "#16da47"}} /></button>}
+          {!userData.Dislikes.includes(props.id) && <button className="AddToFavoritesButton ml-auto text-black bg-lime-100 hover:bg-lime-200 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {dislikeMovie(props.userID, props.id)
+          
+          console.log("Adding " + props.id + " to " + props.userID) }} ><FontAwesomeIcon icon={faThumbsDownOutline}  style={{color: "#da1616"}} /></button>}
+          {userData.Dislikes.includes(props.id) && <button className="AddToFavoritesButton ml-auto text-black bg-red-800 hover:bg-red-900 active:bg-red-1000 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {undislikeMovie(props.userID, props.id)
+          
+          console.log("Adding " + props.id + " to " + props.userID) }} ><FontAwesomeIcon icon={faThumbsDownSolid}  style={{color: "#da1616"}} /></button>}
+          {/* <button className="AddToFavoritesButton ml-auto text-black bg-green-500 hover:bg-green-600 active:bg-green-700 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {props.handleAddToLikes(props.userID, props.id)
           props.handleOnClose()
           console.log("Adding " + props.id + " to " + props.userID) }}>Like</button>
-          <button className="RemoveFromFavoritesButton ml-auto text-black bg-red-500 hover:bg-red-600 active:bg-red-700 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {props.handleAddToDislikes(props.userID, props.id)
+          <button className="RemoveFromFavoritesButton ml-auto text-black bg-red-600 hover:bg-red-700 active:bg-red-800 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {props.handleAddToDislikes(props.userID, props.id)
           props.handleOnClose()
-          console.log("Adding " + props.id + " to " + props.userID) }}>Dislike</button>
-        </div>
+          console.log("Adding " + props.id + " to " + props.userID) }}>Dislike</button> */}
+        </div>}
         
         </div>
         <div className="text-white pb-8">

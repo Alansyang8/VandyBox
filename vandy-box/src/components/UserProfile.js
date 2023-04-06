@@ -509,6 +509,22 @@ const UserProfile = ({ userData }) => {
           <div
             className="mr-2 w-1/4 flex justify-center"
             onClick={() => {
+              setSelectedUserInfo("Seen");
+            }}>
+            <span
+              data-testid="Seen"
+              className={
+                selectedUserInfo == "Seen"
+                  ? "inline-block p-4 text-lime-600 border-b-2 border-lime-600 rounded-t-lg active dark:text-lime-500 dark:border-lime-500"
+                  : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+              }>
+              Seen
+            </span>
+          </div>
+
+          {/* <div
+            className="mr-2 w-1/4 flex justify-center"
+            onClick={() => {
               setSelectedUserInfo("Likes");
             }}>
             <span
@@ -534,7 +550,7 @@ const UserProfile = ({ userData }) => {
               }>
               Dislikes
             </span>
-          </div>
+          </div> */}
           <div
             className="mr-2 w-1/4 flex justify-center"
             onClick={() => {

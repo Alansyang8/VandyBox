@@ -115,6 +115,8 @@ export async function likeMovie(userId, id) {
         Likes: arrayUnion(id),
         Dislikes: arrayRemove(id),
         toWatch: arrayRemove(id),
+
+        //ADD CODE HERE!!!
     });
 }
 
@@ -126,6 +128,25 @@ export async function dislikeMovie(userId, id) {
         Likes: arrayRemove(id),
         toWatch: arrayRemove(id),
         favorites: arrayRemove(id),
+    });
+}
+
+export async function unlikeMovie(userId, id) {
+    const docRef = doc(db, "users", userId);
+    console.log("Like")
+    await updateDoc(docRef, {
+        Likes: arrayRemove(id),
+
+        //ADD CODE HERE!!!
+    });
+}
+
+export async function undislikeMovie(userId, id) {
+    const docRef = doc(db, "users", userId);
+    console.log("Dislike")
+    await updateDoc(docRef, {
+        Dislikes: arrayRemove(id),
+         //ADD CODE HERE!!!
     });
 }
 
