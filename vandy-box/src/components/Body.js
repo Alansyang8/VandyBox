@@ -26,49 +26,45 @@ function getFirstTen(array) {
 function addMoviesToArray(movies) {
   let array = [];
   movies.forEach((movie) => {
-    const { title, poster_path, overview, release_date, vote_average, id } = movie;
-      array.push({
-        title: title,
-        image: `${IMG_PATH}${poster_path}`,
-        overview: overview,
-        release_date: release_date,
-        vote_average: vote_average,
-        id: id
-      });
+    const { title, poster_path, overview, release_date, vote_average, id } =
+      movie;
+    array.push({
+      title: title,
+      image: `${IMG_PATH}${poster_path}`,
+      overview: overview,
+      release_date: release_date,
+      vote_average: vote_average,
+      id: id,
+    });
   });
   return array;
 }
 
-function Body({handleAddToFavorites, handleRemoveFromFavorites, handleAddToWatch, handleRemoveFromWatch, handleAddToLikes, handleAddToDislikes  }) {
+function Body() {
   const [trendingMovieAPI, setTrendingMovieAPI] = useState();
   const [revenueMovieAPI, setRevenueMovieAPI] = useState();
   const [ratingMovieAPI, setRatingMovieAPI] = useState();
-  const [showingPopup, setShowingPopup] = useState(false);
-
-
   const [userData, setUserData] = useState();
 
   const getUserData = async () => {
     const userData = await fetchCurrentUserDataHome();
     setUserData(userData);
+  };
+  async function apiCall() {
+    const apiResponse = await get10Movies(TRENDING_API_URL);
+    setTrendingMovieAPI(apiResponse);
+  }
+  async function apiCall2() {
+    const apiResponse3 = await get10Movies(REVENUE_API_URL);
+    setRevenueMovieAPI(apiResponse3);
+  }
+  async function apiCall3() {
+    const apiResponse3 = await get10Movies(RATINGS_API_URL);
+    setRatingMovieAPI(apiResponse3);
   }
 
   useEffect(() => {
-    async function apiCall() {
-      const apiResponse = await get10Movies(TRENDING_API_URL);
-      setTrendingMovieAPI(apiResponse);
-    }
-    async function apiCall2() {
-      const apiResponse3 = await get10Movies(REVENUE_API_URL);
-      setRevenueMovieAPI(apiResponse3);
-    }
-    async function apiCall3() {
-      const apiResponse3 = await get10Movies(RATINGS_API_URL);
-      setRatingMovieAPI(apiResponse3);
-    }
-
     getUserData();
-
     apiCall();
     apiCall2();
     apiCall3();
@@ -78,16 +74,24 @@ function Body({handleAddToFavorites, handleRemoveFromFavorites, handleAddToWatch
       <Header />
       <Container containerTitle="Trending this week">
         {trendingMovieAPI && userData && (
-          <MovieSlider movies={trendingMovieAPI} setShowingPopup={setShowingPopup} showingPopup={showingPopup}></MovieSlider>
+          <MovieSlider
+            movies={trendingMovieAPI}
+            ></MovieSlider>
         )}
       </Container>
       <Container containerTitle="Trending at Vanderbilt">
         {revenueMovieAPI && userData && (
-          <MovieSlider movies={revenueMovieAPI} setShowingPopup={setShowingPopup} showingPopup={showingPopup}></MovieSlider>
+          <MovieSlider
+            movies={revenueMovieAPI}
+            ></MovieSlider>
         )}
       </Container>
       <Container containerTitle="Favorites">
-        {ratingMovieAPI && userData && <MovieSlider movies={ratingMovieAPI}  setShowingPopup={setShowingPopup} showingPopup={showingPopup}></MovieSlider>}
+        {ratingMovieAPI && userData && (
+          <MovieSlider
+            movies={ratingMovieAPI}
+            ></MovieSlider>
+        )}
       </Container>
 
       {/* <Container containerTitle={"Search"}>

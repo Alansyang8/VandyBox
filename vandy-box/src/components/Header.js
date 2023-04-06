@@ -4,26 +4,29 @@ import { fetchCurrentUserDataHome, fetchCurrentUserData, logOut } from "../auth/
 import anonymousPic from "../assets/anonymous_user_img.jpg";
 import { auth, db } from "../firebase";
 import { onValue, ref } from "firebase/database";
+import { render } from "@testing-library/react";
 
 function Header() {
   const [userData, setUserData] = useState();
+  const [userImage, setUserImage] = useState("");
+
+  console.log("header render")
+
 
   const getUserData = async () => {
     const userData = await fetchCurrentUserDataHome();
     setUserData(userData)
+    setUserImage(userData.image);
   }
 
   useEffect(() => {
+    console.log("header effect")
     getUserData()
-    getCurrentUserImage();
-  })
+  }, [])
   
 
-  const [userImage, setUserImage] = useState("");
-  const getCurrentUserImage = async () => {
-    const userData = await fetchCurrentUserDataHome();
-    setUserImage(userData.image);
-  }
+
+
 
 
 

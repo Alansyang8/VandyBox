@@ -13,6 +13,7 @@ import { faClipboard}  from '@fortawesome/free-regular-svg-icons'
 
 
 function MovieInfoPopUp(props) {
+  console.log("moviepopup render")
   const ref = useRef();
   const [userData, setUserData] = useState();
 
@@ -21,13 +22,13 @@ function MovieInfoPopUp(props) {
     setUserData(userData);
   }
 
-  useEffect(() => {
-    ref.current.style.top = `${document.documentElement.scrollTop}px`
-  }, []);
 
   useEffect(() => {
-   getUserData()
-  });
+    ref.current.style.top = `${document.documentElement.scrollTop}px`
+    
+    getUserData()
+    console.log("useeffect")
+  }, []);
   
   return (
     <>

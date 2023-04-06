@@ -11,11 +11,10 @@ const SEARCH_API_URL =
 
 const genreID= [{"id":28,"name":"Action"},{"id":12,"name":"Adventure"},{"id":16,"name":"Animation"},{"id":35,"name":"Comedy"},{"id":80,"name":"Crime"},{"id":99,"name":"Documentary"},{"id":18,"name":"Drama"},{"id":10751,"name":"Family"},{"id":14,"name":"Fantasy"},{"id":36,"name":"History"},{"id":27,"name":"Horror"},{"id":10402,"name":"Music"},{"id":9648,"name":"Mystery"},{"id":10749,"name":"Romance"},{"id":878,"name":"Science Fiction"},{"id":10770,"name":"TV Movie"},{"id":53,"name":"Thriller"},{"id":10752,"name":"War"},{"id":37,"name":"Western"}]
 function Search() {
-  console.log("hi")
+  console.log("Search Render")
   const [searchMovieAPI, setSearchMovieAPI] = useState();
   const [searchBarValue, setSearchBar] = useState("Blackpink");
   const [genreIDFilters, setGenreIDFilters] = useState([]);
-  const [showingPopup, setShowingPopup] = useState(false);
   async function get10Movies(url) {
     const res = await fetch(url);
     const data = await res.json();
@@ -82,8 +81,7 @@ function Search() {
 
   useEffect(() => {
     apiCall4();
-
-  }, [apiCall4]);
+  }, []);
 
   return (
     <div className="flex flex-col justify-center items-center">
@@ -214,7 +212,7 @@ function Search() {
       <SearchBar HandleSearch={HandleSearch}></SearchBar>
       <Container containerTitle={"Search"}>
         {searchMovieAPI && searchMovieAPI.length > 0 ? (
-          <MovieSlider movies={searchMovieAPI} setShowingPopup={setShowingPopup} showingPopup={showingPopup}></MovieSlider>
+          <MovieSlider movies={searchMovieAPI}></MovieSlider>
         ) : (
           "No Results"
         )}
