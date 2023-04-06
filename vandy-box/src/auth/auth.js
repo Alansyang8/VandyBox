@@ -50,7 +50,7 @@ export const logOut = () => {
 };
 
 export const fetchCurrentUserDataHome = async () => {
-  console.log("read");
+  console.log("database read delayed");
   function sleep(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
@@ -73,7 +73,7 @@ export const fetchCurrentUserDataHome = async () => {
 };
 
 export const fetchCurrentUserData = async () => {
-  console.log("read");
+  console.log("database read");
   if (auth && auth.currentUser && auth.currentUser.email) {
     const userIdRef = doc(db, "userIdMap", auth.currentUser.email);
     const userIdSnap = await getDoc(userIdRef);

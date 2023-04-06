@@ -10,7 +10,6 @@ function Header() {
   const [userData, setUserData] = useState();
   const [userImage, setUserImage] = useState("");
 
-  console.log("header render")
 
 
   const getUserData = async () => {
@@ -20,7 +19,6 @@ function Header() {
   }
 
   useEffect(() => {
-    console.log("header effect")
     getUserData()
   }, [])
   

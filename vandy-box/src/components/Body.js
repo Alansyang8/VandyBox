@@ -44,12 +44,7 @@ function Body() {
   const [trendingMovieAPI, setTrendingMovieAPI] = useState();
   const [revenueMovieAPI, setRevenueMovieAPI] = useState();
   const [ratingMovieAPI, setRatingMovieAPI] = useState();
-  const [userData, setUserData] = useState();
 
-  const getUserData = async () => {
-    const userData = await fetchCurrentUserDataHome();
-    setUserData(userData);
-  };
   async function apiCall() {
     const apiResponse = await get10Movies(TRENDING_API_URL);
     setTrendingMovieAPI(apiResponse);
@@ -64,7 +59,6 @@ function Body() {
   }
 
   useEffect(() => {
-    getUserData();
     apiCall();
     apiCall2();
     apiCall3();
@@ -73,21 +67,21 @@ function Body() {
     <div className="space-y-4 pb-20">
       <Header />
       <Container containerTitle="Trending this week">
-        {trendingMovieAPI && userData && (
+        {trendingMovieAPI && (
           <MovieSlider
             movies={trendingMovieAPI}
             ></MovieSlider>
         )}
       </Container>
       <Container containerTitle="Trending at Vanderbilt">
-        {revenueMovieAPI && userData && (
+        {revenueMovieAPI &&  (
           <MovieSlider
             movies={revenueMovieAPI}
             ></MovieSlider>
         )}
       </Container>
       <Container containerTitle="Favorites">
-        {ratingMovieAPI && userData && (
+        {ratingMovieAPI &&  (
           <MovieSlider
             movies={ratingMovieAPI}
             ></MovieSlider>
