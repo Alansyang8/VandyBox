@@ -46,19 +46,43 @@ export const logOut = () => {
     })
 }
 
-export const fetchCurrentUserData = async () => {
-    if (auth && auth.currentUser.email) {
-        const userIdRef = doc(db, "userIdMap", auth.currentUser.email);
-        const userIdSnap = await getDoc(userIdRef);
-        if (!userIdSnap.exists()) {
-            return null;
-        }
-        const userId = userIdSnap.data().userId;
-        const userDataRef = doc(db, "users", userId);
-        const userDataSnap = await getDoc(userDataRef);
-        if (userDataSnap.exists()) {
-            return userDataSnap.data();
-        }
+export const fetchCurrentUserDataHome = async () => {
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
-    return null;
-}
+
+        await sleep(300);
+        if (auth && auth.currentUser && auth.currentUser.email) {
+            const userIdRef = doc(db, "userIdMap", auth.currentUser.email);
+            const userIdSnap = await getDoc(userIdRef);
+            if (!userIdSnap.exists()) {
+                return null;
+            }
+            const userId = userIdSnap.data().userId;
+            const userDataRef = doc(db, "users", userId);
+            const userDataSnap = await getDoc(userDataRef);
+            if (userDataSnap.exists()) {
+                return userDataSnap.data();
+            }
+        }
+        return null;
+        
+    }
+    
+    export const fetchCurrentUserData = async () => {
+            if (auth && auth.currentUser && auth.currentUser.email) {
+                const userIdRef = doc(db, "userIdMap", auth.currentUser.email);
+                const userIdSnap = await getDoc(userIdRef);
+                if (!userIdSnap.exists()) {
+                    return null;
+                }
+                const userId = userIdSnap.data().userId;
+                const userDataRef = doc(db, "users", userId);
+                const userDataSnap = await getDoc(userDataRef);
+                if (userDataSnap.exists()) {
+                    return userDataSnap.data();
+                }
+            }
+            return null;
+            
+        }

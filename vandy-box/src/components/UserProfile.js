@@ -1,38 +1,24 @@
-import SuzyBaePic from "../assets/SuzyBaePic.png";
 import UserInfoGrid from "./UserInfoGrid";
 import { useState, useEffect } from "react";
 import MovieSlider from "./MovieSlider";
 import ProfileEditPopUp from "./ProfileEditPopUp";
 import { fetchCurrentUserData } from "../auth/auth";
-import FriendList from "./FriendList";
 import { auth, db } from "../firebase";
 import {
   modifyAddInfo,
   modifyName,
   modifyStatusMsg,
-  addToFavorites,
-  deleteFromFavorites,
-  deleteFromToWatch,
-  addToToWatch,
-  addToToSeen,
-  deleteFromSeen,
   addFriend,
-  deleteFriend,
-  likeMovie,
-  dislikeMovie
+  deleteFriend
 } from "../api/firebaseWriter";
 import { doc, getDoc } from "firebase/firestore";
 import Recommendations from "./Recommendations";
 
 const IMG_PATH = "https://image.tmdb.org/t/p/w500";
-const SEARCH_API_URL =
-  'https://api.themoviedb.org/3/search/movie?api_key=75e05708188d5f5a0a191495cf4a48db&language=en-US&page=1&include_adult=false&query="';
 
 const SEARCH_BY_ID_URL_FIRST_HALF = "https://api.themoviedb.org/3/movie/";
 const SEARCH_BY_ID_URL_SECOND_HALF =
   "?api_key=75e05708188d5f5a0a191495cf4a48db&language=en-US";
-let tangled =
-  "https://api.themoviedb.org/3/movie/38757/similar?api_key=75e05708188d5f5a0a191495cf4a48db&language=en-US&page=1";
 
 let GET_SIMILAR_MOVIES_URL_FIRST_THIRD = "https://api.themoviedb.org/3/movie/";
 let GET_SIMILAR_MOVIES_URL_SECOND_THIRD =
@@ -243,12 +229,6 @@ const UserProfile = ({ userData }) => {
     return data.results;
   }
 
-  async function storeFirebaseID() {
-    const userEmail = auth.currentUser.email;
-    const userIdRef = doc(db, "userIdMap", userEmail);
-    const docSnap = await getDoc(userIdRef);
-    setFirebaseUserID(docSnap.data().userId);
-  }
 
   const getUserData = async () => {
     const LoggedInUserData = await fetchCurrentUserData()
@@ -262,7 +242,6 @@ const UserProfile = ({ userData }) => {
     apiCall();
     getUserData();
     getRecommendedMovies();
-    storeFirebaseID();
   }, []);
 
   const [selectedUserInfo, setSelectedUserInfo] = useState("Fav Movies");
@@ -314,71 +293,6 @@ const UserProfile = ({ userData }) => {
     }
   };
 
-  async function handleAddToFavorites(userId, movieID) {
-    const userEmail = auth.currentUser.email;
-    const userIdRef = doc(db, "userIdMap", userEmail);
-    const docSnap = await getDoc(userIdRef);
-    if (docSnap.exists()) {
-      addToFavorites(userId, movieID);
-    } else {
-      console.error("Could not find document.");
-    }
-  }
-
-  async function handleRemoveFromFavorites(userId, movieID) {
-    const userEmail = auth.currentUser.email;
-    const userIdRef = doc(db, "userIdMap", userEmail);
-    const docSnap = await getDoc(userIdRef);
-    if (docSnap.exists()) {
-      deleteFromFavorites(userId, movieID);
-    } else {
-      console.error("Could not find document.");
-    }
-  }
-
-  async function handleAddToWatch(userId, movieID) {
-    const userEmail = auth.currentUser.email;
-    const userIdRef = doc(db, "userIdMap", userEmail);
-    const docSnap = await getDoc(userIdRef);
-    if (docSnap.exists()) {
-      addToToWatch(userId, movieID);
-    } else {
-      console.error("Could not find document.");
-    }
-  }
-
-  async function handleRemoveFromWatch(userId, movieID) {
-    const userEmail = auth.currentUser.email;
-    const userIdRef = doc(db, "userIdMap", userEmail);
-    const docSnap = await getDoc(userIdRef);
-    if (docSnap.exists()) {
-      deleteFromToWatch(userId, movieID);
-    } else {
-      console.error("Could not find document.");
-    }
-  }
-
-  async function handleAddToLikes(userId, movieID) {
-    const userEmail = auth.currentUser.email;
-    const userIdRef = doc(db, "userIdMap", userEmail);
-    const docSnap = await getDoc(userIdRef);
-    if (docSnap.exists()) {
-      likeMovie(userId, movieID);
-    } else {
-      console.error("Could not find document.");
-    }
-  }
-
-  async function handleAddToDislikes(userId, movieID) {
-    const userEmail = auth.currentUser.email;
-    const userIdRef = doc(db, "userIdMap", userEmail);
-    const docSnap = await getDoc(userIdRef);
-    if (docSnap.exists()) {
-      dislikeMovie(userId, movieID);
-    } else {
-      console.error("Could not find document.");
-    }
-  }
 
 
   return (
@@ -457,14 +371,7 @@ const UserProfile = ({ userData }) => {
             {movieObjects && (
               <MovieSlider
                 movies={movieObjects}
-                userID={firebaseUserID}
-                handleAddToFavorites={handleAddToFavorites}
-                handleRemoveFromFavorites={handleRemoveFromFavorites}
-                listOfFavorites={userData.favorites}
-                handleAddToWatch={handleAddToWatch}
-                handleRemoveFromWatch={handleRemoveFromWatch}
-                toWatchList={userData.toWatch}
-                handleAddToLikes={handleAddToLikes} handleAddToDislikes={handleAddToDislikes}
+                
               />
             )}
             {/* {movieObjects.length == 3 && <MovieSlider movies={movieObjects} />} */}
@@ -571,25 +478,9 @@ const UserProfile = ({ userData }) => {
       <UserInfoGrid
         userData={userData}
         selectedUserInfo={selectedUserInfo}
-        userID={firebaseUserID}
-        handleAddToFavorites={handleAddToFavorites}
-        handleRemoveFromFavorites={handleRemoveFromFavorites}
-        listOfFavorites={userData.favorites}
-        handleAddToWatch={handleAddToWatch}
-        handleRemoveFromWatch={handleRemoveFromWatch}
-        toWatchList={userData.toWatch}
-        handleAddToLikes={handleAddToLikes} handleAddToDislikes={handleAddToDislikes}
       />
       <Recommendations
         movies={thirtyMovieRec}
-        handleAddToFavorites={handleAddToFavorites}
-        handleRemoveFromFavorites={handleRemoveFromFavorites}
-        userID={firebaseUserID}
-        listOfFavorites={userData.favorites}
-        handleAddToWatch={handleAddToWatch}
-        handleRemoveFromWatch={handleRemoveFromWatch}
-        toWatchList={userData.toWatch}
-        handleAddToLikes={handleAddToLikes} handleAddToDislikes={handleAddToDislikes}
         ></Recommendations>
     </div>
   );

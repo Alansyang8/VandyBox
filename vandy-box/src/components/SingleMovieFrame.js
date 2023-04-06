@@ -1,8 +1,8 @@
 import React from "react";
 import MovieInfoPopUp from "./MovieInfoPopUp";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
-const SingleMovieFrame = ({ movie, userID, handleAddToFavorites, listOfFavorites, handleRemoveFromFavorites, handleAddToWatch, handleRemoveFromWatch, toWatchList, seenList, handleAddToLikes, handleAddToDislikes  }) => {
+const SingleMovieFrame = ({ movie }) => {
   const [movieDescription, setMovieDescription] = useState("Test");
   const [movieRelease, setMovieRelease] = useState("Test");
   const [movieRating, setMovieRating] = useState("Test");
@@ -18,7 +18,7 @@ const SingleMovieFrame = ({ movie, userID, handleAddToFavorites, listOfFavorites
   return (
     <>
       {showingPopup && (
-        <MovieInfoPopUp description={movieDescription} title={movieTitle} release_date={movieRelease} vote_average={movieRating} image={moviePoster} id={movieID} handleOnClose={handleOnClose} userID={userID} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} listOfFavorites={listOfFavorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={toWatchList} handleAddToLikes={handleAddToLikes} handleAddToDislikes={handleAddToDislikes}  seenList={seenList}></MovieInfoPopUp>
+        <MovieInfoPopUp description={movieDescription} title={movieTitle} release_date={movieRelease} vote_average={movieRating} image={moviePoster} id={movieID} handleOnClose={handleOnClose} ></MovieInfoPopUp>
       )}
       <div className="">
           <div className="flex flex-col items-center">

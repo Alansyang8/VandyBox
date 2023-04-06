@@ -4,18 +4,6 @@ import Container from "../components/Container";
 import MovieSlider from "../components/MovieSlider";
 import GenreCheckBox from "../components/GenreCheckBox";
 import { useState, useEffect } from "react";
-import { auth, db } from "../firebase";
-import {
-  addToFavorites,
-  deleteFromFavorites,
-  deleteFromToWatch,
-  addToToWatch,
-  likeMovie,
-  dislikeMovie,
-  addFriend
-} from "../api/firebaseWriter";
-import { doc, getDoc } from "firebase/firestore";
-import { fetchCurrentUserData } from "../auth/auth";
 
 const IMG_PATH = "https://image.tmdb.org/t/p/w500";
 const SEARCH_API_URL =
@@ -27,12 +15,10 @@ function Search() {
   const [searchMovieAPI, setSearchMovieAPI] = useState();
   const [searchBarValue, setSearchBar] = useState("Blackpink");
   const [genreIDFilters, setGenreIDFilters] = useState([]);
-  const [userData, setUserData] = useState();
   const [showingPopup, setShowingPopup] = useState(false);
   async function get10Movies(url) {
     const res = await fetch(url);
     const data = await res.json();
-    console.log(data)
     let filteredMovies = filterGenres(data.results);
     let firstTen = getFirstTen(filteredMovies);
     return addMoviesToArray(firstTen);
@@ -93,85 +79,12 @@ function Search() {
       });
     }
   }
-  async function handleAddToFavorites(userId, movieID)  {
-    const userEmail = auth.currentUser.email;
-    const userIdRef = doc(db, "userIdMap", userEmail);
-    const docSnap = await getDoc(userIdRef);
-    if (docSnap.exists()) {
-      addToFavorites(userId, movieID)
-    } else {
-      console.error("Could not find document.");
-    }
-  };
-
-  async function handleRemoveFromFavorites(userId, movieID)  {
-    const userEmail = auth.currentUser.email;
-    const userIdRef = doc(db, "userIdMap", userEmail);
-    const docSnap = await getDoc(userIdRef);
-    if (docSnap.exists()) {
-      deleteFromFavorites(userId, movieID)
-    } else {
-      console.error("Could not find document.");
-    }
-  };
-
-  async function handleAddToWatch(userId, movieID)  {
-    const userEmail = auth.currentUser.email;
-    const userIdRef = doc(db, "userIdMap", userEmail);
-    const docSnap = await getDoc(userIdRef);
-    if (docSnap.exists()) {
-      addToToWatch(userId, movieID)
-    } else {
-      console.error("Could not find document.");
-    }
-  };
-
-  async function handleRemoveFromWatch(userId, movieID)  {
-    const userEmail = auth.currentUser.email;
-    const userIdRef = doc(db, "userIdMap", userEmail);
-    const docSnap = await getDoc(userIdRef);
-    if (docSnap.exists()) {
-      deleteFromToWatch(userId, movieID)
-    } else {
-      console.error("Could not find document.");
-    }
-  };
-
-  
-  async function handleAddToLikes(userId, movieID) {
-    const userEmail = auth.currentUser.email;
-    const userIdRef = doc(db, "userIdMap", userEmail);
-    const docSnap = await getDoc(userIdRef);
-    if (docSnap.exists()) {
-      likeMovie(userId, movieID);
-    } else {
-      console.error("Could not find document.");
-    }
-  }
-
-  async function handleAddToDislikes(userId, movieID) {
-    const userEmail = auth.currentUser.email;
-    const userIdRef = doc(db, "userIdMap", userEmail);
-    const docSnap = await getDoc(userIdRef);
-    if (docSnap.exists()) {
-      dislikeMovie(userId, movieID);
-    } else {
-      console.error("Could not find document.");
-    }
-  }  const getUserData = async () => {
-    const userData = await fetchCurrentUserData();
-    setUserData(userData)
-  }
 
   useEffect(() => {
     apiCall4();
 
   }, [apiCall4]);
 
-
-  useEffect(() => {
-    getUserData()
-  }, [])
   return (
     <div className="flex flex-col justify-center items-center">
       <Header></Header>
@@ -300,8 +213,8 @@ function Search() {
       </div>
       <SearchBar HandleSearch={HandleSearch}></SearchBar>
       <Container containerTitle={"Search"}>
-        { userData && searchMovieAPI && searchMovieAPI.length > 0 ? (
-          <MovieSlider movies={searchMovieAPI} userID={userData.handle} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} listOfFavorites={userData.favorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData.toWatch} handleAddToLikes={handleAddToLikes} handleAddToDislikes={handleAddToDislikes}  seenList={userData.seen} setShowingPopup={setShowingPopup} showingPopup={showingPopup}></MovieSlider>
+        {searchMovieAPI && searchMovieAPI.length > 0 ? (
+          <MovieSlider movies={searchMovieAPI} setShowingPopup={setShowingPopup} showingPopup={showingPopup}></MovieSlider>
         ) : (
           "No Results"
         )}

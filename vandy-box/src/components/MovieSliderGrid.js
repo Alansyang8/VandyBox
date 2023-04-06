@@ -1,8 +1,8 @@
 import React from "react";
 import MovieInfoPopUp from "./MovieInfoPopUp";
-import { useState, useEffect } from "react";
+import { useState} from "react";
 
-const MovieSliderGrid = ({ movies, userID, handleAddToFavorites, listOfFavorites, handleRemoveFromFavorites, handleAddToWatch, handleRemoveFromWatch, toWatchList, handleAddToLikes, handleAddToDislikes , seenList }) => {
+const MovieSliderGrid = ({ movies}) => {
   const [movieDescription, setMovieDescription] = useState("Test");
   const [movieRelease, setMovieRelease] = useState("Test");
   const [movieRating, setMovieRating] = useState("Test");
@@ -15,13 +15,12 @@ const MovieSliderGrid = ({ movies, userID, handleAddToFavorites, listOfFavorites
     setShowingPopup(false);
   }
 
-  console.log("sildergrid render")
 
 
   return (
     <>
       {showingPopup && (
-        <MovieInfoPopUp description={movieDescription} title={movieTitle} release_date={movieRelease} vote_average={movieRating} image={moviePoster} id={movieID} handleOnClose={handleOnClose} userID={userID} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} listOfFavorites={listOfFavorites} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={toWatchList} handleAddToLikes={handleAddToLikes} handleAddToDislikes={handleAddToDislikes}></MovieInfoPopUp>
+        <MovieInfoPopUp description={movieDescription} title={movieTitle} release_date={movieRelease} vote_average={movieRating} image={moviePoster} id={movieID} handleOnClose={handleOnClose} ></MovieInfoPopUp>
       )}
       <div className="flex flex-wrap gap-5 w-full justify-center">
         {movies.map((movie) => (

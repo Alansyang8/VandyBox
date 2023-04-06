@@ -1,10 +1,9 @@
 import React from "react";
 import Container from "../components/Container";
-import sampleMovieImage from "../assets/sample-movie-poster.jpeg";
 import Header from "../components/Header";
 import MovieSlider from "./MovieSlider";
 import { useState, useEffect } from "react";
-import { fetchCurrentUserData } from "../auth/auth";
+import { fetchCurrentUserDataHome } from "../auth/auth";
 const TRENDING_API_URL =
   "http://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=75e05708188d5f5a0a191495cf4a48db&page=1";
 const REVENUE_API_URL =
@@ -12,8 +11,6 @@ const REVENUE_API_URL =
 const RATINGS_API_URL =
   "http://api.themoviedb.org/3/discover/movie?sort_by=vote_average.desc&vote_count.gte=3000&api_key=75e05708188d5f5a0a191495cf4a48db&page=1";
 const IMG_PATH = "https://image.tmdb.org/t/p/w780";
-const SEARCH_API_URL =
-  'https://api.themoviedb.org/3/search/movie?api_key=75e05708188d5f5a0a191495cf4a48db&language=en-US&page=1&include_adult=false&query="';
 
 async function get10Movies(url) {
   const res = await fetch(url);
@@ -42,55 +39,6 @@ function addMoviesToArray(movies) {
   return array;
 }
 
-const trendingMovies = [
-  {
-    title: "Movie 1",
-    image: sampleMovieImage,
-  },
-  {
-    title: "Movie 2",
-    image: sampleMovieImage,
-  },
-  {
-    title: "Movie 3",
-    image: sampleMovieImage,
-  },
-];
-
-const trendingMoviesVanderbilt = [
-  {
-    title: "Movie 1",
-    image: sampleMovieImage,
-  },
-  {
-    title: "Movie 2",
-    image: sampleMovieImage,
-  },
-  {
-    title: "Movie 3",
-    image: sampleMovieImage,
-  },
-  {
-    title: "Movie 4",
-    image: sampleMovieImage,
-  },
-  {
-    title: "Movie 5",
-    image: sampleMovieImage,
-  },
-];
-
-// const favoriteMovies = [
-//   {
-//     title: "Movie 1",
-//     image: sampleMovieImage
-//   },
-//   {
-//     title: "Movie 2",
-//     image: sampleMovieImage
-//   }
-// ];
-
 function Body({handleAddToFavorites, handleRemoveFromFavorites, handleAddToWatch, handleRemoveFromWatch, handleAddToLikes, handleAddToDislikes  }) {
   const [trendingMovieAPI, setTrendingMovieAPI] = useState();
   const [revenueMovieAPI, setRevenueMovieAPI] = useState();
@@ -101,7 +49,7 @@ function Body({handleAddToFavorites, handleRemoveFromFavorites, handleAddToWatch
   const [userData, setUserData] = useState();
 
   const getUserData = async () => {
-    const userData = await fetchCurrentUserData();
+    const userData = await fetchCurrentUserDataHome();
     setUserData(userData);
   }
 
@@ -130,16 +78,16 @@ function Body({handleAddToFavorites, handleRemoveFromFavorites, handleAddToWatch
       <Header />
       <Container containerTitle="Trending this week">
         {trendingMovieAPI && userData && (
-          <MovieSlider movies={trendingMovieAPI} listOfFavorites={userData.favorites} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} userID = {userData.handle} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData.toWatch} handleAddToLikes={handleAddToLikes} handleAddToDislikes={handleAddToDislikes}   setShowingPopup={setShowingPopup} showingPopup={showingPopup}></MovieSlider>
+          <MovieSlider movies={trendingMovieAPI} setShowingPopup={setShowingPopup} showingPopup={showingPopup}></MovieSlider>
         )}
       </Container>
       <Container containerTitle="Trending at Vanderbilt">
         {revenueMovieAPI && userData && (
-          <MovieSlider movies={revenueMovieAPI} listOfFavorites={userData.favorites} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} userID = {userData.handle} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData.toWatch} handleAddToLikes={handleAddToLikes} handleAddToDislikes={handleAddToDislikes}   setShowingPopup={setShowingPopup} showingPopup={showingPopup}></MovieSlider>
+          <MovieSlider movies={revenueMovieAPI} setShowingPopup={setShowingPopup} showingPopup={showingPopup}></MovieSlider>
         )}
       </Container>
       <Container containerTitle="Favorites">
-        {ratingMovieAPI && userData && <MovieSlider movies={ratingMovieAPI} listOfFavorites={userData.favorites} handleAddToFavorites={handleAddToFavorites} handleRemoveFromFavorites={handleRemoveFromFavorites} userID = {userData.handle} handleAddToWatch={handleAddToWatch} handleRemoveFromWatch={handleRemoveFromWatch} toWatchList={userData.toWatch} handleAddToLikes={handleAddToLikes} handleAddToDislikes={handleAddToDislikes}   setShowingPopup={setShowingPopup} showingPopup={showingPopup}></MovieSlider>}
+        {ratingMovieAPI && userData && <MovieSlider movies={ratingMovieAPI}  setShowingPopup={setShowingPopup} showingPopup={showingPopup}></MovieSlider>}
       </Container>
 
       {/* <Container containerTitle={"Search"}>

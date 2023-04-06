@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from 'react';
 import { fetchCurrentUserData } from "../auth/auth";
-import { dislikeMovie, likeMovie, undislikeMovie, unlikeMovie } from '../api/firebaseWriter';
+import { addToFavorites, addToToWatch, deleteFromFavorites, deleteFromToWatch, dislikeMovie, likeMovie, undislikeMovie, unlikeMovie } from '../api/firebaseWriter';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faThumbsUp as faThumbsUpSolid} from '@fortawesome/free-solid-svg-icons'
 import { faThumbsUp as faThumbsUpOutline} from '@fortawesome/free-regular-svg-icons'
@@ -34,30 +34,30 @@ function MovieInfoPopUp(props) {
          <div className="text-white  pb-8 flex items-center">
          <span className="font-bold text-4xl">{props.title}</span>
          {userData && <div className='ml-auto flex gap-2'>
-          {!userData.favorites.includes(props.id) && <button className="AddToFavoritesButton ml-auto text-black bg-lime-100 hover:bg-lime-200 active:bg-lime-300 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {props.handleAddToFavorites(props.userID, props.id)
+          {!userData.favorites.includes(props.id) && <button className="AddToFavoritesButton ml-auto text-black bg-lime-100 hover:bg-lime-200 active:bg-lime-300 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {addToFavorites(userData.handle, props.id)
           // props.handleOnClose()
-          console.log("Adding " + props.id + " to " + props.userID) }} >Add to Favorites</button>}
-          {userData.favorites.includes(props.id) && <button className="RemoveFromFavoritesButton ml-auto text-black bg-lime-100 hover:bg-lime-200 active:bg-lime-300 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {props.handleRemoveFromFavorites(props.userID, props.id)
+           }} >Add to Favorites</button>}
+          {userData.favorites.includes(props.id) && <button className="RemoveFromFavoritesButton ml-auto text-black bg-lime-100 hover:bg-lime-200 active:bg-lime-300 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {deleteFromFavorites(userData.handle, props.id)
          
-          console.log("Remove " + props.id + " from " + props.userID) }} >Remove from Favorites</button>}
-          {!userData.toWatch.includes(props.id) && <button className="AddToFavoritesButton ml-auto text-black bg-lime-100 hover:bg-lime-200 active:bg-lime-300 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {props.handleAddToWatch(props.userID, props.id)
+          }} >Remove from Favorites</button>}
+          {!userData.toWatch.includes(props.id) && <button className="AddToFavoritesButton ml-auto text-black bg-lime-100 hover:bg-lime-200 active:bg-lime-300 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {addToToWatch(userData.handle, props.id)
          
-          console.log("Adding " + props.id + " to " + props.userID) }} >Add to Watch List</button>}
-          {userData.toWatch.includes(props.id) && <button className="RemoveFromFavoritesButton ml-auto text-black bg-lime-100 hover:bg-lime-200 active:bg-lime-300 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {props.handleRemoveFromWatch(props.userID, props.id)
+           }} >Add to Watch List</button>}
+          {userData.toWatch.includes(props.id) && <button className="RemoveFromFavoritesButton ml-auto text-black bg-lime-100 hover:bg-lime-200 active:bg-lime-300 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {deleteFromToWatch(userData.handle, props.id)
           
-          console.log("Remove " + props.id + " from " + props.userID) }} >Remove from Watch List</button>}
-          {!userData.Likes.includes(props.id) && <button className="AddToFavoritesButton ml-auto text-black bg-lime-100 hover:bg-lime-200 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {likeMovie(props.userID, props.id)
+           }} >Remove from Watch List</button>}
+          {!userData.Likes.includes(props.id) && <button className="AddToFavoritesButton ml-auto text-black bg-lime-100 hover:bg-lime-200 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {likeMovie(userData.handle, props.id)
           
-          console.log("Adding " + props.id + " to " + props.userID) }} ><FontAwesomeIcon icon={faThumbsUpOutline}  style={{color: "#16da47"}} /></button>}
-          {userData.Likes.includes(props.id) && <button className="AddToFavoritesButton ml-auto text-black bg-green-600 hover:bg-green-700 active:bg-green-900 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {unlikeMovie(props.userID, props.id)
+          }} ><FontAwesomeIcon icon={faThumbsUpOutline}  style={{color: "#16da47"}} /></button>}
+          {userData.Likes.includes(props.id) && <button className="AddToFavoritesButton ml-auto text-black bg-green-600 hover:bg-green-700 active:bg-green-900 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {unlikeMovie(userData.handle, props.id)
          
-          console.log("Adding " + props.id + " to " + props.userID) }} ><FontAwesomeIcon icon={faThumbsUpSolid}  style={{color: "#16da47"}} /></button>}
-          {!userData.Dislikes.includes(props.id) && <button className="AddToFavoritesButton ml-auto text-black bg-lime-100 hover:bg-lime-200 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {dislikeMovie(props.userID, props.id)
+           }} ><FontAwesomeIcon icon={faThumbsUpSolid}  style={{color: "#16da47"}} /></button>}
+          {!userData.Dislikes.includes(props.id) && <button className="AddToFavoritesButton ml-auto text-black bg-lime-100 hover:bg-lime-200 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {dislikeMovie(userData.handle, props.id)
           
-          console.log("Adding " + props.id + " to " + props.userID) }} ><FontAwesomeIcon icon={faThumbsDownOutline}  style={{color: "#da1616"}} /></button>}
-          {userData.Dislikes.includes(props.id) && <button className="AddToFavoritesButton ml-auto text-black bg-red-800 hover:bg-red-900 active:bg-red-1000 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {undislikeMovie(props.userID, props.id)
+          }} ><FontAwesomeIcon icon={faThumbsDownOutline}  style={{color: "#da1616"}} /></button>}
+          {userData.Dislikes.includes(props.id) && <button className="AddToFavoritesButton ml-auto text-black bg-red-800 hover:bg-red-900 active:bg-red-1000 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {undislikeMovie(userData.handle, props.id)
           
-          console.log("Adding " + props.id + " to " + props.userID) }} ><FontAwesomeIcon icon={faThumbsDownSolid}  style={{color: "#da1616"}} /></button>}
+           }} ><FontAwesomeIcon icon={faThumbsDownSolid}  style={{color: "#da1616"}} /></button>}
           {/* <button className="AddToFavoritesButton ml-auto text-black bg-green-500 hover:bg-green-600 active:bg-green-700 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {props.handleAddToLikes(props.userID, props.id)
           props.handleOnClose()
           console.log("Adding " + props.id + " to " + props.userID) }}>Like</button>
@@ -103,9 +103,9 @@ function MovieInfoPopUp(props) {
           {props.vote_average}
         </div> */}
         <div>
-          <button type="button" class="bg-grey rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500" onClick={()=> {props.handleOnClose()}}>
-            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          <button type="button" className="bg-grey rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500" onClick={()=> {props.handleOnClose()}}>
+            <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>

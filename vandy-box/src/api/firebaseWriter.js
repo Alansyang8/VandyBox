@@ -28,6 +28,7 @@ export async function modifyAddInfo(userId, info) {
 // Add a movie to favorites collection
 export async function addToFavorites(userId, movieID) {
     const docRef = doc(db, "users", userId);
+    console.log("Adding " + movieID + " to Favs")
     await updateDoc(docRef, {
         favorites: arrayUnion(movieID),
         toWatch: arrayRemove(movieID),
@@ -39,6 +40,7 @@ export async function addToFavorites(userId, movieID) {
 // Delete a movie from favorites collection
 export async function deleteFromFavorites(userId, movieID) {
     const docRef = doc(db, "users", userId);
+    console.log("Removing " + movieID  + " from Favs") 
     await updateDoc(docRef, {
         favorites: arrayRemove(movieID),
     });
@@ -63,6 +65,7 @@ export async function deleteFromFriends(userId, name) {
 // Add a movie to to-watch collection
 export async function addToToWatch(userId, movieID) {
     const docRef = doc(db, "users", userId);
+    console.log("Adding " + movieID  + " to Watch List")
     await updateDoc(docRef, {
         toWatch: arrayUnion(movieID),
         favorites: arrayRemove(movieID),
@@ -74,6 +77,7 @@ export async function addToToWatch(userId, movieID) {
 // Delete a movie from to-watch collection
 export async function deleteFromToWatch(userId, movieID) {
     const docRef = doc(db, "users", userId);
+    console.log("Removing " + movieID + " from Watch List")
     await updateDoc(docRef, {
         toWatch: arrayRemove(movieID),
     });
@@ -110,7 +114,7 @@ export async function deleteFriend(userId, id) {
 
 export async function likeMovie(userId, id) {
     const docRef = doc(db, "users", userId);
-    console.log("Like")
+     console.log("Adding " + id + " to Likes")
     await updateDoc(docRef, {
         Likes: arrayUnion(id),
         Dislikes: arrayRemove(id),
@@ -122,7 +126,7 @@ export async function likeMovie(userId, id) {
 
 export async function dislikeMovie(userId, id) {
     const docRef = doc(db, "users", userId);
-    console.log("Dislike")
+    console.log("Adding " + id + " to Dislikes" )
     await updateDoc(docRef, {
         Dislikes: arrayUnion(id),
         Likes: arrayRemove(id),
@@ -133,7 +137,7 @@ export async function dislikeMovie(userId, id) {
 
 export async function unlikeMovie(userId, id) {
     const docRef = doc(db, "users", userId);
-    console.log("Like")
+    console.log("Removing " + id + " from Likes")
     await updateDoc(docRef, {
         Likes: arrayRemove(id),
 
@@ -143,7 +147,7 @@ export async function unlikeMovie(userId, id) {
 
 export async function undislikeMovie(userId, id) {
     const docRef = doc(db, "users", userId);
-    console.log("Dislike")
+    console.log("Removing " + id + " from Dislikes ")
     await updateDoc(docRef, {
         Dislikes: arrayRemove(id),
          //ADD CODE HERE!!!
