@@ -10,22 +10,43 @@ import { faHeart as faHeartSolid} from '@fortawesome/free-solid-svg-icons'
 import { faHeart as faHeartOutline} from '@fortawesome/free-regular-svg-icons'
 import { faClipboardList } from '@fortawesome/free-solid-svg-icons'
 import { faClipboard}  from '@fortawesome/free-regular-svg-icons'
+import { collection, getDocs, query } from 'firebase/firestore';
+import { db } from '../firebase';
 
 
 function MovieInfoPopUp(props) {
   const ref = useRef();
   const [userData, setUserData] = useState();
+  const [totalLikes, setTotalLikes] = useState(0);
+  const [totalDislikes, setTotalDislikes] = useState(0);
 
   const getUserData = async () => {
     const userData = await fetchCurrentUserData();
     setUserData(userData);
   }
 
+  const updateLikeDislike = async () => {
+    let numLikes = 0;
+    let numDislikes = 0;
+    const usersCollection = query(collection(db, "users"));
+    const querySnapshot = await getDocs(usersCollection);
+    querySnapshot.forEach((doc) => {
+      if (doc.data().Likes.includes(props.id)) {
+        numLikes++;
+      } else if (doc.data().Dislikes.includes(props.id)) {
+        numDislikes++;
+      }
+    });
+    setTotalLikes(numLikes);
+    setTotalDislikes(numDislikes);
+  }
+
 
   useEffect(() => {
     ref.current.style.top = `${document.documentElement.scrollTop}px`
     
-    getUserData()
+    getUserData();
+    updateLikeDislike();
   }, []);
   
   return (
@@ -45,16 +66,16 @@ function MovieInfoPopUp(props) {
           
           {!userData.Likes.includes(props.id) && <button className="AddToFavoritesButton ml-auto text-black bg-lime-100 hover:bg-lime-200 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {likeMovie(userData.handle, props.id)
           
-          }} ><FontAwesomeIcon icon={faThumbsUpOutline}  style={{color: "#16da47"}} /></button>}
+          }} ><span className='text-green-900 font-bold'>{totalLikes}</span><FontAwesomeIcon icon={faThumbsUpOutline}  style={{color: "#16da47"}} /></button>}
           {userData.Likes.includes(props.id) && <button className="AddToFavoritesButton ml-auto text-black bg-green-600 hover:bg-green-700 active:bg-green-900 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {unlikeMovie(userData.handle, props.id)
          
-           }} ><FontAwesomeIcon icon={faThumbsUpSolid}  bounce style={{color: "#16da47"}} /></button>}
+           }} ><span className='text-green-900 font-bold'>{totalLikes}</span><FontAwesomeIcon icon={faThumbsUpSolid}  bounce style={{color: "#16da47"}} /></button>}
           {!userData.Dislikes.includes(props.id) && <button className="AddToFavoritesButton ml-auto text-black bg-lime-100 hover:bg-lime-200 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {dislikeMovie(userData.handle, props.id)
           
-          }} ><FontAwesomeIcon icon={faThumbsDownOutline}  style={{color: "#da1616"}} /></button>}
+          }} ><span className='text-red-900 font-bold'>{totalDislikes}</span><FontAwesomeIcon icon={faThumbsDownOutline}  style={{color: "#da1616"}} /></button>}
           {userData.Dislikes.includes(props.id) && <button className="AddToFavoritesButton ml-auto text-black bg-red-800 hover:bg-red-900 active:bg-red-1000 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {undislikeMovie(userData.handle, props.id)
           
-           }} ><FontAwesomeIcon icon={faThumbsDownSolid}  shake style={{color: "#da1616"}} /></button>}
+           }} ><span className='text-red-900 font-bold'>{totalDislikes}</span><FontAwesomeIcon icon={faThumbsDownSolid}  shake style={{color: "#da1616"}} /></button>}
            {!userData.toWatch.includes(props.id) && <button className="AddToFavoritesButton ml-auto text-black bg-lime-100 hover:bg-lime-200 active:bg-lime-300 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {addToToWatch(userData.handle, props.id)
          
         }} ><FontAwesomeIcon icon={faClipboard}  style={{color: "blue"}} /></button>}
