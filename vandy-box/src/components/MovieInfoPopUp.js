@@ -62,7 +62,7 @@ function MovieInfoPopUp(props) {
          <span className="font-bold text-4xl">{props.title}</span>
          {userData && <div className='ml-auto flex gap-2'>
           {!userData.favorites.includes(props.id) && <button className="AddToFavoritesButton ml-auto text-black bg-lime-100 hover:bg-lime-200 active:bg-lime-300 pl-3 pr-3 pt-2 pb-2 rounded-xl" onClick={() => {addToFavorites(userData.handle, props.id)
-          setForceUpdate(1)
+          setForceUpdate(prev => prev + 1)
 
           // props.handleOnClose()
            }} ><FontAwesomeIcon icon={faHeartOutline}  style={{color: "#fe6cdf"}} /></button>}

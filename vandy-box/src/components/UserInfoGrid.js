@@ -90,14 +90,14 @@ function UserInfoGrid({ userData, selectedUserInfo}) {
       
       {(selectedUserInfo == "Fav Movies" && favoriteMoviesObjects.length != 0) && favoriteMoviesObjects.map((movieObject) => (
           <div className="flex justify-center items-center h-80">
-            <div className="h-full w-64 flex justify-center items-center border border-lime-400">
+            <div className="h-full w-64 flex justify-center items-center border border-fuchsia-400">
               {userData2 && <SingleMovieFrame movie={movieObject} />}
             </div>
           </div>
         ))}
       {(selectedUserInfo == "To Watch" && toWatchMoviesObjects.length != 0) && toWatchMoviesObjects.map((movieObject) => (
           <div className="flex justify-center items-center h-80">
-            <div className="h-full w-64 flex justify-center items-center border border-yellow-500">
+            <div className="h-full w-64 flex justify-center items-center border border-cyan-500">
             {userData2 && <SingleMovieFrame movie={movieObject}/>}
             </div>
           </div>
@@ -111,12 +111,23 @@ function UserInfoGrid({ userData, selectedUserInfo}) {
           </div>
         ))}
       {(selectedUserInfo == "Seen" && seenMoviesObjects.length != 0) && seenMoviesObjects.map((movieObject) => (
-          <div className="flex justify-center items-center h-80">
-            <div className="h-full w-64 flex justify-center items-center border border-yellow-500">
+        userData.Likes.includes(movieObject.id) && 
+          (<div className="flex justify-center items-center h-80">
+            <div className="h-full w-64 flex justify-center items-center border border-lime-500">
             {userData2 && <SingleMovieFrame movie={movieObject} />}
             </div>
-          </div>
+          </div>)
         ))}
+
+{(selectedUserInfo == "Seen" && seenMoviesObjects.length != 0) && seenMoviesObjects.map((movieObject) => (
+        userData.Dislikes.includes(movieObject.id) && 
+          (<div className="flex justify-center items-center h-80">
+            <div className="h-full w-64 flex justify-center items-center border border-red-500">
+            {userData2 && <SingleMovieFrame movie={movieObject} />}
+            </div>
+          </div>)
+        ))}
+
         {/* {(selectedUserInfo == "Likes" && LikesMoviesObjects.length != 0) && LikesMoviesObjects.map((movieObject) => (
           <div className="flex justify-center items-center h-80">
             <div className="h-full w-64 flex justify-center items-center border border-yellow-500">
