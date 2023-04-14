@@ -14,6 +14,7 @@ import {
 import { doc, getDoc } from "firebase/firestore";
 import Recommendations from "./Recommendations";
 
+
 const IMG_PATH = "https://image.tmdb.org/t/p/w500";
 
 const SEARCH_BY_ID_URL_FIRST_HALF = "https://api.themoviedb.org/3/movie/";
