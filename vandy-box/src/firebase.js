@@ -3,7 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
-import { getAuth } from "firebase/auth"
+import { getAuth } from "firebase/auth";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -17,14 +17,14 @@ const firebaseConfig = {
   storageBucket: "vandy-box.appspot.com",
   messagingSenderId: "1035851981271",
   appId: "1:1035851981271:web:fa83e8aaada928e3a46b92",
-  measurementId: "G-1JCC28M3GF"
+  measurementId: "G-1JCC28M3GF",
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
-const auth = getAuth()
+const auth = getAuth();
 
 const analytics = getAnalytics(app);
 

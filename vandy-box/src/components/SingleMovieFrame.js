@@ -11,33 +11,40 @@ const SingleMovieFrame = ({ movie }) => {
   const [movieID, setMovieID] = useState("Test");
   const [showingPopup, setShowingPopup] = useState(false);
 
-  function handleOnClose(){
+  function handleOnClose() {
     setShowingPopup(false);
   }
 
   return (
     <>
       {showingPopup && (
-        <MovieInfoPopUp description={movieDescription} title={movieTitle} release_date={movieRelease} vote_average={movieRating} image={moviePoster} id={movieID} handleOnClose={handleOnClose} ></MovieInfoPopUp>
+        <MovieInfoPopUp
+          description={movieDescription}
+          title={movieTitle}
+          release_date={movieRelease}
+          vote_average={movieRating}
+          image={moviePoster}
+          id={movieID}
+          handleOnClose={handleOnClose}></MovieInfoPopUp>
       )}
       <div className="">
-          <div className="flex flex-col items-center">
-            <img
+        <div className="flex flex-col items-center">
+          <img
             className="cursor-pointer w-3/5"
-              src={movie.image}
-              alt={movie.title}
-              onClick={() => {
-                setMovieDescription(movie.overview)
-                setMovieRelease(movie.release_date)
-                setMovieRating(movie.vote_average)
-                setMoviePoster(movie.image)
-                setMovieTitle(movie.title)
-                setMovieID(movie.id)
-                setShowingPopup(true)}}
-              
-            />
-            <div className="text-center">{movie.title}</div>
-          </div>
+            src={movie.image}
+            alt={movie.title}
+            onClick={() => {
+              setMovieDescription(movie.overview);
+              setMovieRelease(movie.release_date);
+              setMovieRating(movie.vote_average);
+              setMoviePoster(movie.image);
+              setMovieTitle(movie.title);
+              setMovieID(movie.id);
+              setShowingPopup(true);
+            }}
+          />
+          <div className="text-center">{movie.title}</div>
+        </div>
       </div>
     </>
   );

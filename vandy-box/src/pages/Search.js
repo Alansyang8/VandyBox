@@ -9,7 +9,27 @@ const IMG_PATH = "https://image.tmdb.org/t/p/w500";
 const SEARCH_API_URL =
   'https://api.themoviedb.org/3/search/movie?api_key=75e05708188d5f5a0a191495cf4a48db&language=en-US&page=1&include_adult=false&query="';
 
-const genreID= [{"id":28,"name":"Action"},{"id":12,"name":"Adventure"},{"id":16,"name":"Animation"},{"id":35,"name":"Comedy"},{"id":80,"name":"Crime"},{"id":99,"name":"Documentary"},{"id":18,"name":"Drama"},{"id":10751,"name":"Family"},{"id":14,"name":"Fantasy"},{"id":36,"name":"History"},{"id":27,"name":"Horror"},{"id":10402,"name":"Music"},{"id":9648,"name":"Mystery"},{"id":10749,"name":"Romance"},{"id":878,"name":"Science Fiction"},{"id":10770,"name":"TV Movie"},{"id":53,"name":"Thriller"},{"id":10752,"name":"War"},{"id":37,"name":"Western"}]
+const genreID = [
+  { id: 28, name: "Action" },
+  { id: 12, name: "Adventure" },
+  { id: 16, name: "Animation" },
+  { id: 35, name: "Comedy" },
+  { id: 80, name: "Crime" },
+  { id: 99, name: "Documentary" },
+  { id: 18, name: "Drama" },
+  { id: 10751, name: "Family" },
+  { id: 14, name: "Fantasy" },
+  { id: 36, name: "History" },
+  { id: 27, name: "Horror" },
+  { id: 10402, name: "Music" },
+  { id: 9648, name: "Mystery" },
+  { id: 10749, name: "Romance" },
+  { id: 878, name: "Science Fiction" },
+  { id: 10770, name: "TV Movie" },
+  { id: 53, name: "Thriller" },
+  { id: 10752, name: "War" },
+  { id: 37, name: "Western" },
+];
 function Search() {
   const [searchMovieAPI, setSearchMovieAPI] = useState();
   const [searchBarValue, setSearchBar] = useState("");
@@ -30,14 +50,15 @@ function Search() {
   function addMoviesToArray(movies) {
     let array = [];
     movies.forEach((movie) => {
-      const { title, poster_path, overview, release_date, vote_average, id } = movie;
+      const { title, poster_path, overview, release_date, vote_average, id } =
+        movie;
       array.push({
         title: title,
         image: `${IMG_PATH}${poster_path}`,
         overview: overview,
         release_date: release_date,
         vote_average: vote_average,
-        id: id
+        id: id,
       });
     });
     return array;
@@ -66,7 +87,7 @@ function Search() {
 
   function HandleSearch(searchValue) {
     setSearchBar(searchValue);
-    setForceUpdate(prev => prev + 1)
+    setForceUpdate((prev) => prev + 1);
     apiCall4();
   }
 
@@ -78,7 +99,7 @@ function Search() {
         return prev.filter((ID) => ID != ID);
       });
     }
-    setForceUpdate(prev => prev + 1)
+    setForceUpdate((prev) => prev + 1);
   }
 
   useEffect(() => {
@@ -89,22 +110,6 @@ function Search() {
     <div className="flex flex-col justify-center items-center">
       <Header></Header>
       <div className="genreCheckBoxContainer grid grid-cols-5 gap-1 mt-4">
-        {/* <label>
-          <input
-            type="checkbox"
-            onChange={(event) => {
-              if (event.target.checked) {
-                setGenreIDFilters(prev => [...prev, 28]);
-              }
-              else {
-                setGenreIDFilters(prev => {
-                  return prev.filter(ID => ID != 28)
-                  })
-              }
-            }}
-          />{" "}
-          Action
-        </label> */}
         <GenreCheckBox
           genre={"Action"}
           HandleCheckBox={HandleCheckBox}
@@ -200,16 +205,6 @@ function Search() {
           HandleCheckBox={HandleCheckBox}
           ID={37}
         />
-        {/* <label>
-          Sort by:
-          <select>
-            <option>Relevant</option>
-            <option>Rating+</option>
-            <option>Rating-</option>
-            <option>Release Date+</option>
-            <option>Release Date-</option>
-          </select>
-        </label> */}
       </div>
       <SearchBar HandleSearch={HandleSearch}></SearchBar>
       <Container containerTitle={"Search"}>
@@ -220,18 +215,6 @@ function Search() {
         )}
       </Container>
     </div>
-    //     <input
-    //     type="search"
-    //     className="bg-stone-10 border border-gray-300 text-gray-900 w-1/3 text-sm rounded-lg block p-2.5 searchBar"
-    //     placeholder="Search..."
-    //     defaultValue={""}
-    //     onClick={window.scrollTo
-    //         ({
-    //       top: document.body.scrollHeight,
-    //       behavior: "smooth",
-    //     })}
-    //     onChange={(event) => props.HandleSearch(event.target.value)}
-    //   />
   );
 }
 

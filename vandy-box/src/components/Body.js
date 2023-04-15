@@ -3,15 +3,11 @@ import Container from "../components/Container";
 import Header from "../components/Header";
 import MovieSlider from "./MovieSlider";
 import { useState, useEffect } from "react";
-import { fetchCurrentUserDataHome } from "../auth/auth";
 import { collection, getDocs, query } from "firebase/firestore";
 import { db } from "../firebase";
 const TRENDING_API_URL =
-  "http://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=75e05708188d5f5a0a191495cf4a48db&page=1";
-const REVENUE_API_URL =
-  "http://api.themoviedb.org/3/discover/movie?sort_by=revenue.desc&api_key=75e05708188d5f5a0a191495cf4a48db&page=1";
-const RATINGS_API_URL =
-  "http://api.themoviedb.org/3/discover/movie?sort_by=vote_average.desc&vote_count.gte=3000&api_key=75e05708188d5f5a0a191495cf4a48db&page=1";
+  "https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=75e05708188d5f5a0a191495cf4a48db&page=1";
+
 const IMG_PATH = "https://image.tmdb.org/t/p/w780";
 
 const SEARCH_BY_ID_URL_FIRST_HALF = "https://api.themoviedb.org/3/movie/";
@@ -134,7 +130,8 @@ function Body() {
       for (const movieid of doc.data().toWatch) {
         if (movieid !== "") {
           if (Object.hasOwn(ToWatchMoviesDict, `${movieid}`)) {
-            ToWatchMoviesDict[`${movieid}`] = ToWatchMoviesDict[`${movieid}`] + 1;
+            ToWatchMoviesDict[`${movieid}`] =
+              ToWatchMoviesDict[`${movieid}`] + 1;
           } else {
             ToWatchMoviesDict[`${movieid}`] = 1;
           }
@@ -195,16 +192,11 @@ function Body() {
         )}
       </Container>
       <Container containerTitle="Vandy's Watch List">
-        {mostToWatchMovies && <MovieSlider movies={mostToWatchMovies}></MovieSlider>}
+        {mostToWatchMovies && (
+          <MovieSlider movies={mostToWatchMovies}></MovieSlider>
+        )}
       </Container>
 
-      {/* <Container containerTitle={"Search"}>
-        {searchMovieAPI && searchMovieAPI.length > 0 ? (
-          <MovieSlider movies={searchMovieAPI}></MovieSlider>
-        ) : (
-          "No Results"
-        )}
-      </Container> */}
     </div>
   );
 }

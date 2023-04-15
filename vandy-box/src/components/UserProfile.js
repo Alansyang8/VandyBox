@@ -9,21 +9,16 @@ import {
   modifyName,
   modifyStatusMsg,
   addFriend,
-  deleteFriend
+  deleteFriend,
 } from "../api/firebaseWriter";
 import { doc, getDoc } from "firebase/firestore";
 import Recommendations from "./Recommendations";
-
 
 const IMG_PATH = "https://image.tmdb.org/t/p/w500";
 
 const SEARCH_BY_ID_URL_FIRST_HALF = "https://api.themoviedb.org/3/movie/";
 const SEARCH_BY_ID_URL_SECOND_HALF =
   "?api_key=75e05708188d5f5a0a191495cf4a48db&language=en-US";
-
-let GET_SIMILAR_MOVIES_URL_FIRST_THIRD = "https://api.themoviedb.org/3/movie/";
-let GET_SIMILAR_MOVIES_URL_SECOND_THIRD =
-  "/similar?api_key=75e05708188d5f5a0a191495cf4a48db&language=en-US&page=";
 
 let GET_RECOMMENDED_MOVIES_URL_FIRST_THIRD =
   "https://api.themoviedb.org/3/movie/";
@@ -38,7 +33,7 @@ const UserProfile = ({ userData }) => {
   const [statusMsg, setStatusMsg] = useState("");
   const [additionalInfo, setAdditionalInfo] = useState("");
   const [thirtyMovieRec, setThirtyMovieRec] = useState([]);
-  const [firebaseUserID, setFirebaseUserID] = useState("");
+
   const [isFriend, setIsFriend] = useState(false);
 
   async function get1MovieByID(url) {
@@ -73,27 +68,8 @@ const UserProfile = ({ userData }) => {
   }
 
   async function getRecommendedMovies() {
-    let movieObjectsArray = [];
     let totalRecommendedMovies = [];
     let totalRecommendedMoviesNames = [];
-
-    // for (const movieID of userData.favorites) {
-    //   for (let i = 1; i < 100; i++) {
-    //     totalRecommendedMovies.push(...await getSimilarMovies(GET_RECOMMENDED_MOVIES_URL_FIRST_THIRD + movieID + GET_RECOMMENDED_MOVIES_URL_SECOND_THIRD + i))
-    //   }
-    // }
-
-    // for(const i in totalRecommendedMovies){
-    //   let movieCount = 0
-    //   for(const j in totalRecommendedMovies){
-    //     if(j!= i && totalRecommendedMovies[j].title == totalRecommendedMovies[i].title){
-    //       movieCount++
-    //       if(movieCount>=4){
-    //       movieObjectsArray.push(totalRecommendedMovies[j].title)
-    //       }
-    //     }
-    //   }
-    // }
 
     for (const movieID of userData.favorites) {
       totalRecommendedMovies.push(
@@ -122,18 +98,6 @@ const UserProfile = ({ userData }) => {
       totalRecommendedMoviesNames.push(movieObject.title);
     }
 
-    // for(const i in totalRecommendedMovies){
-    //   let movieCount = 0
-    //   for(const j in totalRecommendedMovies){
-    //     if(j!= i && totalRecommendedMovies[j].title == totalRecommendedMovies[i].title){
-    //       movieCount++
-    //       if(movieCount>=1){
-    //       movieObjectsArray.push(totalRecommendedMovies[j].title)
-    //       }
-    //     }
-    //   }
-    // }
-
     var dictMovies = {};
     var movieCount = 0;
     let totalRecommendedMoviesNamesSET = new Set(totalRecommendedMoviesNames);
@@ -156,7 +120,7 @@ const UserProfile = ({ userData }) => {
         ];
       }
     }
-    // console.log(dictMovies);
+
     let dictMoviesSorted = [];
 
     for (let i = userData.favorites.length; i >= 1; i--) {
@@ -167,7 +131,6 @@ const UserProfile = ({ userData }) => {
       }
     }
 
-    // console.log(dictMoviesSorted)
     for (const movieID of userData.favorites) {
       let index = dictMoviesSorted.indexOf(movieID);
       if (movieID > -1) {
@@ -208,20 +171,6 @@ const UserProfile = ({ userData }) => {
     }
 
     setThirtyMovieRec(best30RecommendedMovieObjects);
-
-    // console.log(best30RecommendedMovieObjects)
-
-    // for(const movie of totalRecommendedMovies){
-    //   totalRecommendedMoviesNames.push(movie.title)
-    // }
-    // console.log(totalRecommendedMoviesNames.length)
-    // console.log(new Set(totalRecommendedMoviesNames).size)
-  }
-
-  async function getSimilarMovies(url) {
-    const res = await fetch(url);
-    const data = await res.json();
-    return data.results;
   }
 
   async function APIRecommended(url) {
@@ -230,14 +179,13 @@ const UserProfile = ({ userData }) => {
     return data.results;
   }
 
-
   const getUserData = async () => {
-    const LoggedInUserData = await fetchCurrentUserData()
-      setCurrentUserData(LoggedInUserData);
-      if (LoggedInUserData.friends.includes(userData.handle)) {
-        setIsFriend(true)
-      }
-    };
+    const LoggedInUserData = await fetchCurrentUserData();
+    setCurrentUserData(LoggedInUserData);
+    if (LoggedInUserData.friends.includes(userData.handle)) {
+      setIsFriend(true);
+    }
+  };
 
   useEffect(() => {
     apiCall();
@@ -294,8 +242,6 @@ const UserProfile = ({ userData }) => {
     }
   };
 
-
-
   return (
     <div>
       {editMode && (
@@ -339,29 +285,30 @@ const UserProfile = ({ userData }) => {
 
               {/* Follow & Message Buttons */}
               <div className="flex flex-row justify-center font-semibold mx-auto my-4 w-40">
-                {currentUserData?.handle != userData.handle ? 
-                 isFriend ? <div
-                    data-testid="follow"
-                    className="my-auto text-white bg-red-500 hover:bg-red-600 hover:cursor-pointer rounded-3xl py-2 px-4 mx-2"
-                    onClick={handleUnfriend}>
-                    Unfriend
-                    </div> :
+                {currentUserData?.handle != userData.handle ? (
+                  isFriend ? (
                     <div
-                    data-testid="follow"
-                    className="my-auto text-white bg-lime-500 hover:bg-lime-600 hover:cursor-pointer rounded-3xl py-2 px-4 mx-2"
-                    onClick={handleFollow}>
-                    Friend
+                      data-testid="follow"
+                      className="my-auto text-white bg-red-500 hover:bg-red-600 hover:cursor-pointer rounded-3xl py-2 px-4 mx-2"
+                      onClick={handleUnfriend}>
+                      Unfriend
                     </div>
-
-                  : 
+                  ) : (
+                    <div
+                      data-testid="follow"
+                      className="my-auto text-white bg-lime-500 hover:bg-lime-600 hover:cursor-pointer rounded-3xl py-2 px-4 mx-2"
+                      onClick={handleFollow}>
+                      Friend
+                    </div>
+                  )
+                ) : (
                   <div
                     data-testid="edit"
                     className="my-auto text-white bg-gray-400 hover:bg-gray-500 hover:cursor-pointer rounded-3xl py-2 px-4 mx-2"
                     onClick={handleEdit}>
                     Edit
                   </div>
-                }
-                {/* <div class="my-auto text-gray-800 py-1 px-4 border-2 border-lime-500 hover:bg-lime-500 hover:cursor-pointer hover:text-white rounded-3xl mx-2">Add to Box</div> */}
+                )}
               </div>
             </div>
           </div>
@@ -369,13 +316,7 @@ const UserProfile = ({ userData }) => {
         {/* User TOP 3 Favorite Movies Display */}
         <div className="flex flex-row w-full justify-end">
           <div className="flex flex-row bg-lime-100 justify-center my-6 w-2/5 h-4/5 rounded-xl mr-8 p-8">
-            {movieObjects && (
-              <MovieSlider
-                movies={movieObjects}
-                
-              />
-            )}
-            {/* {movieObjects.length == 3 && <MovieSlider movies={movieObjects} />} */}
+            {movieObjects && <MovieSlider movies={movieObjects} />}
           </div>
         </div>
       </div>
@@ -430,35 +371,6 @@ const UserProfile = ({ userData }) => {
             </span>
           </div>
 
-          {/* <div
-            className="mr-2 w-1/4 flex justify-center"
-            onClick={() => {
-              setSelectedUserInfo("Likes");
-            }}>
-            <span
-              className={
-                selectedUserInfo == "Likes"
-                  ? "inline-block p-4 text-lime-600 border-b-2 border-lime-600 rounded-t-lg active dark:text-lime-500 dark:border-lime-500"
-                  : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
-              }>
-              Likes
-            </span>
-          </div>
-
-          <div
-            className="mr-2 w-1/4 flex justify-center"
-            onClick={() => {
-              setSelectedUserInfo("Dislikes");
-            }}>
-            <span
-              className={
-                selectedUserInfo == "Disikes"
-                  ? "inline-block p-4 text-lime-600 border-b-2 border-lime-600 rounded-t-lg active dark:text-lime-500 dark:border-lime-500"
-                  : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
-              }>
-              Dislikes
-            </span>
-          </div> */}
           <div
             className="mr-2 w-1/4 flex justify-center"
             onClick={() => {
@@ -476,13 +388,8 @@ const UserProfile = ({ userData }) => {
           </div>
         </div>
       </div>
-      <UserInfoGrid
-        userData={userData}
-        selectedUserInfo={selectedUserInfo}
-      />
-      <Recommendations
-        movies={thirtyMovieRec}
-        ></Recommendations>
+      <UserInfoGrid userData={userData} selectedUserInfo={selectedUserInfo} />
+      <Recommendations movies={thirtyMovieRec}></Recommendations>
     </div>
   );
 };

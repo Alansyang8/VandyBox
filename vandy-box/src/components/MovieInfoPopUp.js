@@ -46,14 +46,13 @@ function MovieInfoPopUp(props) {
         numLikes++;
       } else if (doc.data().Dislikes.includes(props.id)) {
         numDislikes++;
-      }
-      else if (doc.data().toWatch.includes(props.id)) {
+      } else if (doc.data().toWatch.includes(props.id)) {
         numToWatch++;
       }
     });
     setTotalLikes(numLikes);
     setTotalDislikes(numDislikes);
-    setTotalToWatch(numToWatch)
+    setTotalToWatch(numToWatch);
   };
 
   useEffect(() => {
@@ -174,7 +173,7 @@ function MovieInfoPopUp(props) {
                       addToToWatch(userData.handle, props.id);
                       setForceUpdate((prev) => prev + 1);
                     }}>
-                      <span className="text-cyan-900 font-bold mr-2">
+                    <span className="text-cyan-900 font-bold mr-2">
                       {totalToWatch}
                     </span>
                     <FontAwesomeIcon
@@ -190,7 +189,7 @@ function MovieInfoPopUp(props) {
                       deleteFromToWatch(userData.handle, props.id);
                       setForceUpdate((prev) => prev + 1);
                     }}>
-                      <span className="text-cyan-900 font-bold mr-2">
+                    <span className="text-cyan-900 font-bold mr-2">
                       {totalToWatch}
                     </span>
                     <FontAwesomeIcon

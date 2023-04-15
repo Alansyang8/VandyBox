@@ -1,14 +1,13 @@
-import React, { StrictMode } from 'react';
-import ReactDOM from 'react-dom/client';
+import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import './index.css';
+import "./index.css";
 import Home from "./pages/Home";
-import reportWebVitals from './reportWebVitals';
-import ErrorPage from './pages/ErrorPage';
-import ProfilePage from './pages/ProfilePage';
-import LoginPage from './pages/LoginPage';
-import { userDataLoader } from './api/userDataLoader';
-import Search from './pages/Search';
+import reportWebVitals from "./reportWebVitals";
+import ErrorPage from "./pages/ErrorPage";
+import ProfilePage from "./pages/ProfilePage";
+import LoginPage from "./pages/LoginPage";
+import { userDataLoader } from "./api/userDataLoader";
+import Search from "./pages/Search";
 
 const router = createBrowserRouter([
   {
@@ -18,7 +17,7 @@ const router = createBrowserRouter([
   },
   {
     path: "login",
-    element: <LoginPage />
+    element: <LoginPage />,
   },
   {
     path: "search",
@@ -27,14 +26,14 @@ const router = createBrowserRouter([
   {
     path: "profile/:userId",
     element: <ProfilePage />,
-    loader: userDataLoader
+    loader: userDataLoader,
   },
 ]);
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <>
-    <RouterProvider router={router}/>
+    <RouterProvider router={router} />
   </>
 );
 

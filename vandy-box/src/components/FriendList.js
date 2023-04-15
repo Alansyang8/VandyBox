@@ -25,9 +25,11 @@ const FriendList = ({ friend }) => {
       <div className="h-full w-64 flex justify-center items-center bg-lime-100 rounded-lg py-3">
         <div className="p-2">
           <div className="rounded-full overflow-hidden h-32 w-32 flex justify-center items-center">
-            <img src={image ? image : anonymousPic} alt="Friend image"/>
+            <img src={image ? image : anonymousPic} alt="Friend image" />
           </div>
-          <h3 className="mt-6 text-center text-xl text-gray-900 font-medium leading-8" data-testid="name">
+          <h3
+            className="mt-6 text-center text-xl text-gray-900 font-medium leading-8"
+            data-testid="name">
             {name}
           </h3>
           <div className="text-center text-gray-400 text-xs font-semibold">
@@ -37,8 +39,7 @@ const FriendList = ({ friend }) => {
           <div className="text-center my-3">
             <a
               className="text-xs text-indigo-500 italic hover:underline hover:text-indigo-600 font-medium"
-              href={"/profile/" + handle}
-            >
+              href={"/profile/" + handle}>
               View Profile
             </a>
           </div>
