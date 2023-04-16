@@ -30,7 +30,7 @@ function Home() {
   }, [auth]);
 
   return (
-    <div className="Home">
+    <div className="Home overflow-x-hidden">
       <Body></Body>
     </div>
   );

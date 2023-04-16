@@ -25,7 +25,10 @@ function Header() {
         </li>
 
         <li className="">
-          <Link to="/search">Search</Link>
+          <Link to="/search">Search Movies</Link>
+        </li>
+        <li className="">
+          <Link to="/users">Find Friends</Link>
         </li>
         <li
           onClick={() => {

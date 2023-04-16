@@ -208,6 +208,9 @@ const UserProfile = ({userData, handleOpenProfile}) => {
       const userId = docSnap.data().userId;
       addFriend(userId, userData.handle);
       addFriend(userData.handle, userId);
+      setTimeout(() => {
+        window.location.reload(true);
+      }, 500);
     } else {
       console.error("Could not find document.");
     }
@@ -222,6 +225,9 @@ const UserProfile = ({userData, handleOpenProfile}) => {
       const userId = docSnap.data().userId;
       deleteFriend(userId, userData.handle);
       deleteFriend(userData.handle, userId);
+      setTimeout(() => {
+        window.location.reload(true);
+      }, 500);
     } else {
       console.error("Could not find document.");
     }

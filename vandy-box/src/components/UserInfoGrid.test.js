@@ -22,7 +22,7 @@ describe(UserInfoGrid, () => {
     const handleAddToWatch = jest.fn()
     const handleRemoveFromWatch = jest.fn()
     const handleAddToLikes = jest.fn()
-    const  = jest.fn()
+  
     const setShowingPopup = jest.fn()
     const showingPopup = false
 
