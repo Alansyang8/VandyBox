@@ -6,7 +6,7 @@ import { useLocation } from 'react-router-dom'
 import { auth, db } from "../firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 
-const ProfilePage = () => {
+const ProfilePage2 = () => {
   const location = useLocation()
   const userId  = location.state.userId
   useEffect(() => {
@@ -36,4 +36,4 @@ const ProfilePage = () => {
   );
 };
 
-export default ProfilePage;
+export default ProfilePage2;

@@ -2,6 +2,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../firebase";
 import anonymousPic from "../assets/anonymous_user_img.jpg";
+import { Link } from "react-router-dom";
 
 const FriendList = ({ friend }) => {
   const [image, setImage] = useState("");
@@ -37,11 +38,14 @@ const FriendList = ({ friend }) => {
           </div>
           {/* Click this to get to another friend's user profile */}
           <div className="text-center my-3">
-            <a
-              className="text-xs text-indigo-500 italic hover:underline hover:text-indigo-600 font-medium"
-              href={"/profile/" + handle}>
-              View Profile
-            </a>
+            
+         {window.location.href.includes("profile") && <Link className="ml-auto" to={`../profi1e`} state={{userId: `${handle}`}}>
+            View Profile
+          </Link>}
+
+          {window.location.href.includes("profi1e") && <Link className="ml-auto" to={`../profile`} state={{userId: `${handle}`}}>
+            View Profile
+          </Link>}
           </div>
         </div>
       </div>

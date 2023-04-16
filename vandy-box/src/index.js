@@ -8,6 +8,7 @@ import ProfilePage from "./pages/ProfilePage";
 import LoginPage from "./pages/LoginPage";
 import { userDataLoader } from "./api/userDataLoader";
 import Search from "./pages/Search";
+import ProfilePage2 from "./pages/ProfilePage2";
 
 const router = createBrowserRouter([
   {
@@ -24,9 +25,12 @@ const router = createBrowserRouter([
     element: <Search />,
   },
   {
-    path: "profile/:userId",
+    path: "profile",
     element: <ProfilePage />,
-    loader: userDataLoader,
+  },
+  {
+    path: "profi1e",
+    element: <ProfilePage2 />,
   },
 ]);
 
