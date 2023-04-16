@@ -19,6 +19,12 @@ const LoginPage = () => {
         const userIdRef = doc(db, "userIdMap", userEmail);
         const docSnap = await getDoc(userIdRef);
         let id = "";
+        if (!docSnap.exists()) {
+          let newId = user.email.substring(0, user.email.indexOf("@"));
+          await setDoc(doc(db, "userIdMap", user.email), {
+            userId: newId,
+          });
+        }
         if (docSnap.exists()) {
           id = docSnap.data().userId;
           const userDataRef = doc(db, "users", id);
