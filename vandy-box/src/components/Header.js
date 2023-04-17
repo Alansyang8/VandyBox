@@ -25,7 +25,10 @@ function Header() {
         </li>
 
         <li className="">
-          <Link to="/search">Search</Link>
+          <Link to="/search">Search Movies</Link>
+        </li>
+        <li className="">
+          <Link to="/users">Find Friends</Link>
         </li>
         <li
           onClick={() => {
@@ -36,7 +39,7 @@ function Header() {
       </ul>
 
       {userData && (
-        <Link className="ml-auto" to={`/profile/${userData.handle}`}>
+        <Link className="ml-auto" to={`/profile`} state={{userId: `${userData.handle}`}}>
           <img
             src={userImage != "" ? userImage : anonymousPic}
             className="object-cover rounded-full w-16 h-16 "
@@ -45,7 +48,7 @@ function Header() {
       )}
       {!userData && (
         <Link className="ml-auto" to={`/`}>
-          <div className="rounded-full w-16 h-16 "></div>
+          <div className="rounded-full w-16 h-16 bg-red-100"></div>
         </Link>
       )}
     </nav>

@@ -17,15 +17,17 @@ const LoginPage = () => {
       if (user) {
         const userEmail = user.email;
         const userIdRef = doc(db, "userIdMap", userEmail);
-        const docSnap = await getDoc(userIdRef);
+        let docSnap = await getDoc(userIdRef);
+
         let id = "";
         if (!docSnap.exists()) {
           let newId = user.email.substring(0, user.email.indexOf("@"));
+          newId = newId.replace(/[^a-zA-Z ]/g, "")
           await setDoc(doc(db, "userIdMap", user.email), {
             userId: newId,
           });
+          docSnap = await getDoc(userIdRef);
         }
-        if (docSnap.exists()) {
           id = docSnap.data().userId;
           const userDataRef = doc(db, "users", id);
           const userDataSnap = await getDoc(userDataRef);
@@ -33,21 +35,19 @@ const LoginPage = () => {
           if (!userDataSnap.exists()) {
             await setDoc(doc(db, "users", id), {
               additionalInfo: "",
-              favorites: [],
+              favorites: [38757],
               handle: id,
               name: "",
               statusMsg: "",
-              toWatch: [],
-              seen: [],
+              toWatch: [502356],
+              seen: [38757, 181812],
               topThreeMovies: [],
-              friends: ["richardli"],
-              Likes: [],
-              Dislikes: [],
+              friends: ["richardtli"],
+              Likes: [38757],
+              Dislikes: [181812],
+              image: "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FSD56w%2FbtrAdb05hgt%2FkWCR1qc8YyE0sjrg1hx7Ek%2Fimg.jpg"
             });
           }
-        } else {
-          console.error("Could not find document.");
-        }
         navigate("/");
       }
     });

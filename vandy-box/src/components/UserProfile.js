@@ -28,7 +28,7 @@ let GET_RECOMMENDED_MOVIES_URL_FIRST_THIRD =
 let GET_RECOMMENDED_MOVIES_URL_SECOND_THIRD =
   "/recommendations?api_key=75e05708188d5f5a0a191495cf4a48db&language=en-US&page=";
 
-const UserProfile = ({ userData }) => {
+const UserProfile = ({userData, handleOpenProfile}) => {
   const [movieObjects, setMovieObjects] = useState([]);
   const [editMode, setEditMode] = useState(false);
   const [currentUserData, setCurrentUserData] = useState([]);
@@ -216,6 +216,9 @@ const UserProfile = ({ userData }) => {
       const userId = docSnap.data().userId;
       addFriend(userId, userData.handle);
       addFriend(userData.handle, userId);
+      setTimeout(() => {
+        window.location.reload(true);
+      }, 500);
     } else {
       console.error("Could not find document.");
     }
@@ -230,6 +233,9 @@ const UserProfile = ({ userData }) => {
       const userId = docSnap.data().userId;
       deleteFriend(userId, userData.handle);
       deleteFriend(userData.handle, userId);
+      setTimeout(() => {
+        window.location.reload(true);
+      }, 500);
     } else {
       console.error("Could not find document.");
     }
@@ -400,7 +406,7 @@ const UserProfile = ({ userData }) => {
           </div>
         </div>
       </div>
-      <UserInfoGrid userData={userData} selectedUserInfo={selectedUserInfo} />
+      <UserInfoGrid userData={userData} selectedUserInfo={selectedUserInfo} handleOpenProfile={handleOpenProfile}/>
       <Recommendations movies={thirtyMovieRec}></Recommendations>
     </div>
   );
