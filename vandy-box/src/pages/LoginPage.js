@@ -45,7 +45,7 @@ const LoginPage = () => {
               friends: ["richardtli"],
               Likes: [38757],
               Dislikes: [181812],
-              image: "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FSD56w%2FbtrAdb05hgt%2FkWCR1qc8YyE0sjrg1hx7Ek%2Fimg.jpg"
+              image: "https://firebasestorage.googleapis.com/v0/b/vandy-box.appspot.com/o/profilePic%2Fdefault-avatar-profile-icon-of-social-media-user-in-clipart-style-vector.jpg?alt=media&token=bc4f2f77-e73d-4efb-befd-6823f87ae63b"
             });
           }
         navigate("/");
