@@ -28,7 +28,6 @@ const LoginPage = () => {
           });
           docSnap = await getDoc(userIdRef);
         }
-        
           id = docSnap.data().userId;
           const userDataRef = doc(db, "users", id);
           const userDataSnap = await getDoc(userDataRef);

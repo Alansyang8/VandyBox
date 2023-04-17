@@ -13,6 +13,9 @@ import {
 } from "../api/firebaseWriter";
 import { doc, getDoc } from "firebase/firestore";
 import Recommendations from "./Recommendations";
+import TopThreeContainer from "./TopThreeContainer";
+import TopThreeEditor from "./TopThreeEditor";
+import TopThreeSlider from "./TopThreeSlider";
 
 const IMG_PATH = "https://image.tmdb.org/t/p/w500";
 
@@ -58,11 +61,16 @@ const UserProfile = ({userData, handleOpenProfile}) => {
 
   async function apiCall() {
     let movieObjectsArray = [];
+    let remainder = 3;
     for (const movieID of userData.topThreeMovies) {
       const movieObject = await get1MovieByID(
         SEARCH_BY_ID_URL_FIRST_HALF + movieID + SEARCH_BY_ID_URL_SECOND_HALF
       );
       movieObjectsArray.push(movieObject);
+      remainder--;
+    }
+    for (let i = 0; i < remainder; i++) {
+      movieObjectsArray.push(null);
     }
     setMovieObjects(movieObjectsArray);
   }
@@ -321,9 +329,13 @@ const UserProfile = ({userData, handleOpenProfile}) => {
         </div>
         {/* User TOP 3 Favorite Movies Display */}
         <div className="flex flex-row w-full justify-end">
-          <div className="flex flex-row bg-lime-100 justify-center my-6 w-2/5 h-4/5 rounded-xl mr-8 p-8">
-            {movieObjects && <MovieSlider movies={movieObjects} />}
-          </div>
+          <TopThreeContainer>
+            {currentUserData?.handle == userData.handle ? (
+              <TopThreeEditor movies={movieObjects} userData={userData}/>
+            ) : (
+              <TopThreeSlider movies={movieObjects} />
+            )}
+            </TopThreeContainer>
         </div>
       </div>
       {/* Bottom Tabs Section */}
