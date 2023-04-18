@@ -12,6 +12,7 @@ const TopThreeEditPopUp = ({ closePopUp, editIndex, userData }) => {
 
     const [currentMovieId, setCurrentMovieId] = useState("");
     const [favoriteMovieObject, setFavoriteMovieObject] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     const formatObject = (movie) => {
         const { title, poster_path, overview, release_date, vote_average, id } = movie;
@@ -45,6 +46,7 @@ const TopThreeEditPopUp = ({ closePopUp, editIndex, userData }) => {
     }
 
     const handleSubmit = async () => {
+        setLoading(true);
         const userDoc = doc(db, "users", userData.handle);
         let currentUserTopThree = userData.topThreeMovies;
         if (editIndex > currentUserTopThree.length + 1) {
@@ -73,6 +75,11 @@ const TopThreeEditPopUp = ({ closePopUp, editIndex, userData }) => {
             }
             await updateDoc(userDoc, { topThreeMovies: currentUserTopThree });
         }
+        setLoading(false);
+        closePopUp();
+        setTimeout(() => {
+            window.location.reload(true);
+          }, 200);
     }
 
     useEffect(() => {
@@ -99,12 +106,19 @@ const TopThreeEditPopUp = ({ closePopUp, editIndex, userData }) => {
             src={movie.image}
             alt={movie.title}
           />
-          <div className={`text-center ${(currentMovieId == movie.id) && "font-semibold"}`}>{movie.title}</div>
+          <div className={`text-center dark:text-white ${(currentMovieId == movie.id) && "font-semibold"}`}>{movie.title}</div>
                 </div>
                 ))}
             </div>
             <div className="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
-                <button onClick={handleSubmit} data-modal-hide="defaultModal" type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add to Top {editIndex + 1}</button>
+                <button onClick={handleSubmit} data-modal-hide="defaultModal" type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                    {!loading ? (
+                        <span className='font-medium text-sm text-center text-white'>Add to Top {editIndex + 1}</span>
+                    ) : (
+                        <span className='font-medium text-sm text-center text-white'>Adding...</span>
+                    )}
+                    
+                </button>
                 <button onClick={closePopUp} data-modal-hide="defaultModal" type="button" className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Cancel</button>
             </div>
     </div>

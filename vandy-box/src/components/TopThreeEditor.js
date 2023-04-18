@@ -16,7 +16,7 @@ const TopThreeEditor = ({ movies, userData }) => {
     }
 
   return (
-    <div className="flex space-x-5">
+    <div className="grid grid-cols-3 gap-5">
         {showingPopUp && <TopThreeEditPopUp closePopUp={closePopUp} editIndex={currentIndex} userData={userData} />}
         {movies.map((movie, index) => (
             <div className="transition duration-150 transform hover:scale-105 cursor-pointer z-0">
@@ -33,10 +33,14 @@ const TopThreeEditor = ({ movies, userData }) => {
                 alt={movie.title}
                 onClick={() => { handleEdit(index); }}
               />
-              <div className="text-center">{movie.title}</div>
+              <div className="text-center font-semibold">{movie.title}</div>
                     </>
                 ) : (
-                    <div className="bg-white w-44 h-60 flex justify-center items-center font-semibold text-4xl text-gray-600" onClick={() => { handleEdit(index) }}>{index + 1}</div>
+                    <div className='space-y-2 flex flex-col items-center'>
+                        <div className="bg-white w-32 h-44 flex justify-center items-center font-semibold text-4xl text-gray-600" onClick={() => { handleEdit(index) }}>{index + 1}</div>
+                        <div className='bg-white w-32 h-4 rounded-full'></div>
+                        <div className='bg-white w-24 h-4 rounded-full'></div>
+                    </div>
                 )}
             </div>
         ))}
