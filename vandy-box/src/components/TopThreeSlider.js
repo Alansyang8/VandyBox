@@ -10,6 +10,8 @@ const TopThreeSlider = ({ movies }) => {
     const [movieID, setMovieID] = useState("Test");
     const [showingPopup, setShowingPopup] = useState(false);
   
+
+    //closes selector popup
     const handleOnClose = () => {
       setShowingPopup(false);
     }

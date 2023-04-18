@@ -1,1 +1,7 @@
-1. Go to https://playful-chimera-d7f3f0.netlify.app to use the app.
+Go to https://playful-chimera-d7f3f0.netlify.app to use the app.
+
+Or 
+1. Open Folder in Terminal.
+2. run "npm i" to install dependencies
+3. run "npm run start" to open local server
+4. run "npm build" to create a production build folder for deployment.

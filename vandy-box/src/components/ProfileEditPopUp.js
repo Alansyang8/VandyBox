@@ -5,7 +5,7 @@ import {
   modifyName,
   modifyStatusMsg,
 } from "../api/firebaseWriter";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import anonymousImg from "../assets/anonymous_user_img.jpg";
 import { ref, getDownloadURL, uploadString } from "firebase/storage";
 
@@ -30,9 +30,6 @@ const ProfileEditPopUp = ({ setEditMode, currentUserData }) => {
       modifyName(userId, userName);
       modifyStatusMsg(userId, statusMsg);
       modifyAddInfo(userId, additionalInfo);
-      setTimeout(() => {
-        window.location.reload(true);
-      }, 800);
     } else {
       console.error("Could not find document.");
     }
@@ -43,14 +40,16 @@ const ProfileEditPopUp = ({ setEditMode, currentUserData }) => {
       uploadTask
         .then(() => {
           getDownloadURL(storageRef).then(async (url) => {
-            await setDoc(
+            await updateDoc(
               doc(db, "users", userId),
               {
                 image: url,
-              },
-              { merge: true }
+              }
             );
           });
+          setTimeout(() => {
+            window.location.reload(true);
+          }, 200);
         })
         .catch((e) => {
           console.error("Error uploading image: ", e);
