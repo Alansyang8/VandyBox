@@ -50,7 +50,7 @@ const TopThreeSlider = ({ movies }) => {
                   setShowingPopup(true);
                 }}
               />
-              <div className="text-center">{movie.title}</div>
+              <div className="text-center font-semibold">{movie.title}</div>
                     </>
                 ) : (
                     <div className="bg-white w-44 h-60 flex justify-center items-center font-semibold text-4xl text-gray-600">{index + 1}</div>
