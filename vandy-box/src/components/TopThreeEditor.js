@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import TopThreeEditPopUp from './TopThreeEditPopUp';
 
+{/* Allow users to update their top 3 movie lists  */}
 const TopThreeEditor = ({ movies, userData }) => {
 
     const [showingPopUp, setShowingPopUp] = useState(false);

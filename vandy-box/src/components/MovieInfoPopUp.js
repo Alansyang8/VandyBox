@@ -35,7 +35,7 @@ function MovieInfoPopUp(props) {
     setUserData(userData);
   };
 
-  //gets all the users' data of to display
+  {/* gets all the users' data of to display */}
   const updateLikeDislike = async () => {
     let numLikes = 0;
     let numDislikes = 0;
@@ -62,6 +62,7 @@ function MovieInfoPopUp(props) {
     updateLikeDislike();
   }, [forceUpdate]);
 
+{/* Return movie information & pop up page */}
   return (
     <>
       <div className="fixed w-[calc(100vw-16.5px)] h-full left-0 top-0 bg-neutral-900/80 overflow-auto pointer-events-none"></div>

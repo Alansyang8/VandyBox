@@ -9,6 +9,7 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 import anonymousImg from "../assets/anonymous_user_img.jpg";
 import { ref, getDownloadURL, uploadString } from "firebase/storage";
 
+{/* Pop up functionality for user profile edit */}
 const ProfileEditPopUp = ({ setEditMode, currentUserData }) => {
   const [userName, setUserName] = useState(currentUserData.name);
   const [statusMsg, setStatusMsg] = useState(currentUserData.statusMsg);
@@ -18,6 +19,7 @@ const ProfileEditPopUp = ({ setEditMode, currentUserData }) => {
   const [userImage, setUserImage] = useState(currentUserData.image);
   const imageLoaderRef = useRef(null);
 
+  {/* Updates user's handle */}
   const handleUpdate = async () => {
     const userEmail = auth.currentUser.email;
     const userIdRef = doc(db, "userIdMap", userEmail);
@@ -56,6 +58,7 @@ const ProfileEditPopUp = ({ setEditMode, currentUserData }) => {
     }
   };
 
+  {/* Changes user's profile image */}
   const updateUserImage = (e) => {
     const reader = new FileReader();
     if (e.target.files && e.target.files[0]) {

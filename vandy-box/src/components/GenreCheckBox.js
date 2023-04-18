@@ -1,3 +1,4 @@
+{/* Check box for search movie categories */}
 function GenreCheckBox(props) {
   return (
     <label>

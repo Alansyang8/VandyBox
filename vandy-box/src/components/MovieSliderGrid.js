@@ -2,6 +2,7 @@ import React from "react";
 import MovieInfoPopUp from "./MovieInfoPopUp";
 import { useState } from "react";
 
+{/* Movie slider grid format for movie lists*/}
 const MovieSliderGrid = ({ movies }) => {
   const [movieDescription, setMovieDescription] = useState("Test");
   const [movieRelease, setMovieRelease] = useState("Test");

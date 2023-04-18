@@ -42,6 +42,7 @@ function addMoviesToArray(movies) {
   return array;
 }
 
+{/* Allows to fetch a movie by the TMDB Movie ID */}
 async function get1MovieByID(url) {
   const res = await fetch(url);
   const data = await res.json();
@@ -67,11 +68,13 @@ function Body() {
   const [mostLikedMovies, setMostLikedMovies] = useState();
   const [mostToWatchMovies, setMostToWatchMovies] = useState();
 
+  {/* Call API for Trending Movie List */}
   async function getTrendingMovies() {
     const apiResponse = await get10Movies(TRENDING_API_URL);
     setTrendingMovieAPI(apiResponse);
   }
-  //compiles list of all users' Liked Lists as dictionaries and displays the top 10
+ 
+  {/* Compiles list of all users' Liked Lists as dictionaries and displays the top 10 */}
   const get10MostLikedMovies = async () => {
     let LikedMoviesDict = {};
     const usersCollection = query(collection(db, "users"));
@@ -121,7 +124,8 @@ function Body() {
 
     setMostLikedMovies(LikedMoviesSortedObjects);
   };
-  //compiles list of all users' To Watch Lists as dictionaries and displays the top 10
+
+  {/* compiles list of all users' To Watch Lists as dictionaries and displays the top 10 */}
   const get10MostToWatchMovies = async () => {
     let ToWatchMoviesDict = {};
     const usersCollection = query(collection(db, "users"));

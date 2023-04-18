@@ -85,6 +85,7 @@ function UserInfoGrid({ userData, selectedUserInfo }) {
     setSeenMoviesObjects(movieObjectsArray);
   }
 
+  {/* Fav Movies, To Watch, Seen, Friends list on User Profile */}
   return (
     <div className="grid grid-cols-4 gap-2">
       {selectedUserInfo == "Fav Movies" &&
