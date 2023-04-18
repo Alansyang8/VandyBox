@@ -67,11 +67,11 @@ function Body() {
   const [mostLikedMovies, setMostLikedMovies] = useState();
   const [mostToWatchMovies, setMostToWatchMovies] = useState();
 
-  async function apiCall() {
+  async function getTrendingMovies() {
     const apiResponse = await get10Movies(TRENDING_API_URL);
     setTrendingMovieAPI(apiResponse);
   }
-
+  //compiles list of all users' Liked Lists as dictionaries and displays the top 10
   const get10MostLikedMovies = async () => {
     let LikedMoviesDict = {};
     const usersCollection = query(collection(db, "users"));
@@ -121,7 +121,7 @@ function Body() {
 
     setMostLikedMovies(LikedMoviesSortedObjects);
   };
-
+  //compiles list of all users' To Watch Lists as dictionaries and displays the top 10
   const get10MostToWatchMovies = async () => {
     let ToWatchMoviesDict = {};
     const usersCollection = query(collection(db, "users"));
@@ -174,7 +174,7 @@ function Body() {
   };
 
   useEffect(() => {
-    apiCall();
+    getTrendingMovies();
     get10MostLikedMovies();
     get10MostToWatchMovies();
   }, []);
@@ -196,7 +196,6 @@ function Body() {
           <MovieSlider movies={mostToWatchMovies}></MovieSlider>
         )}
       </Container>
-
     </div>
   );
 }

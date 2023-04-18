@@ -10,6 +10,7 @@ const FriendList = ({ friend }) => {
   const [handle, setHandle] = useState(friend);
 
   useEffect(() => {
+    //gets FriendsList Information
     const fetchFriendData = async () => {
       const docRef = doc(db, "users", friend);
       const docSnap = await getDoc(docRef);
