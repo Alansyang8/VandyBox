@@ -39,12 +39,13 @@ const UserProfile = ({userData, handleOpenProfile}) => {
 
   const [isFriend, setIsFriend] = useState(false);
 
+  //returns a movie object based on movie id
   async function get1MovieByID(url) {
     const res = await fetch(url);
     const data = await res.json();
     return Simplify(data);
   }
-
+  //converts movies object from TMDB to simplier object
   function Simplify(movie) {
     const { title, poster_path, overview, release_date, vote_average, id } =
       movie;
@@ -75,6 +76,7 @@ const UserProfile = ({userData, handleOpenProfile}) => {
     setMovieObjects(movieObjectsArray);
   }
 
+  //algorithm to get user's reccommendations based on favorite movies
   async function getRecommendedMovies() {
     let totalRecommendedMovies = [];
     let totalRecommendedMoviesNames = [];

@@ -2,6 +2,8 @@ import React from "react";
 import MovieInfoPopUp from "./MovieInfoPopUp";
 import { useState } from "react";
 
+
+//Movie Slider but with 1 movie
 const SingleMovieFrame = ({ movie }) => {
   const [movieDescription, setMovieDescription] = useState("Test");
   const [movieRelease, setMovieRelease] = useState("Test");
